@@ -1,0 +1,87 @@
+.topNavContainer {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 7rem;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  border-bottom: 1px solid gray;
+  background-color: white;
+}
+
+.topNavContainer ul {
+  display: grid;
+  grid-template-columns: 10% 20% 20% 20% 20%;
+  grid-template-rows: 100%;
+  align-items: center;
+  justify-items: center;
+}
+
+.logoLi {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  justify-self: start;
+}
+
+.assetsLi {
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+.cashLi {
+  grid-column: 3/4;
+  grid-row: 1/2;
+}
+
+.buyLi {
+  grid-column: 4/5;
+  grid-row: 1/2;
+}
+
+.buyLi button {
+  width: 12rem;
+  min-width: max-content;
+  height: 4.5rem;
+  padding: 1rem;
+  outline: none;
+  background-color: rgb(13, 119, 54);
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1.3rem;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+.rightSideOptions {
+  grid-column: 5/6;
+  grid-row: 1/2;
+  width: 100%;
+  height: 100%;
+}
+
+.signOutBtnContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.signOutBtn {
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signOutBtnImg {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 0.2rem;
+}
+
+.signOutBtnText {
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 600;
+}

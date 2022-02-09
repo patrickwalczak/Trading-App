@@ -1,0 +1,17 @@
+.header {
+  width: auto;
+  min-height: 60rem;
+  height: 100vh;
+  max-height: 80rem;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(37, 42, 54, 0.37) 0%,
+      rgba(35, 39, 49, 0.397) 100%
+    ),
+    url("../../images/heroImage.jpg");
+  background-position: center;
+  background-size: cover;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 30vh 70vh;
+}

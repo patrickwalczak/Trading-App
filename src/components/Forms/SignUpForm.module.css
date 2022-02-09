@@ -1,0 +1,55 @@
+form {
+  width: 26rem;
+  height: 30rem;
+  background-color: rgb(255, 255, 255);
+  padding: 2rem 2rem;
+  border-radius: 1rem;
+  border: 1px solid rgb(100, 100, 100);
+  grid-column: 1/2;
+  grid-row: 3/4;
+  justify-self: center;
+  align-self: start;
+}
+
+label {
+  font-size: 1.7rem;
+  color: rgb(95, 95, 95);
+  transform: translateX(5rem);
+}
+
+input {
+  height: 2.5rem;
+  width: 20rem;
+  border: none;
+  border-bottom: 2px solid grey;
+  background-color: inherit;
+  font-size: 1.6rem;
+  margin-top: 0.5rem;
+}
+
+input:focus {
+  border-bottom: 2px solid rgb(0, 112, 177);
+  outline: none;
+}
+
+.block {
+  height: 5.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.block p {
+  font-size: 1rem;
+  color: red;
+}
+
+form button {
+  width: 20rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 500;
+  height: 3rem;
+  background-color: rgb(12, 133, 8);
+  border: none;
+  color: white;
+  text-transform: uppercase;
+}

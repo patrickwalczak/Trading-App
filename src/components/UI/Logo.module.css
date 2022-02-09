@@ -1,0 +1,17 @@
+.logoContainer {
+  background-color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  position: relative;
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 12%;
+  left: 15%;
+}

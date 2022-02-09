@@ -1,0 +1,82 @@
+.mainPanelRightSideContainer {
+  width: 100%;
+  height: 100%;
+  grid-column: 3/4;
+  grid-row: 1/3;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 0.5rem;
+  width: 100%;
+  height: 12%;
+  justify-content: center;
+  align-items: center;
+}
+
+.sectionHeader h3 {
+  font-size: 1.8rem;
+}
+
+.securitySideDataContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  width: 100%;
+  height: 77%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.securityDataItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  letter-spacing: 2px;
+}
+
+.securityDataItem h5 {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+
+.securityDataItem span {
+  font-size: 1.8rem;
+}
+
+.transactionButtonsContainer {
+  width: 100%;
+  height: 12%;
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+  justify-content: space-around;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.transactionBuy,
+.transactionSell {
+  width: 7rem;
+  height: 3rem;
+  border: none;
+  outline: none;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.transactionBuy {
+  background-color: #2a9c26;
+}
+
+.transactionSell {
+  background-color: #ca171d;
+}

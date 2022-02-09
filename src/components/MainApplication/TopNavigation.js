@@ -1,5 +1,6 @@
 import classes from "./TopNavigation.module.css";
 import signOutImg from "../../images/signOutBtn.png";
+import msgImg from "../../images/email.png";
 
 const TopNavigation = () => {
   return (
@@ -12,8 +13,10 @@ const TopNavigation = () => {
           <button>+ New transaction</button>
         </li>
         <li className={classes.rightSideOptions}>
-          <li>Messages</li>
-          <li></li>
+          <li>
+            <img className={classes.msgImg} src={msgImg}></img>
+          </li>
+          <li>ACCOUNT V</li>
           <li className={classes.signOutBtnContainer}>
             <button className={classes.signOutBtn}>
               <img className={classes.signOutBtnImg} src={signOutImg}></img>

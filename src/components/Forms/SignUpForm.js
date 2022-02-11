@@ -11,15 +11,15 @@ const SignUpForm = () => {
     <form onSubmit={submitFormHandler}>
       <div className={classes.block}>
         <label htmlFor="name">Username</label>
-        <input type="text" id="name" />
+        <input className={classes.signUpInput} type="text" id="name" />
       </div>
       <div className={classes.block}>
         <label htmlFor="mail">E-Mail Address</label>
-        <input type="email" id="mail" />
+        <input className={classes.signUpInput} type="email" id="mail" />
       </div>
       <div className={classes.block}>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" />
+        <input className={classes.signUpInput} type="password" id="password" />
       </div>
       <button type="submit">Register</button>
     </form>

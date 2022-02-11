@@ -2,6 +2,8 @@ import classes from "./MainPanelLeftSide.module.css";
 
 const MainPanelLeftSide = () => {
   return (
+    <section className={classes.securitiesListContainer}>
+    <h3 className={classes.securitiesHeader}>My Securities</h3>
     <ul className={classes.securitiesContainer}>
       <li className={`${classes.securityElement} ${classes.activeSecurity}`}>
         <span className={classes.activeSecurityIndicator}></span>
@@ -26,6 +28,7 @@ const MainPanelLeftSide = () => {
         </div>
       </li>
     </ul>
+    </section>
   );
 };
 

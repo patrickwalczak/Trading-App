@@ -8,8 +8,7 @@ export const fetchCryptocurrencies = (query) => {
           
            if(query === '') {
             dispatch(uiActions.loadingStatus({status: 'no query', message: 'no query'}))
-            console.log('Test')
-            return
+            return;
            }
 
             dispatch(uiActions.loadingStatus({status: 'loading', message: 'loading'}))
@@ -17,7 +16,7 @@ export const fetchCryptocurrencies = (query) => {
             const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
 
             if (!response.ok) {
-                throw new Error('Could not fetch data!');
+                throw new Error('Lost internet connecton!');
               }
     
             const data = await response.json()
@@ -28,7 +27,7 @@ export const fetchCryptocurrencies = (query) => {
 
 
         } catch (err) {
-          dispatch(uiActions.loadingStatus({status: 'failed', message: err}))
+          dispatch(uiActions.loadingStatus({status: 'failed', message: "Lost internet connection"}))
         }
 
        

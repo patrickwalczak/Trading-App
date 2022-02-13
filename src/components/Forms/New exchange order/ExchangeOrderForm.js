@@ -4,7 +4,8 @@ import searchImg from '../../../images/search.png'
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCryptocurrencies } from "../../../store/takeCryptocurrencies"
-import FoundElement from "./FoundElement"
+import FoundElementsContainer from "./FoundElementsContainer"
+import StatusMsg from "./StatusMsg"
 
 const ExchangeOrderForm = (props) => {
     const [isSearching, setIsSearching] = useState(false)
@@ -12,7 +13,6 @@ const ExchangeOrderForm = (props) => {
     const dispatch = useDispatch()
     const {searchingResults} = useSelector(state => state.searchResults)
     const {notification} = useSelector(state => state.uiNotification)
-
 
 
     const onChangeHandler = (e) => {
@@ -47,13 +47,9 @@ const ExchangeOrderForm = (props) => {
                     <input value={searchInputValue} onBlur={onBlurHandler} onChange={onChangeHandler} 
                     className={classes.searchInput} type="search" placeholder="Search by symbol or name" ></input>
                 </div>
-                { notification?.status === 'success' && <div className={classes.foundElementsContainer}>
-                        <h5 className={classes.foundElementsHeader}>Results <span className={classes.resultsAmount}>{searchingResults.length}</span></h5>
-                        <ul className={classes.foundElementsList}>
-                            {searchingResults.length >= 1 ? searchingResults.map(item => <FoundElement key={item.id} data={item} />) : <p className={classes.errorMessage}>No element found</p>}
-                        </ul>
-                    </div>}
-                
+                {notification?.status === 'success' && <FoundElementsContainer searchingResults={searchingResults} />}
+                {notification?.status === 'failed' && <StatusMsg>lost internet connection</StatusMsg>}
+
             </form>
         </div>
     </Modal>

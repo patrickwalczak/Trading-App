@@ -168,3 +168,17 @@ padding-right: 4rem;
     padding-left: 7rem;
 
 }
+
+.foundNoElConta {
+    width: 100%;
+    height: 10rem;
+    background-color: rgb(250, 250, 250);
+    padding-top: 3.5rem;
+}
+
+.foundNoElMsg {    
+    text-transform: uppercase;
+    color: rgb(110, 110, 110);
+    text-align: center;
+    margin: auto;
+}

@@ -1,8 +1,21 @@
 import classes from './ExchangeOrderForm.module.css'
+import { useDispatch } from 'react-redux'
+import { searchResultsActions } from '../../../store/searchResults-slice';
+
 
 
 const FoundElement = (props) => {
-    return <li className={classes.foundElement}>
+    const dispatch = useDispatch();
+
+
+    const clickHandler = () => {
+        console.log(props.data)
+
+        dispatch(searchResultsActions.addChosenSecurity({...props.data}))
+        
+    }
+
+    return <li className={classes.foundElement} onClick={clickHandler}>
         <div className={classes.foundElementImgContainer}>
 
         <img src={props.data.image} className={classes.foundElementImg}></img>

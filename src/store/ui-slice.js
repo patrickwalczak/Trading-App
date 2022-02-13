@@ -10,7 +10,6 @@ const uiSlice = createSlice({
       loadingStatus(state, action) {
         state.notification = {
           status: action.payload.status,
-          message: action.payload.message,
         };
       },
     },

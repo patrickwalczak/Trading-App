@@ -1,18 +1,17 @@
 import Modal from "../../UI/Modal/Modal"
 import classes from './ExchangeOrderForm.module.css'
-import searchImg from '../../../images/search.png'
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCryptocurrencies } from "../../../store/takeCryptocurrencies"
-import FoundElementsContainer from "./FoundElementsContainer"
-import StatusMsg from "./StatusMsg"
+import { searchResultsActions } from "../../../store/searchResults-slice"
+import InputSearchContainer from "./InputSearchContainer"
+import ChosenSecurity from "./ChosenSecurity"
 
 const ExchangeOrderForm = (props) => {
     const [isSearching, setIsSearching] = useState(false)
     const [searchInputValue, setSearchInputValue] = useState('')
+    const {chosenSecurity} = useSelector(state => state.searchResults)
     const dispatch = useDispatch()
-    const {searchingResults} = useSelector(state => state.searchResults)
-    const {notification} = useSelector(state => state.uiNotification)
 
 
     const onChangeHandler = (e) => {
@@ -26,30 +25,32 @@ const ExchangeOrderForm = (props) => {
         setIsSearching(false)
     }
 
+    const clearInputHandler = () => {
+        setSearchInputValue('')
+    }
+
+    const closeFormActionsHandler = () => {
+        clearInputHandler();
+        searchResultsActions.clearSearchResults();
+        props.onChangeModalState()
+    }
+
     useEffect(()=> {
-        if(!isSearching) return;
-        console.log(searchInputValue)
+        if(!isSearching && searchInputValue.length === 0) return;
         dispatch(fetchCryptocurrencies(searchInputValue))
-
-
         setTimeout(setIsSearching(false), 500)
     }, [dispatch, isSearching, searchInputValue])
 
-    return <Modal onChangeModalState={props.onChangeModalState}>
+
+    return <Modal onChangeModalState={props.onChangeModalState} onCloseFormActions={closeFormActionsHandler}>
         <div className={classes.exchangeFormContainer}>
             <div className={classes.formHeaderContainer}>
             <h3 className={classes.exchangeFormHeader}>Order new exchange</h3>
-            <button className={classes.formCloseBtn} onClick={props.onChangeModalState}>X</button>
+            <button className={classes.formCloseBtn} onClick={closeFormActionsHandler}>X</button>
             </div>
             <form className={classes.exchangeForm}>
-                <div className={classes.inputSearchContainer}>
-                    <img className={classes.searchImg} src={searchImg}></img>
-                    <input value={searchInputValue} onBlur={onBlurHandler} onChange={onChangeHandler} 
-                    className={classes.searchInput} type="search" placeholder="Search by symbol or name" ></input>
-                </div>
-                {notification?.status === 'success' && <FoundElementsContainer searchingResults={searchingResults} />}
-                {notification?.status === 'failed' && <StatusMsg>lost internet connection</StatusMsg>}
-
+                {!chosenSecurity?.id && <InputSearchContainer onBlur={onBlurHandler} onChange={onChangeHandler} value={searchInputValue} onClearInputHandler={clearInputHandler} />}
+                {chosenSecurity?.id && <ChosenSecurity data={chosenSecurity} />}
             </form>
         </div>
     </Modal>

@@ -1,20 +1,34 @@
 import { searchResultsActions } from "./searchResults-slice";
+import {uiActions} from './ui-slice'
 
 export const fetchCryptocurrencies = (query) => {
     return async (dispatch) => {
         
         try{
+          
+           if(query === '') {
+            dispatch(uiActions.loadingStatus({status: 'no query', message: 'no query'}))
+            console.log('Test')
+            return
+           }
+
+            dispatch(uiActions.loadingStatus({status: 'loading', message: 'loading'}))
+
             const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
 
             if (!response.ok) {
-                throw new Error('Could not fetch cart data!');
+                throw new Error('Could not fetch data!');
               }
     
             const data = await response.json()
     
             dispatch(searchResultsActions.searchByQuery({query, data}))
+
+            dispatch(uiActions.loadingStatus({status: 'success', message: 'Success'}))
+
+
         } catch (err) {
-            console.log(err)
+          dispatch(uiActions.loadingStatus({status: 'failed', message: err}))
         }
 
        

@@ -2,11 +2,13 @@
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   height: 7rem;
-  width: 100%;
+  width: calc(100% - 10rem);
   position: fixed;
   top: 0;
-  border-bottom: 1px solid gray;
+  right: 0;
+  border-bottom: 1px solid rgb(218, 218, 218);
   background-color: white;
+  z-index: 100;
 }
 
 .topNavContainer ul {
@@ -18,11 +20,7 @@
   justify-items: center;
 }
 
-.logoLi {
-  grid-column: 1/2;
-  grid-row: 1/2;
-  justify-self: start;
-}
+
 
 .assetsLi {
   grid-column: 2/3;
@@ -37,6 +35,11 @@
 .buyLi {
   grid-column: 4/5;
   grid-row: 1/2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start
 }
 
 .buyLi button {
@@ -67,9 +70,18 @@
 }
 
 .signOutBtnContainer {
-  width: max-content;
-  height: max-content;
+  width: 33.3%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: inherit;
 }
+
+.signOutBtnContainer:hover {
+  background-color: rgb(235, 235, 235);
+}
+
 
 .signOutBtn {
   border: none;
@@ -81,15 +93,28 @@
 }
 
 .signOutBtnImg {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   margin-bottom: 0.2rem;
 }
 
 .signOutBtnText {
   text-transform: uppercase;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
+}
+
+.msgImgContainer {
+  width: 33.3%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: inherit;
+  cursor: pointer;
+}
+.msgImgContainer:hover {
+  background-color: rgb(235, 235, 235);
 }
 
 .msgImg {

@@ -12,12 +12,12 @@ const SideNavigation = () => {
         </li>
         <li>
           <NavLink className={classes.link} to="/tradingPlatform/mainPanel">
-            My equities and cryptocurr
+            Securities
           </NavLink>
         </li>
         <li>
           <NavLink className={classes.link} to="/tradingPlatform/mainPanel">
-            Mark as Watched
+            Watchlist
           </NavLink>
         </li>
         <li>

@@ -17,7 +17,7 @@ label {
   transform: translateX(5rem);
 }
 
-input {
+.signUpInput {
   height: 2.5rem;
   width: 20rem;
   border: none;
@@ -27,7 +27,7 @@ input {
   margin-top: 0.5rem;
 }
 
-input:focus {
+.signUpInput:focus {
   border-bottom: 2px solid rgb(0, 112, 177);
   outline: none;
 }

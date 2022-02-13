@@ -1,0 +1,10 @@
+.modal {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+    height: max-content;
+    z-index: 300;
+    overflow: hidden;
+  }

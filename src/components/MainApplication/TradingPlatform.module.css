@@ -8,6 +8,6 @@
   grid-template-columns: 9rem auto;
   grid-template-rows: 6rem auto;
   position: relative;
-  background-color: rgb(238, 238, 238);
+  background-color: rgb(255, 255, 255);
   overflow-x: hidden;
 }

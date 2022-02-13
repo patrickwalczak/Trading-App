@@ -1,10 +1,18 @@
 import classes from './ExchangeOrderForm.module.css'
+import { useDispatch } from 'react-redux'
+import { searchResultsActions } from '../../../store/searchResults-slice';
+
 
 
 const FoundElement = (props) => {
+    const dispatch = useDispatch();
+
 
     const clickHandler = () => {
         console.log(props.data)
+
+        dispatch(searchResultsActions.addChosenSecurity({...props.data}))
+        
     }
 
     return <li className={classes.foundElement} onClick={clickHandler}>

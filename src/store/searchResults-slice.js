@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const searchResultsSlice = createSlice({
     name: 'searchResults',
     initialState: {
-        searchResults: []
+        searchResults: [],
+        chosenSecurity: null,
     },
     reducers: {
         searchByQuery(state, action) {
@@ -13,7 +14,14 @@ const searchResultsSlice = createSlice({
         },
         clearSearchResults(state) {
             state.searchResults = []
+        },
+        addChosenSecurity(state, action) {
+            state.chosenSecurity = action.payload
+        },
+        removeChosenSecurity(state) {
+            state.chosenSecurity = null
         }
+
 
 
     }

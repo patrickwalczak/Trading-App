@@ -2,7 +2,12 @@ import classes from './ExchangeOrderForm.module.css'
 
 
 const FoundElement = (props) => {
-    return <li className={classes.foundElement}>
+
+    const clickHandler = () => {
+        console.log(props.data)
+    }
+
+    return <li className={classes.foundElement} onClick={clickHandler}>
         <div className={classes.foundElementImgContainer}>
 
         <img src={props.data.image} className={classes.foundElementImg}></img>

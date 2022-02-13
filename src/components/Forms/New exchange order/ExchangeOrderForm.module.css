@@ -182,3 +182,34 @@ padding-right: 4rem;
     text-align: center;
     margin: auto;
 }
+
+.loadingSpinner {
+    width: 12px;
+    height: 12px;
+    animation: loading 1s infinite linear;
+    margin-right: 1rem;
+}
+  
+  @keyframes loading {
+    0% {
+      transform: rotate(0);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+
+  .clearInputBtn {
+      width: max-content;
+      height: max-content;
+      border: none;
+      outline: none;
+      background: none;
+      cursor: pointer;
+      font-weight: 500;
+      color: black;
+      margin-right: 1rem;
+  }
+

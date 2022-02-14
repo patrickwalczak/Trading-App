@@ -16,10 +16,8 @@ const ExchangeOrderForm = (props) => {
 
     const onChangeHandler = (e) => {
         setIsSearching(true)
-
         setSearchInputValue(e.target.value.trim())
     }
-
 
     const onBlurHandler = () => {
         setIsSearching(false)
@@ -29,10 +27,14 @@ const ExchangeOrderForm = (props) => {
         setSearchInputValue('')
     }
 
-    const closeFormActionsHandler = () => {
+    const resetSearchResults = (isModal = false) => {
         clearInputHandler();
-        searchResultsActions.clearSearchResults();
-        props.onChangeModalState()
+        dispatch(searchResultsActions.clearSearchResults());
+        dispatch(searchResultsActions.removeChosenSecurity())
+
+        if(isModal === 'yes') {
+            props.onChangeModalState()
+        }
     }
 
     useEffect(()=> {
@@ -42,15 +44,19 @@ const ExchangeOrderForm = (props) => {
     }, [dispatch, isSearching, searchInputValue])
 
 
-    return <Modal onChangeModalState={props.onChangeModalState} onCloseFormActions={closeFormActionsHandler}>
+    return <Modal onCloseFormActions={resetSearchResults.bind(null, 'yes')}>
         <div className={classes.exchangeFormContainer}>
             <div className={classes.formHeaderContainer}>
             <h3 className={classes.exchangeFormHeader}>Order new exchange</h3>
-            <button className={classes.formCloseBtn} onClick={closeFormActionsHandler}>X</button>
+            <button className={classes.formCloseBtn} onClick={resetSearchResults.bind(null, 'yes')}>X</button>
             </div>
             <form className={classes.exchangeForm}>
                 {!chosenSecurity?.id && <InputSearchContainer onBlur={onBlurHandler} onChange={onChangeHandler} value={searchInputValue} onClearInputHandler={clearInputHandler} />}
-                {chosenSecurity?.id && <ChosenSecurity data={chosenSecurity} />}
+                {chosenSecurity?.id && <ChosenSecurity data={chosenSecurity} onReset={resetSearchResults}  />}
+                <div className={classes.chooseTransactionTypeContainer}>
+                    <button className={`${classes.chooseTransactionBtn}`}>BUY</button>
+                    <button className={`${classes.chooseTransactionBtn}`}>SELL</button>
+                </div>
             </form>
         </div>
     </Modal>

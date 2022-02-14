@@ -10,7 +10,7 @@ const Modal = props => {
 
     return <Fragment>
 
-        {ReactDOM.createPortal(<Backdrop onCloseModal={props.onChangeModalState}/>, rootEl)}
+        {ReactDOM.createPortal(<Backdrop onCloseForm={props.onCloseFormActions}/>, rootEl)}
         {ReactDOM.createPortal(<ModalContentWrapper>{props.children}</ModalContentWrapper>, rootEl)}
 
     </Fragment>

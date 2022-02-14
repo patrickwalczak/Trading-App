@@ -10,21 +10,6 @@ const SideNavigation = () => {
             Main Panel
           </NavLink>
         </li>
-        <li>
-          <NavLink className={classes.link} to="/tradingPlatform/mainPanel">
-            Securities
-          </NavLink>
-        </li>
-        <li>
-          <NavLink className={classes.link} to="/tradingPlatform/mainPanel">
-            Watchlist
-          </NavLink>
-        </li>
-        <li>
-          <NavLink className={classes.link} to="/tradingPlatform/mainPanel">
-            Other
-          </NavLink>
-        </li>
       </ul>
     </nav>
   );

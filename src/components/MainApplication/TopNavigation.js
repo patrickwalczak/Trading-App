@@ -21,7 +21,7 @@ const TopNavigation = () => {
         <li className={classes.assetsLi}>Bought assets</li>
         <li className={classes.cashLi}>Cash</li>
         <li className={classes.buyLi}>
-          <button onClick={changeModalStateHandler}>+ NEW ORDER</button>
+          <button className={classes.newOrderBtn} onClick={changeModalStateHandler}>+ NEW ORDER</button>
         </li>
         <li className={classes.rightSideOptions}>
           <div className={classes.msgImgContainer}>

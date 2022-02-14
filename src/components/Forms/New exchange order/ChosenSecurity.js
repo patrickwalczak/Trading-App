@@ -1,16 +1,12 @@
 import classes from './ChosenSecurity.module.css'
 import searchImg from '../../../images/search.png'
-import { useDispatch } from 'react-redux'
-import { searchResultsActions } from '../../../store/searchResults-slice'
 
 
 const ChosenSecurity = (props) => {
-    const dispatch = useDispatch()
 
     const onReturnHandler = (e) => {
         e.preventDefault();
-
-        dispatch(searchResultsActions.removeChosenSecurity())
+        props.onReset()
     }
 
 

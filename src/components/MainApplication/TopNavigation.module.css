@@ -42,7 +42,7 @@
   justify-content: start
 }
 
-.buyLi button {
+.newOrderBtn {
   width: 12rem;
   min-width: max-content;
   height: 4.5rem;

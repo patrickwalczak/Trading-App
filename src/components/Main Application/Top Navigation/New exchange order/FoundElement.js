@@ -1,6 +1,6 @@
 import classes from './ExchangeOrderForm.module.css'
 import { useDispatch } from 'react-redux'
-import { searchResultsActions } from '../../../store/searchResults-slice';
+import { searchResultsActions } from '../../../../store/searchResults-slice';
 
 
 

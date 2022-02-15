@@ -1,4 +1,4 @@
-import SignUpForm from "../Forms/SignUpForm";
+import SignUpForm from "./SignUpForm";
 import Logo from "../UI/Logo";
 import classes from "./CreateAccount.module.css";
 

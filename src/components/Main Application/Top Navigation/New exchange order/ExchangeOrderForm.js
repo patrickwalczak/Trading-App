@@ -1,9 +1,9 @@
-import Modal from "../../UI/Modal/Modal"
+import Modal from "../../../UI/Modal/Modal"
 import classes from './ExchangeOrderForm.module.css'
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchCryptocurrencies } from "../../../store/takeCryptocurrencies"
-import { searchResultsActions } from "../../../store/searchResults-slice"
+import { fetchCryptocurrencies } from "../../../../store/takeCryptocurrencies"
+import { searchResultsActions } from "../../../../store/searchResults-slice"
 import InputSearchContainer from "./InputSearchContainer"
 import ChosenSecurity from "./ChosenSecurity"
 
@@ -57,6 +57,31 @@ const ExchangeOrderForm = (props) => {
                     <button className={`${classes.chooseTransactionBtn}`}>BUY</button>
                     <button className={`${classes.chooseTransactionBtn}`}>SELL</button>
                 </div>
+                <div className={classes.transactionDetailContainer}>
+                    <div className={`${classes.transactionInputLabelContainer} ${classes.priceContainer}`}>
+                        <label className={classes.transactionLabel} htmlFor="currentPrice">Price</label>
+                        <input className={classes.transactionInput}  type="number" id="currentPrice"></input>
+                    </div>
+                    <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
+                        <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
+                        <input className={classes.transactionInput} type="number" id="amount"></input>
+                    </div>
+                </div>
+                <div className={classes.transactionSummaryContainer}>
+                    <div className={classes.transactionSummaryFragment}>
+                        <h6 className={classes.transactionSummaryHeader}> Available funds </h6> <span className={classes.transactionSummaryValue}>699$</span>
+                    </div>
+                    <div className={classes.transactionSummaryFragment}>
+                        <h6 className={classes.transactionSummaryHeader}> Commission</h6> <span className={classes.transactionSummaryValue}>10$</span>
+                    </div>
+                    <div className={classes.transactionSummaryFragment}>
+                        <h6 className={classes.transactionSummaryHeader}> Order value</h6> <span className={classes.transactionSummaryValue}>10$</span>
+                    </div>
+                    <div className={classes.transactionSummaryFragment}>
+                        <h6 className={classes.transactionSummaryHeader}> Available funds after order</h6> <span className={classes.transactionSummaryValue}>10$</span>
+                    </div>
+                </div>
+                <button className={classes.placeOrderBtn} type="submit">Place Order</button>
             </form>
         </div>
     </Modal>

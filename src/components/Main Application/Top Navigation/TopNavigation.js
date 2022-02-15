@@ -1,8 +1,8 @@
 import classes from "./TopNavigation.module.css";
-import signOutImg from "../../images/signOutBtn.png";
-import msgImg from "../../images/email.png";
+import signOutImg from "../../../images/signOutBtn.png";
+import msgImg from "../../../images/email.png";
 import { Fragment, useState } from "react";
-import ExchangeOrderForm from "../Forms/New exchange order/ExchangeOrderForm";
+import ExchangeOrderForm from "./New exchange order/ExchangeOrderForm";
 
 const TopNavigation = () => {
     const [modalVisibility, setModalVisibility] = useState(false)

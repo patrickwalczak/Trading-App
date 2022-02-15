@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import MainPanel from "./MainPanel";
-import SideNavigation from "./SideNavigation";
-import TopNavigation from "./TopNavigation";
-import classes from "./TradingPlatform.module.css";
+import MainPanel from "./Panels/Home Panel/HomePanel";
+import SideNavigation from "./Side Navigation/SideNavigation";
+import TopNavigation from "./Top Navigation/TopNavigation";
+import classes from "./MainApplication.module.css";
 
 const TradingPlatform = () => {
   return (

@@ -235,3 +235,47 @@ padding-right: 4rem;
     height: 5rem;
     font-size: 1.6rem;
 }
+
+.transactionDetailContainer {
+    margin-top: 4rem;
+    width: 100%;
+    height: 8rem;
+    display: grid;
+    grid-template-columns: 47% 47%;
+    grid-template-rows: 5rem 5rem;
+    justify-content: space-between;
+    border: 1px solid black;
+
+}
+
+.transactionInputLabelContainer {
+display: flex;
+flex-direction: column;
+}
+
+
+.priceContainer {
+    grid-column: 1/2;
+    grid-row: 1/2;
+}
+
+.amountContainer {
+    grid-column: 2/3;
+    grid-row: 1/2;
+}
+
+.totalContainer {
+    grid-column: 2/3;
+    grid-row: 2/3;
+}
+
+.transactionLabel {
+    transform: none;
+    text-transform: uppercase;
+    color: rgb(104, 104, 104);
+    font-size: 1.7rem;
+}
+
+.transactionInput {
+height: 4rem;
+}

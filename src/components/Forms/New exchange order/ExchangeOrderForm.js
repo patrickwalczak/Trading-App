@@ -57,6 +57,16 @@ const ExchangeOrderForm = (props) => {
                     <button className={`${classes.chooseTransactionBtn}`}>BUY</button>
                     <button className={`${classes.chooseTransactionBtn}`}>SELL</button>
                 </div>
+                <div className={classes.transactionDetailContainer}>
+                    <div className={`${classes.transactionInputLabelContainer} ${classes.priceContainer}`}>
+                        <label className={classes.transactionLabel} htmlFor="currentPrice">Price</label>
+                        <input className={classes.transactionInput}  type="number" id="currentPrice"></input>
+                    </div>
+                    <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
+                        <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
+                        <input className={classes.transactionInput} type="number" id="amount"></input>
+                    </div>
+                </div>
             </form>
         </div>
     </Modal>

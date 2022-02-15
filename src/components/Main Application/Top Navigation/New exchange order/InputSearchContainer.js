@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 import classes from './ExchangeOrderForm.module.css'
 import { useSelector } from "react-redux"
-import searchImg from '../../../images/search.png'
-import loadingSpinnerImg from '../../../images/loadingSpinner.png'
+import searchImg from '../../../../images/search.png'
+import loadingSpinnerImg from '../../../../images/loadingSpinner.png'
 import FoundElementsContainer from './FoundElementsContainer';
 import StatusMsg from './StatusMsg';
 

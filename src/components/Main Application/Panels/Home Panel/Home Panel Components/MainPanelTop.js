@@ -1,5 +1,5 @@
 import classes from "./MainPanelTop.module.css";
-import analyticsImg from '../../../images/analytics.png'
+import analyticsImg from '../../../../../images/analytics.png'
 
 const MainPanelTop = () => {
   return (

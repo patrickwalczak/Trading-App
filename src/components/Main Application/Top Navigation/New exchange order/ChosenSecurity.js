@@ -1,5 +1,5 @@
 import classes from './ChosenSecurity.module.css'
-import searchImg from '../../../images/search.png'
+import searchImg from '../../../../images/search.png'
 
 
 const ChosenSecurity = (props) => {

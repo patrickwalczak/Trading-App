@@ -11,10 +11,10 @@ import TransactionDetail from "./TransactionDetail"
 import TransactionSummary from "./TransactionSummary"
 
 const ExchangeOrderForm = (props) => {
-    const [isSearching, setIsSearching] = useState(false)
-    const [searchInputValue, setSearchInputValue] = useState('')
-    const {chosenSecurity} = useSelector(state => state.searchResults)
-    const dispatch = useDispatch()
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchInputValue, setSearchInputValue] = useState('');
+    const {chosenSecurity} = useSelector(state => state.searchResults);
+    const dispatch = useDispatch();
 
 
     const onChangeHandler = (e) => {
@@ -46,6 +46,11 @@ const ExchangeOrderForm = (props) => {
         setTimeout(setIsSearching(false), 500)
     }, [dispatch, isSearching, searchInputValue])
 
+    const getTransactionTypeHandler = (type) => {
+
+        console.log(type)
+    }
+
 
     return <Modal onCloseFormActions={resetSearchResults.bind(null, 'yes')}>
         <div className={classes.exchangeFormContainer}>
@@ -53,9 +58,9 @@ const ExchangeOrderForm = (props) => {
             <form className={classes.exchangeForm}>
                 {!chosenSecurity && <InputSearchContainer onBlur={onBlurHandler} onChange={onChangeHandler} value={searchInputValue} onClearInputHandler={clearInputHandler} />}
                 {chosenSecurity && <ChosenSecurity data={chosenSecurity} onReset={resetSearchResults}  />}
-                <TransactionDetail />
+                <TransactionDetail onGetTransactionType={getTransactionTypeHandler} />
                 <TransactionSummary />
-                <button className={classes.placeOrderBtn} type="submit">Place Order</button>
+                <button disabled={true} className={`${classes.placeOrderBtn} ${chosenSecurity === null ? classes['disabled'] : ''}`} type="submit">Place Order</button>
             </form>
         </div>
     </Modal>

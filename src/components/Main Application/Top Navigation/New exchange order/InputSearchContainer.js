@@ -18,7 +18,7 @@ const InputSearchContainer = (props) => {
         <Fragment>
             <div className={classes.inputSearchContainer}>
                     <img className={classes.searchImg} src={searchImg}></img>
-                    <input value={props.value} onBlur={props.onBlur} onChange={props.onChange} 
+                    <input autoFocus value={props.value} onBlur={props.onBlur} onChange={props.onChange} 
                     className={classes.searchInput} type="text" placeholder="Search by symbol or name" ></input>
                     {displayClearInputBtn}
                     {displayLoadingSpinner}

@@ -1,0 +1,112 @@
+.chooseTransactionTypeContainer {
+    width: 100%;
+    height: 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 4rem;
+}
+
+.transactionTypeBtnGeneral {
+    background: none;
+    outline: none;
+    border: 1px solid black;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    height: 5rem;
+}
+
+.buyBtnClass {
+    width: 47%;
+}
+
+.sellBtnContainer {
+    width: 47%;
+    height: 5rem;
+}
+
+.sellBtnClass {
+    width: 100%;
+}
+
+.buyBtnClass.notChosen, .sellBtnClass.notChosen {
+    cursor: not-allowed;
+    border: 1px solid rgb(196, 196, 196);
+}
+
+.buyBtnClass.chosen, .sellBtnClass.chosen {
+    cursor: pointer;
+}
+
+.buyBtnClass.chosen:hover {
+    border: 1px solid rgb(0, 105, 0);
+    background-color: rgba(139, 255, 139, 0.397);
+}
+
+.buyBtnClass.chosen.active {
+    border: 1px solid rgb(0, 105, 0);
+    background-color: rgba(139, 255, 139, 0.397);
+}
+
+.sellBtnClass.chosen:hover {
+    border: 1px solid rgb(134, 15, 15);
+    background-color: rgba(255, 139, 139, 0.397);
+}
+
+.sellBtnClass.chosen.active {
+    border: 1px solid rgb(134, 15, 15);
+    background-color: rgba(255, 139, 139, 0.397);
+}
+
+.sellNotAvailable {
+    font-size: 1.2rem;
+    width: max-content;
+    color: rgb(224, 0, 0);
+    margin-top: 0.5rem;
+}
+
+/* ================================= */
+
+.transactionDetailContainer {
+    margin-top: 3rem;
+    width: 100%;
+    height: 8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.transactionInputLabelContainer {
+    display: flex;
+    flex-direction: column;
+    width: 47%;
+}
+
+.transactionLabel {
+    transform: none;
+    text-transform: uppercase;
+    color: rgb(104, 104, 104);
+    font-size: 1.7rem;
+    margin-bottom: 1rem;
+}
+
+.transactionInput {
+    height: 4rem;
+    padding-left: 1rem;
+    outline: none;
+}
+
+.transactionInput.notChosen {
+    cursor: not-allowed;
+}
+
+.invalidInputAmount {
+    font-size: 1.2rem;
+    width: max-content;
+    color: rgb(224, 0, 0);
+    margin-top: 0.5rem;
+    float: right;
+    margin-right: 17.8rem;
+    padding: 0;
+    height: 0;
+}

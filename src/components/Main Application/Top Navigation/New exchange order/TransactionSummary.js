@@ -3,7 +3,9 @@ import classes from './ExchangeOrderForm.module.css'
 
 
 const TransactionSummary = () =>{
-    const {availableFunds} = useSelector(state => state.accountData)
+    const {availableFunds} = useSelector(state => state.accountData);
+
+    const commissionValue = 0
 
 
     return ( 

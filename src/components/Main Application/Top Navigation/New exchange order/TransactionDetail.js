@@ -16,16 +16,28 @@ const TransactionDetail = (props) => {
 
     // If security will be chosen (for example cryptocurrency such as bitcoin), then we remove disabled property from buttons and input
     const isChoosing = chosenSecurity === null ? true : false;
+
     // This assures that if security is not chosen but button will be hovered then no styling will be applied for buttons
     const isChosenClass = chosenSecurity === null ? 'notChosen' : 'chosen';
 
     // These two classes apply styling for transaction type button when its clicked
     const activeBuyButtonClass = buyBtnIsActive ? 'active' : '';
     const activeSellButtonClass = sellBtnIsActive ? 'active' : '';
+    
+    // The same styling for both buy and sell transactons
     const transactionBtnClasses = `${classes.transactionTypeBtnGeneral} ${classes[isChosenClass]}`;
+
     const buyBtnClasses = `${classes.buyBtnClass} ${transactionBtnClasses} ${classes[activeBuyButtonClass]}`;
     const sellBtnClasses = `${classes.sellBtnClass} ${transactionBtnClasses} ${classes[activeSellButtonClass]}`;
+
+    // Variable which will help to apply styling for amount input only if security is chosen and transaction button is active
+    const enableAmountInput = !isChoosing && (buyBtnIsActive || sellBtnIsActive);
+    const enabledInputClass = enableAmountInput ? 'chosen' : 'notChosen';
+
+
     const chosenSecurityPrice = chosenSecurity?.current_price ? `$ ${chosenSecurity.current_price}` : '';
+
+    let errorMsg;
 
 
 
@@ -51,8 +63,7 @@ const TransactionDetail = (props) => {
             props.onGetTransactionType(transactionType)
             setSellBtnState(!sellBtnIsActive)
         };
-
-    }
+    }   
 
     const amountHandler = (e) => {
         setAmountInputValidation(true)
@@ -64,9 +75,10 @@ const TransactionDetail = (props) => {
 
         if(enteredAmount <= 0 && enteredAmount.length === 1) {
             setAmountInputValidation(false);
-            return
+            return;
         }
-           
+        
+        setAmountInputValue(enteredAmount)
     }
 
     useEffect(()=> {
@@ -97,12 +109,12 @@ return ( <Fragment>
                 </div>
             <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
                     <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
-                    <input disabled={isChoosing}  className={`${classes.transactionInput} ${classes[isChosenClass]}`} 
+                    <input disabled={!enableAmountInput}  className={`${classes.transactionInput} ${classes[enabledInputClass]}`} 
                     onChange={amountHandler}  type="number" id="amount"></input>
                 </div>
             </div>
-                {!amountInputIsValid && <p className={classes.invalidInputAmount}>Invalid input</p>}
-</Fragment>)
+                {!amountInputIsValid && <p className={classes.invalidInputAmount}>Invalid Input</p>}
+        </Fragment>)
 }
 
 export default TransactionDetail

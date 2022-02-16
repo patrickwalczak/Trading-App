@@ -6,6 +6,9 @@ import { fetchCryptocurrencies } from "../../../../store/takeCryptocurrencies"
 import { searchResultsActions } from "../../../../store/searchResults-slice"
 import InputSearchContainer from "./InputSearchContainer"
 import ChosenSecurity from "./ChosenSecurity"
+import OrderFormHeader from './OrderFormHeader'
+import TransactionDetail from "./TransactionDetail"
+import TransactionSummary from "./TransactionSummary"
 
 const ExchangeOrderForm = (props) => {
     const [isSearching, setIsSearching] = useState(false)
@@ -46,41 +49,12 @@ const ExchangeOrderForm = (props) => {
 
     return <Modal onCloseFormActions={resetSearchResults.bind(null, 'yes')}>
         <div className={classes.exchangeFormContainer}>
-            <div className={classes.formHeaderContainer}>
-            <h3 className={classes.exchangeFormHeader}>Order new exchange</h3>
-            <button className={classes.formCloseBtn} onClick={resetSearchResults.bind(null, 'yes')}>X</button>
-            </div>
+           <OrderFormHeader onReset={resetSearchResults.bind(null, 'yes')} />
             <form className={classes.exchangeForm}>
-                {!chosenSecurity?.id && <InputSearchContainer onBlur={onBlurHandler} onChange={onChangeHandler} value={searchInputValue} onClearInputHandler={clearInputHandler} />}
-                {chosenSecurity?.id && <ChosenSecurity data={chosenSecurity} onReset={resetSearchResults}  />}
-                <div className={classes.chooseTransactionTypeContainer}>
-                    <button className={`${classes.chooseTransactionBtn}`}>BUY</button>
-                    <button className={`${classes.chooseTransactionBtn}`}>SELL</button>
-                </div>
-                <div className={classes.transactionDetailContainer}>
-                    <div className={`${classes.transactionInputLabelContainer} ${classes.priceContainer}`}>
-                        <label className={classes.transactionLabel} htmlFor="currentPrice">Price</label>
-                        <input className={classes.transactionInput}  type="number" id="currentPrice"></input>
-                    </div>
-                    <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
-                        <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
-                        <input className={classes.transactionInput} type="number" id="amount"></input>
-                    </div>
-                </div>
-                <div className={classes.transactionSummaryContainer}>
-                    <div className={classes.transactionSummaryFragment}>
-                        <h6 className={classes.transactionSummaryHeader}> Available funds </h6> <span className={classes.transactionSummaryValue}>699$</span>
-                    </div>
-                    <div className={classes.transactionSummaryFragment}>
-                        <h6 className={classes.transactionSummaryHeader}> Commission</h6> <span className={classes.transactionSummaryValue}>10$</span>
-                    </div>
-                    <div className={classes.transactionSummaryFragment}>
-                        <h6 className={classes.transactionSummaryHeader}> Order value</h6> <span className={classes.transactionSummaryValue}>10$</span>
-                    </div>
-                    <div className={classes.transactionSummaryFragment}>
-                        <h6 className={classes.transactionSummaryHeader}> Available funds after order</h6> <span className={classes.transactionSummaryValue}>10$</span>
-                    </div>
-                </div>
+                {!chosenSecurity && <InputSearchContainer onBlur={onBlurHandler} onChange={onChangeHandler} value={searchInputValue} onClearInputHandler={clearInputHandler} />}
+                {chosenSecurity && <ChosenSecurity data={chosenSecurity} onReset={resetSearchResults}  />}
+                <TransactionDetail />
+                <TransactionSummary />
                 <button className={classes.placeOrderBtn} type="submit">Place Order</button>
             </form>
         </div>

@@ -16,7 +16,7 @@ const searchResultsSlice = createSlice({
             state.searchResults = []
         },
         addChosenSecurity(state, action) {
-            state.chosenSecurity = action.payload
+            state.chosenSecurity = {...action.payload, current_price: action.payload.current_price.toFixed(2)}
         },
         removeChosenSecurity(state) {
             state.chosenSecurity = null

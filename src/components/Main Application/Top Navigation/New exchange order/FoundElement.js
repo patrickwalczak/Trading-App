@@ -9,10 +9,7 @@ const FoundElement = (props) => {
 
 
     const clickHandler = () => {
-        console.log(props.data)
-
         dispatch(searchResultsActions.addChosenSecurity({...props.data}))
-        
     }
 
     return <li className={classes.foundElement} onClick={clickHandler}>

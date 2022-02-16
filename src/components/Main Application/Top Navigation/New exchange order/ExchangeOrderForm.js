@@ -12,7 +12,9 @@ import TransactionSummary from "./TransactionSummary"
 
 const ExchangeOrderForm = (props) => {
     const [isSearching, setIsSearching] = useState(false);
+    const [transactionType, setTransactionType] = useState('');
     const [searchInputValue, setSearchInputValue] = useState('');
+    const [transactionData, setTransactionData] = useState(null);
     const {chosenSecurity} = useSelector(state => state.searchResults);
     const dispatch = useDispatch();
 
@@ -47,8 +49,14 @@ const ExchangeOrderForm = (props) => {
     }, [dispatch, isSearching, searchInputValue])
 
     const getTransactionTypeHandler = (type) => {
+        setTransactionType(type)
+    }
 
-        console.log(type)
+    const getTransactionData = (data) => {
+        if(transactionType === 'BUY') {
+
+            setTransactionData(data)
+        }
     }
 
 
@@ -58,8 +66,8 @@ const ExchangeOrderForm = (props) => {
             <form className={classes.exchangeForm}>
                 {!chosenSecurity && <InputSearchContainer onBlur={onBlurHandler} onChange={onChangeHandler} value={searchInputValue} onClearInputHandler={clearInputHandler} />}
                 {chosenSecurity && <ChosenSecurity data={chosenSecurity} onReset={resetSearchResults}  />}
-                <TransactionDetail onGetTransactionType={getTransactionTypeHandler} />
-                <TransactionSummary />
+                <TransactionDetail onGetTransactionType={getTransactionTypeHandler} onGetTransactionData={getTransactionData} />
+                <TransactionSummary transactionData={transactionData} />
                 <button disabled={true} className={`${classes.placeOrderBtn} ${chosenSecurity === null ? classes['disabled'] : ''}`} type="submit">Place Order</button>
             </form>
         </div>

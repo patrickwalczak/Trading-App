@@ -9,10 +9,14 @@ const TransactionDetail = (props) => {
     const [sellNotAvailable, setSellAvailable] = useState(null);
     const [amountInputValue, setAmountInputValue] = useState('');
     const [amountInputIsValid, setAmountInputValidation] = useState(true);
+    const [errorMsg, setErrorMsg] = useState('');
+
 
 
     const {chosenSecurity} = useSelector(state => state.searchResults);
     const {transactions} = useSelector(state => state.accountData);
+    const {availableFunds} = useSelector(state => state.accountData);
+
 
     // If security will be chosen (for example cryptocurrency such as bitcoin), then we remove disabled property from buttons and input
     const isChoosing = chosenSecurity === null ? true : false;
@@ -36,8 +40,6 @@ const TransactionDetail = (props) => {
 
 
     const chosenSecurityPrice = chosenSecurity?.current_price ? `$ ${chosenSecurity.current_price}` : '';
-
-    let errorMsg;
 
 
 
@@ -69,16 +71,49 @@ const TransactionDetail = (props) => {
         setAmountInputValidation(true)
 
         const enteredAmount = e.target.value.trim();
+        const hasDot = enteredAmount.includes('.')
+
+        console.log(enteredAmount, hasDot)
+        if(enteredAmount.length === 0) {
+            return console.log('empty');
+        };
+
+        if(+enteredAmount < 0) {
+            setAmountInputValidation(false);
+            setErrorMsg('Negative');
+            return;
+        };
+
+        if(+enteredAmount === 0 && enteredAmount.length === 1 && !hasDot) {
+            setAmountInputValidation(false);
+            setErrorMsg('Zero');
+            return;
+        };
+
+        // if(enteredAmount <= 0 && enteredAmount.length === 1) {
+        //     setAmountInputValidation(false);
+        //     setErrorMsg('Invalid input');
+        //     return;
+        // }
 
         if(enteredAmount.includes(',')) enteredAmount.replace(',', '.');
 
+        const transactionValue = (chosenSecurity.current_price * enteredAmount).toFixed(2);
 
-        if(enteredAmount <= 0 && enteredAmount.length === 1) {
+        const commission = ((chosenSecurity.current_price * enteredAmount) * 0.01).toFixed(2);
+        
+        const total = availableFunds - transactionValue - commission < 0;
+
+        if(total) {
             setAmountInputValidation(false);
             return;
         }
-        
-        setAmountInputValue(enteredAmount)
+
+        const availableFundsAfterTransaction = (availableFunds - transactionValue - commission).toFixed(2);
+
+        setAmountInputValue(enteredAmount);
+        setAmountInputValidation(true);
+        props.onGetTransactionData({transactionValue, commission, availableFunds, availableFundsAfterTransaction});
     }
 
     useEffect(()=> {
@@ -113,7 +148,7 @@ return ( <Fragment>
                     onChange={amountHandler}  type="number" id="amount"></input>
                 </div>
             </div>
-                {!amountInputIsValid && <p className={classes.invalidInputAmount}>Invalid Input</p>}
+                {!amountInputIsValid && <p className={classes.invalidInputAmount}>{errorMsg}</p>}
         </Fragment>)
 }
 

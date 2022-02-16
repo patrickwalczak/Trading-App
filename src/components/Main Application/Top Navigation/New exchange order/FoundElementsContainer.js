@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 
 
 
-const FoundElementsContainer = (props) => {
+const FoundElementsContainer = () => {
     const {searchResults} = useSelector(state => state.searchResults)
     let content;
 

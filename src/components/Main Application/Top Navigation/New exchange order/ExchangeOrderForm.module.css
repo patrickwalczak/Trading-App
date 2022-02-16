@@ -229,11 +229,39 @@ padding-bottom: 4rem;
     background: none;
     outline: none;
     border: 1px solid black;
-    cursor: pointer;
     text-transform: uppercase;
     width: 47%;
     height: 5rem;
     font-size: 1.6rem;
+}
+
+.chooseTransactionBtn.notChosen {
+cursor: not-allowed;
+border: 1px solid rgb(196, 196, 196);
+}
+
+.chooseTransactionBtn.chosen {
+cursor: pointer;
+}
+
+.buyTransBtn.chosen:hover {
+border: 1px solid rgb(0, 105, 0);
+background-color: rgba(139, 255, 139, 0.397);
+}
+
+.buyTransBtn.chosen.active {
+border: 1px solid rgb(0, 105, 0);
+background-color: rgba(139, 255, 139, 0.397);
+}
+
+.sellTransBtn.chosen:hover {
+    border: 1px solid rgb(134, 15, 15);
+    background-color: rgba(255, 139, 139, 0.397);
+}
+
+.sellTransBtn.chosen.active {
+    border: 1px solid rgb(134, 15, 15);
+    background-color: rgba(255, 139, 139, 0.397);
 }
 
 .transactionDetailContainer {
@@ -246,9 +274,9 @@ padding-bottom: 4rem;
 }
 
 .transactionInputLabelContainer {
-display: flex;
-flex-direction: column;
-width: 47%;
+    display: flex;
+    flex-direction: column;
+    width: 47%;
 }
 
 .transactionLabel {
@@ -260,9 +288,15 @@ width: 47%;
 }
 
 .transactionInput {
-height: 4rem;
-padding-left: 1rem;
+    height: 4rem;
+    padding-left: 1rem;
+    outline: none;
 }
+
+.transactionInput.notChosen {
+    cursor: not-allowed;
+}
+
 
 .transactionSummaryContainer {
     width: 100%;

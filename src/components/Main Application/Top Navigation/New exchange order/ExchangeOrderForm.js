@@ -1,6 +1,6 @@
 import Modal from "../../../UI/Modal/Modal"
 import classes from './ExchangeOrderForm.module.css'
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCryptocurrencies } from "../../../../store/takeCryptocurrencies"
 import { searchResultsActions } from "../../../../store/searchResults-slice"
@@ -15,6 +15,8 @@ const ExchangeOrderForm = (props) => {
     const [transactionType, setTransactionType] = useState('');
     const [searchInputValue, setSearchInputValue] = useState('');
     const [transactionData, setTransactionData] = useState(null);
+    const amountInputRef = useRef();
+
     const {chosenSecurity} = useSelector(state => state.searchResults);
     const dispatch = useDispatch();
 
@@ -35,7 +37,10 @@ const ExchangeOrderForm = (props) => {
     const resetSearchResults = (isModal = false) => {
         clearInputHandler();
         dispatch(searchResultsActions.clearSearchResults());
-        dispatch(searchResultsActions.removeChosenSecurity())
+        dispatch(searchResultsActions.removeChosenSecurity());
+        setTransactionData(null);
+        setTransactionType('');
+        amountInputRef.current.value = '';
 
         if(isModal === 'yes') {
             props.onChangeModalState()
@@ -66,9 +71,9 @@ const ExchangeOrderForm = (props) => {
             <form className={classes.exchangeForm}>
                 {!chosenSecurity && <InputSearchContainer onBlur={onBlurHandler} onChange={onChangeHandler} value={searchInputValue} onClearInputHandler={clearInputHandler} />}
                 {chosenSecurity && <ChosenSecurity data={chosenSecurity} onReset={resetSearchResults}  />}
-                <TransactionDetail onGetTransactionType={getTransactionTypeHandler} onGetTransactionData={getTransactionData} />
+                <TransactionDetail ref={amountInputRef} onGetTransactionType={getTransactionTypeHandler} onGetTransactionData={getTransactionData} />
                 <TransactionSummary transactionData={transactionData} />
-                <button disabled={true} className={`${classes.placeOrderBtn} ${chosenSecurity === null ? classes['disabled'] : ''}`} type="submit">Place Order</button>
+                <button disabled={transactionData === null} className={`${classes.placeOrderBtn} ${transactionData === null ? classes['disabled'] : ''}`} type="submit">Place Order</button>
             </form>
         </div>
     </Modal>

@@ -1,13 +1,11 @@
-import { Fragment, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { accountDataActions } from "../../../../store/accountData-slice"
-import classes from './TransactionDetail.module.css'
+import React, { Fragment, useEffect, useState }  from "react";
+import { useSelector } from "react-redux";
+import classes from './TransactionDetail.module.css';
 
-const TransactionDetail = (props) => {
+const TransactionDetail = React.forwardRef((props, ref) => {
     const [buyBtnIsActive, setBuyBtnState] = useState(false);
     const [sellBtnIsActive, setSellBtnState] = useState(false);
     const [sellNotAvailable, setSellAvailable] = useState(null);
-    const [amountInputValue, setAmountInputValue] = useState('');
     const [amountInputIsValid, setAmountInputValidation] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
 
@@ -73,24 +71,30 @@ const TransactionDetail = (props) => {
         const enteredAmount = e.target.value;
         const searchDots = /\./g;
 
-        if(!enteredAmount) return;
+        const wrongInputActions = (errMsg) => {
+            setAmountInputValidation(false);
+            setErrorMsg(errMsg);
+            props.onGetTransactionData(null);
+        };
+
+        if(!enteredAmount) {
+            props.onGetTransactionData(null);
+            return;
+        };
 
         if(+enteredAmount < 0) {
-            setAmountInputValidation(false);
-            setErrorMsg('Amount cannot be a negative number');
+           wrongInputActions('Amount cannot be a negative number')
             return;
         };
 
        
         if((+enteredAmount === 0 && enteredAmount.length === 1) || enteredAmount === '0.0' || enteredAmount === '0,0') {
-            setAmountInputValidation(false);
-            setErrorMsg('Amount cannot be a zero');
+            wrongInputActions('Amount cannot be a zero');
             return;
         };
 
         if(enteredAmount.length >= 2 && enteredAmount[0] === '0' && enteredAmount.search(searchDots) !== 1) {
-            setAmountInputValidation(false);
-            setErrorMsg('Integer cannot start with zero');
+            wrongInputActions('Integer cannot start with zero');
             return;
         };
 
@@ -104,13 +108,12 @@ const TransactionDetail = (props) => {
 
         if(total) {
             setAmountInputValidation(false);
-            setErrorMsg('Insufficient funds')
+            setErrorMsg('Insufficient funds');
+            props.onGetTransactionData(null);
             return;
         }
 
         const availableFundsAfterTransaction = (availableFunds - transactionValue - commission).toFixed(2);
-
-        setAmountInputValue(enteredAmount);
 
         props.onGetTransactionData({transactionValue, commission, availableFunds, availableFundsAfterTransaction});
     }
@@ -124,8 +127,6 @@ const TransactionDetail = (props) => {
         }, 1000 )
 
     }, [sellNotAvailable])
-
-
 
 
 return ( <Fragment>
@@ -144,11 +145,11 @@ return ( <Fragment>
             <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
                     <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
                     <input disabled={!enableAmountInput}  className={`${classes.transactionInput} ${classes[enabledInputClass]}`} 
-                    onChange={amountHandler}  type="number" id="amount" maxLength="6"></input>
+                    onChange={amountHandler}  type="number" id="amount" maxLength="6" ref={ref}></input>
                 </div>
             </div>
-                {!amountInputIsValid && <p className={classes.invalidInputAmount}>{errorMsg}</p>}
+                {!amountInputIsValid && chosenSecurity && <p className={classes.invalidInputAmount}>{errorMsg}</p>}
         </Fragment>)
-}
+})
 
 export default TransactionDetail

@@ -69,34 +69,32 @@ const TransactionDetail = (props) => {
 
     const amountHandler = (e) => {
         setAmountInputValidation(true)
+        setErrorMsg('')
+        const enteredAmount = e.target.value;
+        const searchDots = /\./g;
 
-        const enteredAmount = e.target.value.trim();
-        const hasDot = enteredAmount.includes('.')
-
-        console.log(enteredAmount, hasDot)
-        if(enteredAmount.length === 0) {
-            return console.log('empty');
-        };
+        if(!enteredAmount) return;
 
         if(+enteredAmount < 0) {
             setAmountInputValidation(false);
-            setErrorMsg('Negative');
+            setErrorMsg('Amount cannot be a negative number');
             return;
         };
 
-        if(+enteredAmount === 0 && enteredAmount.length === 1 && !hasDot) {
+       
+        if((+enteredAmount === 0 && enteredAmount.length === 1) || enteredAmount === '0.0' || enteredAmount === '0,0') {
             setAmountInputValidation(false);
-            setErrorMsg('Zero');
+            setErrorMsg('Amount cannot be a zero');
             return;
         };
 
-        // if(enteredAmount <= 0 && enteredAmount.length === 1) {
-        //     setAmountInputValidation(false);
-        //     setErrorMsg('Invalid input');
-        //     return;
-        // }
+        if(enteredAmount.length >= 2 && enteredAmount[0] === '0' && enteredAmount.search(searchDots) !== 1) {
+            setAmountInputValidation(false);
+            setErrorMsg('Integer cannot start with zero');
+            return;
+        };
 
-        if(enteredAmount.includes(',')) enteredAmount.replace(',', '.');
+        setAmountInputValidation(true);
 
         const transactionValue = (chosenSecurity.current_price * enteredAmount).toFixed(2);
 
@@ -106,13 +104,14 @@ const TransactionDetail = (props) => {
 
         if(total) {
             setAmountInputValidation(false);
+            setErrorMsg('Insufficient funds')
             return;
         }
 
         const availableFundsAfterTransaction = (availableFunds - transactionValue - commission).toFixed(2);
 
         setAmountInputValue(enteredAmount);
-        setAmountInputValidation(true);
+
         props.onGetTransactionData({transactionValue, commission, availableFunds, availableFundsAfterTransaction});
     }
 
@@ -145,7 +144,7 @@ return ( <Fragment>
             <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
                     <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
                     <input disabled={!enableAmountInput}  className={`${classes.transactionInput} ${classes[enabledInputClass]}`} 
-                    onChange={amountHandler}  type="number" id="amount"></input>
+                    onChange={amountHandler}  type="number" id="amount" maxLength="6"></input>
                 </div>
             </div>
                 {!amountInputIsValid && <p className={classes.invalidInputAmount}>{errorMsg}</p>}

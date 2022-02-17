@@ -1,1 +1,1 @@
-Currently, my new React project is being built here!
+My new React project is being built here!

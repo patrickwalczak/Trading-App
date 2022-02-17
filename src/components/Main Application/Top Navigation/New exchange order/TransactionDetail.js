@@ -104,7 +104,8 @@ const TransactionDetail = (props) => {
 
         if(total) {
             setAmountInputValidation(false);
-            setErrorMsg('Insufficient funds')
+            setErrorMsg('Insufficient funds');
+            props.onGetTransactionData(null);
             return;
         }
 

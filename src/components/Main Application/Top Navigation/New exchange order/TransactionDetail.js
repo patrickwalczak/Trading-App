@@ -40,6 +40,8 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     const enableAmountInput = !isChoosing && (buyBtnIsActive || sellBtnIsActive);
     const enabledInputClass = enableAmountInput ? 'chosen' : 'notChosen';
 
+    const addErrBorder = !amountInputIsValid && errorMsg !== '' ? 'errBorder' : '';
+
 
     const chosenSecurityPrice = chosenSecurity?.current_price ? `$ ${chosenSecurity.current_price}` : '';
 
@@ -114,10 +116,6 @@ const TransactionDetail = React.forwardRef((props, ref) => {
 
         const transactionValue = (chosenSecurity.current_price * enteredAmount).toFixed(2);
 
-        if(transactionValue < 1) {
-            return wrongInputActions('Order value must be at least $1');
-        }
-
         const commission = ((chosenSecurity.current_price * enteredAmount) * 0.01).toFixed(2);
         
         const total = availableFunds - transactionValue - commission < 0;
@@ -154,7 +152,7 @@ return ( <Fragment>
                 </div>
             <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
                     <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
-                    <input disabled={!enableAmountInput}  className={`${classes.transactionInput} ${classes[enabledInputClass]}`} 
+                    <input disabled={!enableAmountInput}  className={`${classes.transactionInput} ${classes[enabledInputClass]} ${classes[addErrBorder]}`} 
                     onChange={amountHandler}  type="number" id="amount" maxLength="6" ref={amountInputRef}></input>
                 </div>
             </div>

@@ -40,8 +40,8 @@ const ExchangeOrderForm = (props) => {
         dispatch(searchResultsActions.removeChosenSecurity());
         setTransactionData(null);
         setTransactionType('');
-        amountInputRef.current.value = '';
-
+        amountInputRef.current.resetTransactionDetail();
+        
         if(isModal === 'yes') {
             props.onChangeModalState()
         }
@@ -54,13 +54,29 @@ const ExchangeOrderForm = (props) => {
     }, [dispatch, isSearching, searchInputValue])
 
     const getTransactionTypeHandler = (type) => {
-        setTransactionType(type)
+
+        setTransactionType(type);
     }
 
     const getTransactionData = (data) => {
         if(transactionType === 'BUY') {
 
             setTransactionData(data)
+        }
+    }
+
+    const sendingTransactionDataHandler = (e) => {
+        e.preventDefault();
+        
+        const transaction = {
+            id: '1',
+            type: transactionType,
+            orderValue: transactionData.transactionValue,
+            commission: transactionData.commission, 
+            availableFundsAfter: transactionData.availableFundsAfterTransaction,
+            securityName: chosenSecurity.name,
+            securityID: chosenSecurity.id,
+            securityPrice: chosenSecurity.current_price,
         }
     }
 
@@ -73,7 +89,7 @@ const ExchangeOrderForm = (props) => {
                 {chosenSecurity && <ChosenSecurity data={chosenSecurity} onReset={resetSearchResults}  />}
                 <TransactionDetail ref={amountInputRef} onGetTransactionType={getTransactionTypeHandler} onGetTransactionData={getTransactionData} />
                 <TransactionSummary transactionData={transactionData} />
-                <button disabled={transactionData === null} className={`${classes.placeOrderBtn} ${transactionData === null ? classes['disabled'] : ''}`} type="submit">Place Order</button>
+                <button onClick={sendingTransactionDataHandler} disabled={transactionData === null} className={`${classes.placeOrderBtn} ${transactionData === null ? classes['disabled'] : ''}`} type="submit">Place Order</button>
             </form>
         </div>
     </Modal>

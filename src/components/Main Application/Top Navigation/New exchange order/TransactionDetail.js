@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState }  from "react";
+import React, { Fragment, useEffect, useState, useImperativeHandle, useRef }  from "react";
 import { useSelector } from "react-redux";
 import classes from './TransactionDetail.module.css';
 
@@ -8,8 +8,12 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     const [sellNotAvailable, setSellAvailable] = useState(null);
     const [amountInputIsValid, setAmountInputValidation] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
+    const amountInputRef = useRef();
 
 
+    useImperativeHandle(ref, () => ({
+        resetTransactionDetail: resetDetailHandler,
+    }));
 
     const {chosenSecurity} = useSelector(state => state.searchResults);
     const {transactions} = useSelector(state => state.accountData);
@@ -39,20 +43,31 @@ const TransactionDetail = React.forwardRef((props, ref) => {
 
     const chosenSecurityPrice = chosenSecurity?.current_price ? `$ ${chosenSecurity.current_price}` : '';
 
-
+    const resetDetailHandler = () => {
+        setBuyBtnState(false);
+        setSellBtnState(false);
+        amountInputRef.current.value = '';
+        setErrorMsg('');
+        amountInputIsValid(true);
+    };
 
     const transactionTypeBtnHandler = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         const transactionType = e.target.dataset.transactionType;
+
+        if(buyBtnIsActive || sellBtnIsActive) {
+            props.onGetTransactionData(null);
+            return resetDetailHandler();
+        };
         
         if(transactionType === "BUY") {
-            setSellBtnState(false)
-            setBuyBtnState(!buyBtnIsActive)
-            props.onGetTransactionType(transactionType)
+            setSellBtnState(false);
+            setBuyBtnState(!buyBtnIsActive);
+            props.onGetTransactionType(transactionType);
         };
 
         if(transactionType === "SELL") {
-            setBuyBtnState(false)
+            setBuyBtnState(false);
 
             const foundTransactionIndex = Number(transactions.findIndex(item => item.securityID === chosenSecurity.id));
 
@@ -60,14 +75,15 @@ const TransactionDetail = React.forwardRef((props, ref) => {
                 return setSellAvailable(false);
             }
             
-            props.onGetTransactionType(transactionType)
-            setSellBtnState(!sellBtnIsActive)
+            props.onGetTransactionType(transactionType);
+            setSellBtnState(!sellBtnIsActive);
         };
+
     }   
 
     const amountHandler = (e) => {
-        setAmountInputValidation(true)
-        setErrorMsg('')
+        setAmountInputValidation(true);
+        setErrorMsg('');
         const enteredAmount = e.target.value;
         const searchDots = /\./g;
 
@@ -78,45 +94,40 @@ const TransactionDetail = React.forwardRef((props, ref) => {
         };
 
         if(!enteredAmount) {
-            props.onGetTransactionData(null);
-            return;
+            return props.onGetTransactionData(null);
         };
 
         if(+enteredAmount < 0) {
-           wrongInputActions('Amount cannot be a negative number')
-            return;
+            return wrongInputActions('Amount cannot be a negative number');
         };
 
        
         if((+enteredAmount === 0 && enteredAmount.length === 1) || enteredAmount === '0.0' || enteredAmount === '0,0') {
-            wrongInputActions('Amount cannot be a zero');
-            return;
+            return wrongInputActions('Amount cannot be a zero');
         };
 
         if(enteredAmount.length >= 2 && enteredAmount[0] === '0' && enteredAmount.search(searchDots) !== 1) {
-            wrongInputActions('Integer cannot start with zero');
-            return;
+            return wrongInputActions('Integer cannot start with zero');
         };
 
         setAmountInputValidation(true);
 
         const transactionValue = (chosenSecurity.current_price * enteredAmount).toFixed(2);
 
+        if(transactionValue < 1) {
+            return wrongInputActions('Order value must be at least $1');
+        }
+
         const commission = ((chosenSecurity.current_price * enteredAmount) * 0.01).toFixed(2);
         
         const total = availableFunds - transactionValue - commission < 0;
 
-        if(total) {
-            setAmountInputValidation(false);
-            setErrorMsg('Insufficient funds');
-            props.onGetTransactionData(null);
-            return;
-        }
+        if(total) return wrongInputActions('Insufficient funds');
 
         const availableFundsAfterTransaction = (availableFunds - transactionValue - commission).toFixed(2);
 
         props.onGetTransactionData({transactionValue, commission, availableFunds, availableFundsAfterTransaction});
-    }
+    };
 
     useEffect(()=> {
         setTimeout(() =>{
@@ -126,8 +137,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
         
         }, 1000 )
 
-    }, [sellNotAvailable])
-
+    }, [sellNotAvailable]);
 
 return ( <Fragment>
             <div className={`${classes.chooseTransactionTypeContainer }`}>
@@ -145,11 +155,11 @@ return ( <Fragment>
             <div className={`${classes.transactionInputLabelContainer} ${classes.amountContainer}`}>
                     <label className={classes.transactionLabel} htmlFor="amount">Amount</label>
                     <input disabled={!enableAmountInput}  className={`${classes.transactionInput} ${classes[enabledInputClass]}`} 
-                    onChange={amountHandler}  type="number" id="amount" maxLength="6" ref={ref}></input>
+                    onChange={amountHandler}  type="number" id="amount" maxLength="6" ref={amountInputRef}></input>
                 </div>
             </div>
                 {!amountInputIsValid && chosenSecurity && <p className={classes.invalidInputAmount}>{errorMsg}</p>}
         </Fragment>)
-})
+});
 
 export default TransactionDetail

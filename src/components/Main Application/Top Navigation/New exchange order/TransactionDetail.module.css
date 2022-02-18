@@ -39,23 +39,27 @@
 }
 
 .buyBtnClass.chosen:hover {
-    border: 1px solid rgb(0, 105, 0);
-    background-color: rgba(139, 255, 139, 0.397);
+    border: 1px solid #39a935;
+    background-color: #e8f8ea;
+    color: #39a935;
 }
 
 .buyBtnClass.chosen.active {
-    border: 1px solid rgb(0, 105, 0);
-    background-color: rgba(139, 255, 139, 0.397);
+    border: 1px solid #39a935;
+    background-color: #e8f8ea;
+    color: #39a935;
 }
 
 .sellBtnClass.chosen:hover {
-    border: 1px solid rgb(134, 15, 15);
-    background-color: rgba(255, 139, 139, 0.397);
+    border: 1px solid #e01017;
+    background-color: #ffeaea;
+    color: #e01017;
 }
 
 .sellBtnClass.chosen.active {
-    border: 1px solid rgb(134, 15, 15);
-    background-color: rgba(255, 139, 139, 0.397);
+    border: 1px solid #e01017;
+    background-color: #ffeaea;
+    color: #e01017;
 }
 
 .sellNotAvailable {

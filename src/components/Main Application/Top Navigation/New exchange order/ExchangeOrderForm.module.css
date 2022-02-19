@@ -1,274 +1,266 @@
 .exchangeFormContainer {
-    width: 60rem;
-    height: 60rem;
-    background-color: white;
-    border-radius: 0.5rem;
-
+  width: 60rem;
+  height: 60rem;
+  background-color: white;
+  border-radius: 0.5rem;
 }
 
 .formHeaderContainer {
-    display: flex;
-    flex-direction: row;
-    border-bottom: 1px solid rgb(199, 199, 199);
-    align-items: center;
-    justify-content: space-between;
-    padding: 2rem;
-    background-color: rgb(255, 255, 255);
-    width: 100%;
-    height: 6rem;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid rgb(199, 199, 199);
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: 6rem;
 }
 
 .exchangeFormHeader {
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 1.8rem;
-    color: rgb(90, 90, 90);
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 1.8rem;
+  color: rgb(90, 90, 90);
 }
 
 .formCloseBtn {
-    border: none;
-    background-color: inherit;
-    font-size: 2rem;
-    cursor: pointer;
+  border: none;
+  background-color: inherit;
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 .exchangeForm {
-border: none;
-width: 100%;
-height: 100%;
-max-height: 54rem;
-padding-left: 4rem;
-padding-right: 4rem;
-padding-bottom: 4rem;
+  border: none;
+  width: 100%;
+  height: 100%;
+  max-height: 54rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  padding-bottom: 4rem;
 }
 
 .inputSearchContainer {
-    border: 1px solid gray;
-    height: 5rem;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding-left: 0.5rem;
-    position: relative;
-    margin-bottom: 0rem;
+  border: 1px solid gray;
+  height: 5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+  position: relative;
+  margin-bottom: 0rem;
 }
 
 .searchImg {
-    width: 14px;
-    height: 14px;
+  width: 14px;
+  height: 14px;
 }
 
 .searchInput {
-    width: 95%;
-    height: 2.5rem;
-    padding-left: 1rem;
-    outline: none;
-    border: none;
-    font-size: 1.5rem;
+  width: 95%;
+  height: 2.5rem;
+  padding-left: 1rem;
+  outline: none;
+  border: none;
+  font-size: 1.5rem;
 }
 
 .foundElementsContainer {
-    width: 86.7%;
-    height: auto;
-    background-color: rgb(255, 255, 255);
-    position: absolute;
+  width: 86.7%;
+  height: auto;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
 }
 
 .foundElementsHeader {
-    width: 100%;
-    background-color: rgb(236, 236, 236);
-    font-size: 1.4rem;
-    padding: 1rem;
-    text-transform: uppercase;
-    font-weight: 400;
+  width: 100%;
+  background-color: rgb(236, 236, 236);
+  font-size: 1.4rem;
+  padding: 1rem;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 
 .resultsAmount {
-    margin-left: 0.5rem;
-    font-weight: 600;
+  margin-left: 0.5rem;
+  font-weight: 600;
 }
 
 .foundElementsList {
-    width: 100%;
-    height: auto;
-    max-height: 36rem;
-    overflow-y: scroll;
-    z-index: 100;
+  width: 100%;
+  height: auto;
+  max-height: 36rem;
+  overflow-y: scroll;
+  z-index: 100;
 }
 
-
 .foundElement {
-    width: 100%;
-    height: 6rem;
-    display: flex;
-    align-items: center;
-    background-color: rgb(250, 250, 250);
-    border-bottom: 1px solid rgb(231, 231, 231);
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+  width: 100%;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  background-color: rgb(250, 250, 250);
+  border-bottom: 1px solid rgb(231, 231, 231);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .foundElement:hover {
-    cursor: pointer;
-    background-color: rgb(245, 244, 244);
+  cursor: pointer;
+  background-color: rgb(245, 244, 244);
 }
 
 .foundElementImgContainer {
-    width: 100%;
-    height: 100%;
-    flex: 1.5;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  flex: 1.5;
+  position: relative;
 }
-
 
 .foundElementImg {
-    position: absolute;
-    top: 45%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-    width: 35px;
-    height:35px;
-    flex: 2;
+  position: absolute;
+  top: 45%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  width: 35px;
+  height: 35px;
+  flex: 2;
 }
 
-
 .foundElementNameSymbolContainer {
-    text-transform: uppercase;
-    flex: 8;
+  text-transform: uppercase;
+  flex: 8;
 }
 
 .foundElName {
-    font-weight: 600;
-    font-size: 1.4rem;
-    margin-bottom: 0.2rem;
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
 }
 
 .foundElSymbol {
-    display: block;
-    font-size: 1.2rem;
-    color: gray;
+  display: block;
+  font-size: 1.2rem;
+  color: gray;
 }
 
 .foundElType {
-    text-transform: capitalize;
-    display: block;
-    flex: 1;
-    width: max-content;
-    border-radius: 1rem;
-    padding: 5px;
-    border: 1px solid gray;
-    font-size: 1.1rem;
-    align-self: flex-start;
-    margin-top: 1rem;
+  text-transform: capitalize;
+  display: block;
+  flex: 1;
+  width: max-content;
+  border-radius: 1rem;
+  padding: 5px;
+  border: 1px solid gray;
+  font-size: 1.1rem;
+  align-self: flex-start;
+  margin-top: 1rem;
 }
 
 .errorMessage {
-    height: 10rem;
-    margin: auto;
-    color: black;
-    padding-top: 3rem;
-    padding-left: 7rem;
-
+  height: 10rem;
+  margin: auto;
+  color: black;
+  padding-top: 3rem;
+  padding-left: 7rem;
 }
 
 .foundNoElConta {
-    width: 100%;
-    height: 10rem;
-    background-color: rgb(250, 250, 250);
-    padding-top: 3.5rem;
+  width: 100%;
+  height: 10rem;
+  background-color: rgb(250, 250, 250);
+  padding-top: 3.5rem;
 }
 
-.foundNoElMsg {    
-    text-transform: uppercase;
-    color: rgb(110, 110, 110);
-    text-align: center;
-    margin: auto;
+.foundNoElMsg {
+  text-transform: uppercase;
+  color: rgb(110, 110, 110);
+  text-align: center;
+  margin: auto;
 }
 
 .loadingSpinner {
-    width: 12px;
-    height: 12px;
-    animation: loading 1s infinite linear;
-    margin-right: 1rem;
+  width: 12px;
+  height: 12px;
+  animation: loading 1s infinite linear;
+  margin-right: 1rem;
 }
-  
-  @keyframes loading {
-    0% {
-      transform: rotate(0);
-    }
-  
-    100% {
-      transform: rotate(360deg);
-    }
+
+@keyframes loading {
+  0% {
+    transform: rotate(0);
   }
 
-
-  .clearInputBtn {
-      width: max-content;
-      height: max-content;
-      border: none;
-      outline: none;
-      background: none;
-      cursor: pointer;
-      font-weight: 500;
-      color: black;
-      margin-right: 1rem;
+  100% {
+    transform: rotate(360deg);
   }
+}
 
-
+.clearInputBtn {
+  width: max-content;
+  height: max-content;
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: black;
+  margin-right: 1rem;
+}
 
 .transactionSummaryContainer {
-    width: 100%;
-    height: 12rem;
-    margin-bottom: 3rem;
-    margin-top: 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  width: 100%;
+  height: 12rem;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .transactionSummaryFragment {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .transactionSummaryHeader {
-font-weight: 500;
+  font-weight: 500;
 }
 
-.transactionSummaryHeader, .transactionSummaryValue {
-font-size: 1.5rem;
+.transactionSummaryHeader,
+.transactionSummaryValue {
+  font-size: 1.5rem;
 }
 
 .transactionSummaryValue {
-    display: block;
+  display: block;
 }
 
 .availableFunds {
-    color: rgb(0, 177, 0);
-    font-weight: 500;
-    letter-spacing: 1px;
+  color: rgb(0, 177, 0);
+  font-weight: 500;
+  letter-spacing: 1px;
 }
 
 .placeOrderBtn {
-    width: 75%;
-    float: right;
-    height: 4rem;
-    font-size: 1.8rem;
-    padding: 1rem;
-    text-transform: uppercase;
-    outline: none;
-    background-color: rgb(39, 39, 39);
-    border: none;
-    cursor: pointer;
-    color: white;
-    border-radius: 0.5rem;
+  width: 75%;
+  float: right;
+  height: 4rem;
+  font-size: 1.8rem;
+  padding: 1rem;
+  text-transform: uppercase;
+  outline: none;
+  background-color: rgb(39, 39, 39);
+  border: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 0.5rem;
 }
 
 .placeOrderBtn.disabled {
-    cursor: not-allowed;
-    background-color: rgb(212, 212, 212);
-    color: rgb(150, 150, 150);
+  cursor: not-allowed;
+  background-color: rgb(212, 212, 212);
+  color: rgb(150, 150, 150);
 }
-

@@ -7,8 +7,13 @@ const accountDataSlice = createSlice({
     transactions: [],
     availableFunds: 10000,
     currency: "USD",
+    watchList: [],
   },
-  reducers: {},
+  reducers: {
+    addTransaction(state, action) {
+      const { transactionData } = action.payload;
+    },
+  },
 });
 
 export const accountDataActions = accountDataSlice.actions;

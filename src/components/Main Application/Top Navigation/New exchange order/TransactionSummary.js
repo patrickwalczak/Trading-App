@@ -3,18 +3,36 @@ import classes from "./ExchangeOrderForm.module.css";
 
 const TransactionSummary = (props) => {
   const { availableFunds } = useSelector((state) => state.accountData);
+
+  const localStringOptions = {
+    maximumFractionDigits: 2,
+    style: "currency",
+    currency: "USD",
+  };
+
   const commissionValue =
     props.transactionData !== null
-      ? `- ${props.transactionData.commission}`
+      ? `- ${props.transactionData.finalCommission.toLocaleString(
+          "en-US",
+          localStringOptions
+        )}`
       : "-";
   const orderValue =
     props.transactionData !== null
-      ? `- ${props.transactionData.transactionValue}`
+      ? `- ${props.transactionData.transactionValue.toLocaleString(
+          "en-US",
+          localStringOptions
+        )}`
       : "-";
   const fundsAfterValue =
     props.transactionData !== null
-      ? `${props.transactionData.availableFundsAfterTransaction}`
+      ? `${props.transactionData.availableFundsAfterTransaction.toLocaleString(
+          "en-US",
+          localStringOptions
+        )}`
       : "-";
+
+  const activeClass = props.transactionData !== null ? "active" : "";
 
   return (
     <div className={classes.transactionSummaryContainer}>
@@ -23,44 +41,31 @@ const TransactionSummary = (props) => {
         <span
           className={`${classes.transactionSummaryValue} ${classes.availableFunds}`}
         >
-          {availableFunds.toLocaleString("en-US", {
-            maximumFractionDigits: 2,
-            style: "currency",
-            currency: "USD",
-          })}
+          {availableFunds.toLocaleString("en-US", localStringOptions)}
         </span>
       </div>
       <div className={classes.transactionSummaryFragment}>
-        <h6 className={classes.transactionSummaryHeader}> Commission</h6>{" "}
-        <span className={classes.transactionSummaryValue}>
-          {commissionValue.toLocaleString("en-US", {
-            maximumFractionDigits: 2,
-            style: "currency",
-            currency: "USD",
-          })}
+        <h6 className={classes.transactionSummaryHeader}> Commission</h6>
+        <span
+          className={`${classes.transactionSummaryValue} ${classes[activeClass]}`}
+        >
+          {commissionValue}
         </span>
       </div>
       <div className={classes.transactionSummaryFragment}>
-        <h6 className={classes.transactionSummaryHeader}> Order value</h6>{" "}
-        <span className={classes.transactionSummaryValue}>
-          {orderValue.toLocaleString("en-US", {
-            maximumFractionDigits: 2,
-            style: "currency",
-            currency: "USD",
-          })}
+        <h6 className={classes.transactionSummaryHeader}> Order value</h6>
+        <span
+          className={`${classes.transactionSummaryValue} ${classes[activeClass]}`}
+        >
+          {orderValue}
         </span>
       </div>
       <div className={classes.transactionSummaryFragment}>
         <h6 className={classes.transactionSummaryHeader}>
-          {" "}
           Available funds after order
-        </h6>{" "}
-        <span className={classes.transactionSummaryValue}>
-          {fundsAfterValue.toLocaleString("en-US", {
-            maximumFractionDigits: 2,
-            style: "currency",
-            currency: "USD",
-          })}
+        </h6>
+        <span className={`${classes.total} ${classes[activeClass]}`}>
+          {fundsAfterValue}
         </span>
       </div>
     </div>

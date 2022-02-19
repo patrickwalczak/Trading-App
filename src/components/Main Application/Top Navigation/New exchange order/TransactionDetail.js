@@ -48,7 +48,11 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     !amountInputIsValid && errorMsg !== "" ? "errBorder" : "";
 
   const chosenSecurityPrice = chosenSecurity?.current_price
-    ? `$ ${chosenSecurity.current_price}`
+    ? `${chosenSecurity.current_price.toLocaleString("en-US", {
+        maximumFractionDigits: 2,
+        style: "currency",
+        currency: "USD",
+      })}`
     : "";
 
   const resetDetailHandler = () => {
@@ -56,7 +60,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     setSellBtnState(false);
     amountInputRef.current.value = "";
     setErrorMsg("");
-    amountInputIsValid(true);
+    setAmountInputValidation(true);
   };
 
   const transactionTypeBtnHandler = (e) => {
@@ -128,29 +132,28 @@ const TransactionDetail = React.forwardRef((props, ref) => {
 
     setAmountInputValidation(true);
 
-    const transactionValue = (
-      chosenSecurity.current_price * enteredAmount
-    ).toFixed(2);
+    const transactionValue = Number(
+      (chosenSecurity.current_price * enteredAmount).toFixed(2)
+    );
 
-    const commission = (
-      chosenSecurity.current_price *
-      enteredAmount *
-      0.01
-    ).toFixed(2);
+    const COMMISSION = 0.25;
+    const calcCommision = Number(
+      (chosenSecurity.current_price * enteredAmount * 0.01).toFixed(2)
+    );
 
-    const total = availableFunds - transactionValue - commission < 0;
+    const finalCommission = calcCommision < 0.25 ? COMMISSION : calcCommision;
+
+    const total = availableFunds - transactionValue - finalCommission < 0;
 
     if (total) return wrongInputActions("Insufficient funds");
 
-    const availableFundsAfterTransaction = (
-      availableFunds -
-      transactionValue -
-      commission
-    ).toFixed(2);
+    const availableFundsAfterTransaction = Number(
+      (availableFunds - transactionValue - finalCommission).toFixed(2)
+    );
 
     props.onGetTransactionData({
       transactionValue,
-      commission,
+      finalCommission,
       availableFunds,
       availableFundsAfterTransaction,
     });
@@ -216,7 +219,6 @@ const TransactionDetail = React.forwardRef((props, ref) => {
             onChange={amountHandler}
             type="number"
             id="amount"
-            maxLength="6"
             ref={amountInputRef}
           ></input>
         </div>

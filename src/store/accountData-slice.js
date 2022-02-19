@@ -5,7 +5,7 @@ const accountDataSlice = createSlice({
   initialState: {
     userName: "",
     transactions: [],
-    availableFunds: 1000,
+    availableFunds: 10000,
     currency: "USD",
   },
   reducers: {},

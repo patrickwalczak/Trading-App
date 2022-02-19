@@ -230,8 +230,17 @@
 }
 
 .transactionSummaryHeader,
-.transactionSummaryValue {
+.transactionSummaryValue,
+.total {
   font-size: 1.5rem;
+}
+
+.transactionSummaryValue.active {
+  color: rgb(219, 22, 22);
+}
+
+.total.active {
+  font-weight: 600;
 }
 
 .transactionSummaryValue {

@@ -50,7 +50,7 @@ const ExchangeOrderForm = (props) => {
     if (!isSearching && searchInputValue.length === 0) return;
     dispatch(fetchCryptocurrencies(searchInputValue));
     setTimeout(setIsSearching(false), 500);
-  }, [dispatch, isSearching, searchInputValue]);
+  }, [isSearching, searchInputValue]);
 
   const getTransactionTypeHandler = (type) => {
     setTransactionType(type);
@@ -65,8 +65,8 @@ const ExchangeOrderForm = (props) => {
   const sendingTransactionDataHandler = (e) => {
     e.preventDefault();
 
+    // TODO Create a function for making id
     const transaction = {
-      id: "1",
       type: transactionType,
       orderValue: transactionData.transactionValue,
       commission: transactionData.commission,

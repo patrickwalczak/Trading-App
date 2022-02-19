@@ -20,8 +20,6 @@
   justify-items: center;
 }
 
-
-
 .assetsLi {
   grid-column: 2/3;
   grid-row: 1/2;
@@ -39,7 +37,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: start
+  justify-content: start;
 }
 
 .newOrderBtn {
@@ -81,7 +79,6 @@
 .signOutBtnContainer:hover {
   background-color: rgb(235, 235, 235);
 }
-
 
 .signOutBtn {
   border: none;

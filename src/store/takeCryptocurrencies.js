@@ -1,38 +1,33 @@
 import { searchResultsActions } from "./searchResults-slice";
-import {uiActions} from './ui-slice'
+import { uiActions } from "./ui-slice";
 
 export const fetchCryptocurrencies = (query) => {
-    return async (dispatch) => {
-        
-        try{
-            dispatch(uiActions.loadingStatus({status: 'loading'}))
+  return async (dispatch) => {
+    try {
+      dispatch(uiActions.loadingStatus({ status: "loading" }));
 
-            const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
+      );
 
-            if (!response.ok) {
-                throw new Error('Lost internet connecton!');
-              }
-    
-            const data = await response.json()
-    
-            dispatch(searchResultsActions.searchByQuery({query, data}))
+      if (!response.ok) {
+        throw new Error("Lost internet connecton!");
+      }
 
-            if(query !== '') {
-              setTimeout(() => {
-                dispatch(uiActions.loadingStatus({status: 'success'}))
-              }, 200);
-            }
-           
+      const data = await response.json();
 
-        } catch (err) {
-          dispatch(uiActions.loadingStatus({status: 'failed'}))
-        }
+      dispatch(searchResultsActions.searchByQuery({ query, data }));
 
-       
-        
+      if (query !== "") {
+        setTimeout(() => {
+          dispatch(uiActions.loadingStatus({ status: "success" }));
+        }, 200);
+      }
+    } catch (err) {
+      dispatch(uiActions.loadingStatus({ status: "failed" }));
     }
-}
-
+  };
+};
 
 /* 
 export const CoinList = (currency) =>

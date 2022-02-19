@@ -1,120 +1,121 @@
 .chooseTransactionTypeContainer {
-    width: 100%;
-    height: 6rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-top: 4rem;
+  width: 100%;
+  height: 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 4rem;
 }
 
 .transactionTypeBtnGeneral {
-    background: none;
-    outline: none;
-    border: 1px solid black;
-    text-transform: uppercase;
-    font-size: 1.6rem;
-    height: 5rem;
+  background: none;
+  outline: none;
+  border: 1px solid black;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  height: 5rem;
 }
 
 .buyBtnClass {
-    width: 47%;
+  width: 47%;
 }
 
 .sellBtnContainer {
-    width: 47%;
-    height: 5rem;
+  width: 47%;
+  height: 5rem;
 }
 
 .sellBtnClass {
-    width: 100%;
+  width: 100%;
 }
 
-.buyBtnClass.notChosen, .sellBtnClass.notChosen {
-    cursor: not-allowed;
-    border: 1px solid rgb(196, 196, 196);
+.buyBtnClass.notChosen,
+.sellBtnClass.notChosen {
+  cursor: not-allowed;
+  border: 1px solid rgb(196, 196, 196);
 }
 
-.buyBtnClass.chosen, .sellBtnClass.chosen {
-    cursor: pointer;
+.buyBtnClass.chosen,
+.sellBtnClass.chosen {
+  cursor: pointer;
 }
 
 .buyBtnClass.chosen:hover {
-    border: 1px solid #39a935;
-    background-color: #e8f8ea;
-    color: #39a935;
+  border: 1px solid #39a935;
+  background-color: #e8f8ea;
+  color: #39a935;
 }
 
 .buyBtnClass.chosen.active {
-    border: 1px solid #39a935;
-    background-color: #e8f8ea;
-    color: #39a935;
+  border: 1px solid #39a935;
+  background-color: #e8f8ea;
+  color: #39a935;
 }
 
 .sellBtnClass.chosen:hover {
-    border: 1px solid #e01017;
-    background-color: #ffeaea;
-    color: #e01017;
+  border: 1px solid #e01017;
+  background-color: #ffeaea;
+  color: #e01017;
 }
 
 .sellBtnClass.chosen.active {
-    border: 1px solid #e01017;
-    background-color: #ffeaea;
-    color: #e01017;
+  border: 1px solid #e01017;
+  background-color: #ffeaea;
+  color: #e01017;
 }
 
 .sellNotAvailable {
-    font-size: 1.2rem;
-    width: max-content;
-    color: rgb(224, 0, 0);
-    margin-top: 0.5rem;
+  font-size: 1.2rem;
+  width: max-content;
+  color: rgb(224, 0, 0);
+  margin-top: 0.5rem;
 }
 
 /* ================================= */
 
 .transactionDetailContainer {
-    margin-top: 3rem;
-    width: 100%;
-    height: 8rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+  margin-top: 3rem;
+  width: 100%;
+  height: 8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .transactionInputLabelContainer {
-    display: flex;
-    flex-direction: column;
-    width: 47%;
+  display: flex;
+  flex-direction: column;
+  width: 47%;
 }
 
 .transactionLabel {
-    transform: none;
-    text-transform: uppercase;
-    color: rgb(104, 104, 104);
-    font-size: 1.7rem;
-    margin-bottom: 1rem;
+  transform: none;
+  text-transform: uppercase;
+  color: rgb(104, 104, 104);
+  font-size: 1.7rem;
+  margin-bottom: 1rem;
 }
 
 .transactionInput {
-    height: 4rem;
-    padding-left: 1rem;
-    outline: none;
+  height: 4rem;
+  padding-left: 1rem;
+  outline: none;
 }
 
 .transactionInput.errBorder {
-    border: 1px solid rgb(196, 9, 9);
+  border: 1px solid rgb(196, 9, 9);
 }
 
 .transactionInput.notChosen {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 .invalidInputAmount {
-    font-size: 1.2rem;
-    width: 24.5rem;
-    
-    color: rgb(224, 0, 0);
-    margin-top: 0.5rem;
-    float: right;
-    padding: 0;
-    height: 0;
+  font-size: 1.2rem;
+  width: 24.5rem;
+  color: rgb(224, 0, 0);
+  margin-top: 0.5rem;
+  float: right;
+  padding: 0;
+  height: 0;
 }

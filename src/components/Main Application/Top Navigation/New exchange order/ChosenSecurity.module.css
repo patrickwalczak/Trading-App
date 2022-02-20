@@ -1,73 +1,70 @@
 .chosenSecurityContainer {
-    width: 100%;
-    height: 5rem;
+  width: 100%;
+  height: 5rem;
 }
 
 .securityNameAndBtn {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-
 .backToSearchBarBtn {
-    border: none;
-    background: none;
-    outline: none;
-    cursor: pointer;
-    color: black;
-    width: 20px;
-    height: 20px;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  color: black;
+  width: 20px;
+  height: 20px;
 }
 
 .backToSearchBarBtn img {
-    width: 14px;
-    height: 14px;
+  width: 14px;
+  height: 14px;
 }
 
 .chosenSecurityName {
-    text-transform: uppercase;
-    font-size: 2.5rem;
-    margin-right: 1.5rem;
+  text-transform: uppercase;
+  font-size: 2.5rem;
+  margin-right: 1.5rem;
 }
 
 .symbolPriceChangeContainer {
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    font-size: 1.6rem;
-    align-items: flex-start;
-    justify-content: center;
-
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  font-size: 1.6rem;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .chosenSymbol {
-color: grey;
-font-weight: 500;
-font-size: 1.6rem;
-margin-right: 1rem;
-text-transform: uppercase;
+  color: grey;
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin-right: 1rem;
+  text-transform: uppercase;
 }
 
 .chosenPrice {
-    display: block;
-    margin-right: 1rem;
+  display: block;
+  margin-right: 1rem;
 }
 
 .chosenPriceChange {
-    display: block;
-    
+  display: block;
 }
 
 .chosenPriceChange.growing {
-color: green;
+  color: green;
 }
 
 .chosenPriceChange.droping {
-    color: rgb(255, 0, 0);
+  color: rgb(255, 0, 0);
 }

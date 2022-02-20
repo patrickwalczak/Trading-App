@@ -22,11 +22,6 @@ const searchResultsSlice = createSlice({
     addChosenSecurity(state, action) {
       state.chosenSecurity = {
         ...action.payload,
-        current_price: action.payload.current_price.toLocaleString("en-US", {
-          maximumFractionDigits: 2,
-          style: "currency",
-          currency: "USD",
-        }),
       };
     },
     removeChosenSecurity(state) {

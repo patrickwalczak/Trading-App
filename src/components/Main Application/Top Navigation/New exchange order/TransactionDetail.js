@@ -12,7 +12,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
   const [buyBtnIsActive, setBuyBtnState] = useState(false);
   const [sellBtnIsActive, setSellBtnState] = useState(false);
   const [sellNotAvailable, setSellAvailable] = useState(null);
-  const [amountInputIsValid, setAmountInputValidation] = useState(true);
+  const [amountInputIsValid, setAmountInputValidity] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const amountInputRef = useRef();
 
@@ -47,8 +47,20 @@ const TransactionDetail = React.forwardRef((props, ref) => {
   const addErrBorder =
     !amountInputIsValid && errorMsg !== "" ? "errBorder" : "";
 
+  // Some cryptocurrencies have price equals to zero after rounding them to two digits, so in this case I increase max fraction digits.
+
+  const chosenCurrencyPrice = chosenSecurity?.current_price;
+
+  let maxFractionDigits = 2;
+
+  if (+chosenCurrencyPrice?.toFixed(2) === 0) maxFractionDigits = 4;
+
   const chosenSecurityPrice = chosenSecurity?.current_price
-    ? `$ ${chosenSecurity.current_price}`
+    ? `${chosenSecurity.current_price.toLocaleString("en-US", {
+        maximumFractionDigits: maxFractionDigits,
+        style: "currency",
+        currency: "USD",
+      })}`
     : "";
 
   const resetDetailHandler = () => {
@@ -56,7 +68,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     setSellBtnState(false);
     amountInputRef.current.value = "";
     setErrorMsg("");
-    amountInputIsValid(true);
+    setAmountInputValidity(true);
   };
 
   const transactionTypeBtnHandler = (e) => {
@@ -91,15 +103,15 @@ const TransactionDetail = React.forwardRef((props, ref) => {
   };
 
   const amountHandler = (e) => {
-    setAmountInputValidation(true);
+    setAmountInputValidity(true);
     setErrorMsg("");
     const enteredAmount = e.target.value;
     const searchDots = /\./g;
 
-    const wrongInputActions = (errMsg) => {
-      setAmountInputValidation(false);
+    const wrongInputActions = (errMsg, transactionData = null) => {
+      setAmountInputValidity(false);
       setErrorMsg(errMsg);
-      props.onGetTransactionData(null);
+      props.onGetTransactionData(transactionData);
     };
 
     if (!enteredAmount) {
@@ -110,11 +122,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
       return wrongInputActions("Amount cannot be a negative number");
     }
 
-    if (
-      (+enteredAmount === 0 && enteredAmount.length === 1) ||
-      enteredAmount === "0.0" ||
-      enteredAmount === "0,0"
-    ) {
+    if (+enteredAmount === 0) {
       return wrongInputActions("Amount cannot be a zero");
     }
 
@@ -126,31 +134,46 @@ const TransactionDetail = React.forwardRef((props, ref) => {
       return wrongInputActions("Integer cannot start with zero");
     }
 
-    setAmountInputValidation(true);
+    setAmountInputValidity(true);
 
-    const transactionValue = (
-      chosenSecurity.current_price * enteredAmount
-    ).toFixed(2);
+    const transactionValue = Number(
+      (chosenSecurity.current_price * enteredAmount).toFixed(2)
+    );
 
-    const commission = (
-      chosenSecurity.current_price *
-      enteredAmount *
-      0.01
-    ).toFixed(2);
+    const COMMISSION = 0.25;
+    const calcCommission = Number(
+      (chosenSecurity.current_price * enteredAmount * 0.01).toFixed(2)
+    );
 
-    const total = availableFunds - transactionValue - commission < 0;
+    const finalCommission = calcCommission < 0.25 ? COMMISSION : calcCommission;
 
-    if (total) return wrongInputActions("Insufficient funds");
+    const total = availableFunds - transactionValue - finalCommission < 0;
 
-    const availableFundsAfterTransaction = (
-      availableFunds -
-      transactionValue -
-      commission
-    ).toFixed(2);
+    const availableFundsAfterTransaction = Number(
+      (availableFunds - transactionValue - finalCommission).toFixed(2)
+    );
+
+    if (total) {
+      return wrongInputActions("Insufficient funds");
+    }
+
+    if (transactionValue <= 0.99) {
+      props.onChangeFormValidity(false);
+      return wrongInputActions("Order value cannot be less than $1", {
+        amount: enteredAmount,
+        transactionValue,
+        finalCommission,
+        availableFunds,
+        availableFundsAfterTransaction,
+      });
+    }
+
+    props.onChangeFormValidity(true);
 
     props.onGetTransactionData({
+      amount: enteredAmount,
       transactionValue,
-      commission,
+      finalCommission,
       availableFunds,
       availableFundsAfterTransaction,
     });
@@ -216,7 +239,6 @@ const TransactionDetail = React.forwardRef((props, ref) => {
             onChange={amountHandler}
             type="number"
             id="amount"
-            maxLength="6"
             ref={amountInputRef}
           ></input>
         </div>

@@ -7,6 +7,12 @@ const ChosenSecurity = (props) => {
     props.onReset();
   };
 
+  const chosenCurrencyPrice = props.data.current_price;
+
+  let maxFractionDigits = 2;
+
+  if (+chosenCurrencyPrice.toFixed(2) === 0) maxFractionDigits = 4;
+
   return (
     <div className={classes.chosenSecurityContainer}>
       <div className={classes.securityNameAndBtn}>
@@ -20,9 +26,15 @@ const ChosenSecurity = (props) => {
       </div>
       <div className={classes.symbolPriceChangeContainer}>
         <h3 className={classes.chosenSymbol}>{props.data.symbol}</h3>
-        <span className={classes.chosenPrice}>{props.data.current_price}</span>
+        <span className={classes.chosenPrice}>
+          {chosenCurrencyPrice.toLocaleString("en-US", {
+            maximumFractionDigits: maxFractionDigits,
+            style: "currency",
+            currency: "USD",
+          })}
+        </span>
         <span className={`${classes.chosenPriceChange} ${classes.droping}`}>
-          {props.data.price_change_percentage_24h}%
+          {props.data.price_change_percentage_24h.toFixed(2)}%
         </span>
       </div>
     </div>

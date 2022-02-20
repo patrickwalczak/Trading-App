@@ -5,10 +5,15 @@ const accountDataSlice = createSlice({
   initialState: {
     userName: "",
     transactions: [],
-    availableFunds: 1000,
+    availableFunds: 10000,
     currency: "USD",
+    watchList: [],
   },
-  reducers: {},
+  reducers: {
+    addTransaction(state, action) {
+      const { transactionData } = action.payload;
+    },
+  },
 });
 
 export const accountDataActions = accountDataSlice.actions;

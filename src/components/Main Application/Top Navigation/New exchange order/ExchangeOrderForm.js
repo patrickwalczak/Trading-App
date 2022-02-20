@@ -68,7 +68,6 @@ const ExchangeOrderForm = (props) => {
   const sendingTransactionDataHandler = (e) => {
     e.preventDefault();
 
-    // TODO Create a function for making id
     const transaction = {
       purchasedAmount: transactionData.amount,
       type: transactionType,
@@ -81,6 +80,14 @@ const ExchangeOrderForm = (props) => {
       purchasedSecurity: { ...chosenSecurity },
     };
 
+    resetNewOrderForm("close_modal");
+
+    // I need a variable here which will help with displaying current processing status (loading, success, failed)
+
+    // What else I want to do with that transaction object?
+    // - create an ID
+    // - add creation date (timestamp)
+
     // TODO Call loading spinner
     // Change button content from 'Place order' to loading spinner
 
@@ -90,7 +97,6 @@ const ExchangeOrderForm = (props) => {
     // Change button content from 'Place order' to "tick'
 
     // TODO close form and reset
-    resetNewOrderForm("close_modal");
   };
 
   useEffect(() => {

@@ -5,13 +5,25 @@ const accountDataSlice = createSlice({
   initialState: {
     userName: "",
     transactions: [],
-    availableFunds: 10000,
-    currency: "USD",
+    availableFunds: 0,
+    currency: "",
     watchList: [],
   },
   reducers: {
     addTransaction(state, action) {
-      const { transactionData } = action.payload;
+      console.log(action.payload);
+    },
+    getUserAccountData(state, action) {
+      const { userName, transactions, availableFunds, currency, watchList } =
+        action.payload;
+
+      state = {
+        userName,
+        transactions: transactions || [],
+        availableFunds: availableFunds || 0,
+        currency,
+        watchList: watchList || [],
+      };
     },
   },
 });

@@ -9,6 +9,7 @@ import ChosenSecurity from "./ChosenSecurity";
 import OrderFormHeader from "./OrderFormHeader";
 import TransactionDetail from "./TransactionDetail";
 import TransactionSummary from "./TransactionSummary";
+import { getAccountData } from "../../../../store/accountData-actions";
 
 const ExchangeOrderForm = (props) => {
   const [isSearching, setIsSearching] = useState(false);
@@ -79,6 +80,8 @@ const ExchangeOrderForm = (props) => {
       purchasedSecurityPrice: chosenSecurity.current_price,
       purchasedSecurity: { ...chosenSecurity },
     };
+
+    dispatch(getAccountData());
 
     resetNewOrderForm("close_modal");
 

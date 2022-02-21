@@ -1,10 +1,12 @@
 import { searchResultsActions } from "./searchResults-slice";
-import { uiActions } from "./ui-slice";
+import { taskStatusActions } from "./taskStatus-slice";
 
 export const fetchCryptocurrencies = (query) => {
   return async (dispatch) => {
     try {
-      dispatch(uiActions.loadingStatus({ status: "loading" }));
+      dispatch(
+        taskStatusActions.changeSearchResultsStatus({ status: "loading" })
+      );
 
       const response = await fetch(
         `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
@@ -20,11 +22,15 @@ export const fetchCryptocurrencies = (query) => {
 
       if (query !== "") {
         setTimeout(() => {
-          dispatch(uiActions.loadingStatus({ status: "success" }));
+          dispatch(
+            taskStatusActions.changeSearchResultsStatus({ status: "success" })
+          );
         }, 200);
       }
     } catch (err) {
-      dispatch(uiActions.loadingStatus({ status: "failed" }));
+      dispatch(
+        taskStatusActions.changeSearchResultsStatus({ status: "failed" })
+      );
     }
   };
 };

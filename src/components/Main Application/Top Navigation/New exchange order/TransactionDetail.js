@@ -11,6 +11,7 @@ import classes from "./TransactionDetail.module.css";
 const TransactionDetail = React.forwardRef((props, ref) => {
   const [buyBtnIsActive, setBuyBtnState] = useState(false);
   const [sellBtnIsActive, setSellBtnState] = useState(false);
+  const [transactionType, setTransactionType] = useState(null);
   const [sellNotAvailable, setSellAvailable] = useState(null);
   const [amountInputIsValid, setAmountInputValidity] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
@@ -69,6 +70,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     amountInputRef.current.value = "";
     setErrorMsg("");
     setAmountInputValidity(true);
+    setTransactionType("");
   };
 
   const transactionTypeBtnHandler = (e) => {
@@ -83,7 +85,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     if (transactionType === "BUY") {
       setSellBtnState(false);
       setBuyBtnState(!buyBtnIsActive);
-      props.onGetTransactionType(transactionType);
+      setTransactionType(transactionType);
     }
 
     if (transactionType === "SELL") {
@@ -97,7 +99,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
         return setSellAvailable(false);
       }
 
-      props.onGetTransactionType(transactionType);
+      setTransactionType(transactionType);
       setSellBtnState(!sellBtnIsActive);
     }
   };
@@ -165,6 +167,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
         finalCommission,
         availableFunds,
         availableFundsAfterTransaction,
+        transactionType,
       });
     }
 
@@ -176,6 +179,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
       finalCommission,
       availableFunds,
       availableFundsAfterTransaction,
+      transactionType,
     });
   };
 

@@ -5,13 +5,39 @@ const accountDataSlice = createSlice({
   initialState: {
     userName: "",
     transactions: [],
-    availableFunds: 10000,
-    currency: "USD",
+    availableFunds: 0,
+    currency: "",
     watchList: [],
   },
   reducers: {
+    getUserAccountData(state, action) {
+      state.userName = action.payload.userName;
+      state.availableFunds = action.payload.availableFunds || 10000;
+      state.currency = action.payload.currency;
+      state.watchList = action.payload?.watchList || [];
+
+      const transactionsObj = action.payload?.transactions;
+
+      if (transactionsObj === undefined) return;
+
+      const convertedArrFromFirebase = Object.entries(transactionsObj).map(
+        (transaction) => {
+          return {
+            databaseID: transaction[0],
+            transactionData: transaction[1],
+          };
+        }
+      );
+
+      state.transactions = convertedArrFromFirebase;
+    },
+
     addTransaction(state, action) {
-      const { transactionData } = action.payload;
+      state.transactions.unshift({ ...action.payload });
+    },
+
+    updateAvailableFunds(state, action) {
+      state.availableFunds = action.payload;
     },
   },
 });

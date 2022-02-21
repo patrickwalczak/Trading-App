@@ -7,14 +7,14 @@ import FoundElementsContainer from "./FoundElementsContainer";
 import StatusMsg from "./StatusMsg";
 
 const InputSearchContainer = (props) => {
-  const { notification } = useSelector((state) => state.uiNotification);
+  const { searchResultsStatus } = useSelector((state) => state.taskStatus);
 
-  const displayLoadingSpinner = notification?.status === "loading" &&
+  const displayLoadingSpinner = searchResultsStatus?.status === "loading" &&
     props.value && (
       <img className={classes.loadingSpinner} src={loadingSpinnerImg}></img>
     );
-  const displayClearInputBtn = (notification?.status === "success" ||
-    notification?.status === "failed") &&
+  const displayClearInputBtn = (searchResultsStatus?.status === "success" ||
+    searchResultsStatus?.status === "failed") &&
     props.value && (
       <button
         className={classes.clearInputBtn}
@@ -40,10 +40,10 @@ const InputSearchContainer = (props) => {
         {displayClearInputBtn}
         {displayLoadingSpinner}
       </div>
-      {notification?.status === "success" && props.value && (
+      {searchResultsStatus?.status === "success" && props.value && (
         <FoundElementsContainer />
       )}
-      {notification?.status === "failed" && (
+      {searchResultsStatus?.status === "failed" && (
         <StatusMsg>lost internet connection</StatusMsg>
       )}
     </Fragment>

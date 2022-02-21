@@ -30,7 +30,7 @@ export const getApplicationData = () => {
 
       const today = new Date().toLocaleString("en-US", dateOptions);
 
-      if (dateFromDatabase !== today) {
+      if (dateFromDatabase === today) {
         return dispatch(
           applicationActions.initState({ expirationDate, transactionCounter })
         );
@@ -63,6 +63,30 @@ export const updateApplicationData = (url, database_id, updatedData) => {
       }
     } catch (err) {
       throw "Wrong url or lost internet connection";
+    }
+  };
+};
+
+export const updateApplicationCounter = (updatedData) => {
+  return async () => {
+    try {
+      const response = await fetch(
+        "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/-MwLmbRjZUUKo8dEZNIX/transactionCounter.json",
+        {
+          method: "PUT",
+          body: JSON.stringify(updatedData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Could not update counter",
+          response.statusText,
+          response.url
+        );
+      }
+    } catch (err) {
+      throw err;
     }
   };
 };

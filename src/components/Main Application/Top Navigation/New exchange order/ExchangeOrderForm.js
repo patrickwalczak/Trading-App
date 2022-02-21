@@ -9,21 +9,30 @@ import ChosenSecurity from "./ChosenSecurity";
 import OrderFormHeader from "./OrderFormHeader";
 import TransactionDetail from "./TransactionDetail";
 import TransactionSummary from "./TransactionSummary";
-import { getAccountData } from "../../../../store/accountData-actions";
+import { addTransaction } from "../../../../store/accountData-actions";
+import loadingSpinnerImg from "../../../../images/loadingSpinner.png";
+import SuccessModal from "./SuccessModal";
 
 const ExchangeOrderForm = (props) => {
+  const dispatch = useDispatch();
+
   const [isSearching, setIsSearching] = useState(false);
-  const [transactionType, setTransactionType] = useState("");
   const [searchInputValue, setSearchInputValue] = useState("");
   const [transactionData, setTransactionData] = useState(null);
-  const amountInputRef = useRef();
   const [isFormValid, setFormValidity] = useState(false);
 
-  const submitButtonDisabledState =
-    isFormValid === false || transactionData === null;
-
   const { chosenSecurity } = useSelector((state) => state.searchResults);
-  const dispatch = useDispatch();
+  const { transactionCounter } = useSelector((state) => state.applicationData);
+  const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
+
+  const amountInputRef = useRef();
+
+  let submitButtonContent;
+
+  const submitButtonDisabledState =
+    isFormValid === false ||
+    transactionData === null ||
+    sendTransactionStatus?.status === "loading";
 
   const changeFormValidity = (formState) => {
     setFormValidity(formState);
@@ -47,7 +56,6 @@ const ExchangeOrderForm = (props) => {
     dispatch(searchResultsActions.clearSearchResults());
     dispatch(searchResultsActions.removeChosenSecurity());
     setTransactionData(null);
-    setTransactionType("");
     amountInputRef.current.resetTransactionDetail();
     setFormValidity(false);
 
@@ -56,22 +64,18 @@ const ExchangeOrderForm = (props) => {
     }
   };
 
-  const getTransactionTypeHandler = (type) => {
-    setTransactionType(type);
-  };
-
   const getTransactionData = (data) => {
-    if (transactionType === "BUY") {
+    if (data?.transactionType === "BUY") {
       setTransactionData(data);
     }
   };
 
-  const sendingTransactionDataHandler = (e) => {
+  const sendingTransactionDataHandler = async (e) => {
     e.preventDefault();
 
     const transaction = {
       purchasedAmount: transactionData.amount,
-      type: transactionType,
+      type: transactionData.transactionType,
       orderValue: transactionData.transactionValue,
       commission: transactionData.finalCommission,
       availableFundsAfter: transactionData.availableFundsAfterTransaction,
@@ -81,26 +85,26 @@ const ExchangeOrderForm = (props) => {
       purchasedSecurity: { ...chosenSecurity },
     };
 
-    dispatch(getAccountData());
-
-    resetNewOrderForm("close_modal");
-
-    // I need a variable here which will help with displaying current processing status (loading, success, failed)
-
-    // What else I want to do with that transaction object?
-    // - create an ID
-    // - add creation date (timestamp)
-
-    // TODO Call loading spinner
-    // Change button content from 'Place order' to loading spinner
-
-    // TODO Send transaction to reducer and server
-
-    // TODO display error or success msg
-    // Change button content from 'Place order' to "tick'
-
-    // TODO close form and reset
+    try {
+      dispatch(addTransaction(transaction, transactionCounter));
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  if (sendTransactionStatus === null) {
+    submitButtonContent = "Place order";
+  }
+
+  if (sendTransactionStatus?.status === "loading") {
+    submitButtonContent = (
+      <img className={classes.loadingSpinner} src={loadingSpinnerImg}></img>
+    );
+  }
+
+  const displayExchangeFormCondition =
+    sendTransactionStatus === null ||
+    sendTransactionStatus?.status === "loading";
 
   useEffect(() => {
     if (!isSearching && searchInputValue.length === 0) return;
@@ -110,41 +114,50 @@ const ExchangeOrderForm = (props) => {
 
   return (
     <Modal onCloseFormActions={resetNewOrderForm.bind(null, "close_modal")}>
-      <div className={classes.exchangeFormContainer}>
-        <OrderFormHeader
-          onReset={resetNewOrderForm.bind(null, "close_modal")}
-        />
-        <form className={classes.exchangeForm}>
-          {!chosenSecurity && (
-            <InputSearchContainer
-              onBlur={onBlurHandler}
-              onChange={onChangeHandler}
-              value={searchInputValue}
-              onClearInputHandler={clearInputHandler}
-            />
-          )}
-          {chosenSecurity && (
-            <ChosenSecurity data={chosenSecurity} onReset={resetNewOrderForm} />
-          )}
-          <TransactionDetail
-            ref={amountInputRef}
-            onGetTransactionType={getTransactionTypeHandler}
-            onGetTransactionData={getTransactionData}
-            onChangeFormValidity={changeFormValidity}
+      {displayExchangeFormCondition && (
+        <div className={classes.exchangeFormContainer}>
+          <OrderFormHeader
+            onReset={resetNewOrderForm.bind(null, "close_modal")}
           />
-          <TransactionSummary transactionData={transactionData} />
-          <button
-            onClick={sendingTransactionDataHandler}
-            disabled={submitButtonDisabledState}
-            className={`${classes.placeOrderBtn} ${
-              submitButtonDisabledState ? classes["disabled"] : ""
-            }`}
-            type="submit"
-          >
-            Place Order
-          </button>
-        </form>
-      </div>
+          <form className={classes.exchangeForm}>
+            {!chosenSecurity && (
+              <InputSearchContainer
+                onBlur={onBlurHandler}
+                onChange={onChangeHandler}
+                value={searchInputValue}
+                onClearInputHandler={clearInputHandler}
+              />
+            )}
+            {chosenSecurity && (
+              <ChosenSecurity
+                data={chosenSecurity}
+                onReset={resetNewOrderForm}
+              />
+            )}
+            <TransactionDetail
+              ref={amountInputRef}
+              onGetTransactionData={getTransactionData}
+              onChangeFormValidity={changeFormValidity}
+            />
+            <TransactionSummary transactionData={transactionData} />
+            <button
+              onClick={sendingTransactionDataHandler}
+              disabled={submitButtonDisabledState}
+              className={`${classes.placeOrderBtn} ${
+                submitButtonDisabledState ? classes["disabled"] : ""
+              }`}
+              type="submit"
+            >
+              Place order
+            </button>
+          </form>
+        </div>
+      )}
+      {!displayExchangeFormCondition && (
+        <SuccessModal
+          onResetForm={resetNewOrderForm.bind(null, "close_modal")}
+        />
+      )}
     </Modal>
   );
 };

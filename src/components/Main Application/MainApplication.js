@@ -6,12 +6,14 @@ import classes from "./MainApplication.module.css";
 import { useEffect } from "react";
 import { getApplicationData } from "../../store/application-actions";
 import { useDispatch } from "react-redux";
+import { getAccountData } from "../../store/accountData-actions";
 
 const TradingPlatform = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getApplicationData());
+    dispatch(getAccountData());
   }, []);
 
   return (

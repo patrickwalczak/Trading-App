@@ -50,19 +50,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
 
   // Some cryptocurrencies have price equals to zero after rounding them to two digits, so in this case I increase max fraction digits.
 
-  const chosenCurrencyPrice = chosenSecurity?.current_price;
-
-  let maxFractionDigits = 2;
-
-  if (+chosenCurrencyPrice?.toFixed(2) === 0) maxFractionDigits = 4;
-
-  const chosenSecurityPrice = chosenSecurity?.current_price
-    ? `${chosenSecurity.current_price.toLocaleString("en-US", {
-        maximumFractionDigits: maxFractionDigits,
-        style: "currency",
-        currency: "USD",
-      })}`
-    : "";
+  const chosenSecurityPrice = chosenSecurity?.convertedPrice;
 
   const resetDetailHandler = () => {
     setBuyBtnState(false);

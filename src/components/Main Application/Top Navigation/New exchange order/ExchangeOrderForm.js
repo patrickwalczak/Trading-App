@@ -21,6 +21,8 @@ const ExchangeOrderForm = (props) => {
   const [transactionData, setTransactionData] = useState(null);
   const [isFormValid, setFormValidity] = useState(false);
 
+  console.log(isFormValid);
+
   const { chosenSecurity } = useSelector((state) => state.searchResults);
   const { transactionCounter } = useSelector((state) => state.applicationData);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
@@ -65,9 +67,7 @@ const ExchangeOrderForm = (props) => {
   };
 
   const getTransactionData = (data) => {
-    if (data?.transactionType === "BUY") {
-      setTransactionData(data);
-    }
+    setTransactionData(data);
   };
 
   const sendingTransactionDataHandler = async (e) => {

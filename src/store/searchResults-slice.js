@@ -39,6 +39,7 @@ const searchResultsSlice = createSlice({
       state.chosenSecurity = {
         ...action.payload,
         convertedPrice,
+        maxFractionDigits,
       };
     },
     removeChosenSecurity(state) {

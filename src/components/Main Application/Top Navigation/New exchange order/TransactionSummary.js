@@ -10,6 +10,8 @@ const TransactionSummary = (props) => {
     currency: "USD",
   };
 
+  console.log(props.transactionData);
+
   const commissionValue =
     props.transactionData !== null
       ? `- ${props.transactionData.finalCommission.toLocaleString(
@@ -37,7 +39,7 @@ const TransactionSummary = (props) => {
   return (
     <div className={classes.transactionSummaryContainer}>
       <div className={classes.transactionSummaryFragment}>
-        <h6 className={classes.transactionSummaryHeader}> Available funds </h6>{" "}
+        <h6 className={classes.transactionSummaryHeader}> Available funds </h6>
         <span
           className={`${classes.transactionSummaryValue} ${classes.availableFunds}`}
         >

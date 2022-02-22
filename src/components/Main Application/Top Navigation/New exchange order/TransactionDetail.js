@@ -96,7 +96,6 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     setAmountInputValidity(true);
     setErrorMsg("");
     const enteredAmount = e.target.value;
-    const searchDots = /\./g;
 
     const wrongInputActions = (errMsg, transactionData = null) => {
       setAmountInputValidity(false);
@@ -119,23 +118,28 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     if (
       enteredAmount.length >= 2 &&
       enteredAmount[0] === "0" &&
-      enteredAmount.search(searchDots) !== 1
+      !enteredAmount.includes(".")
     ) {
       return wrongInputActions("Integer cannot start with zero");
     }
 
     setAmountInputValidity(true);
 
+    const chosenSecurityConvertedPrice = Number(
+      chosenSecurity.current_price.toFixed(chosenSecurity.maxFractionDigits)
+    );
+
     const transactionValue = Number(
-      (chosenSecurity.current_price * enteredAmount).toFixed(2)
+      (chosenSecurityConvertedPrice * enteredAmount).toFixed(2)
     );
 
-    const COMMISSION = 0.25;
+    const minCommission = 0.25;
     const calcCommission = Number(
-      (chosenSecurity.current_price * enteredAmount * 0.01).toFixed(2)
+      (chosenSecurityConvertedPrice * enteredAmount * 0.01).toFixed(2)
     );
 
-    const finalCommission = calcCommission < 0.25 ? COMMISSION : calcCommission;
+    const finalCommission =
+      calcCommission < minCommission ? minCommission : calcCommission;
 
     const total = availableFunds - transactionValue - finalCommission < 0;
 
@@ -147,7 +151,9 @@ const TransactionDetail = React.forwardRef((props, ref) => {
       return wrongInputActions("Insufficient funds");
     }
 
-    if (transactionValue <= 0.99) {
+    const minTransactionValue = 1;
+
+    if (transactionValue < minTransactionValue) {
       props.onChangeFormValidity(false);
       return wrongInputActions("Order value cannot be less than $1", {
         amount: enteredAmount,

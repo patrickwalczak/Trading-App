@@ -20,8 +20,26 @@ const searchResultsSlice = createSlice({
       state.searchResults = [];
     },
     addChosenSecurity(state, action) {
+      const securityPrice = action.payload.current_price;
+      let maxFractionDigits = 2;
+
+      if (+securityPrice.toFixed(maxFractionDigits) === 0) {
+        maxFractionDigits = 4;
+      }
+
+      if (+securityPrice.toFixed(maxFractionDigits) === 0) {
+        maxFractionDigits = 6;
+      }
+      const convertedPrice = Number(securityPrice).toLocaleString("en-US", {
+        maximumFractionDigits: maxFractionDigits,
+        style: "currency",
+        currency: "USD",
+      });
+
       state.chosenSecurity = {
         ...action.payload,
+        convertedPrice,
+        maxFractionDigits,
       };
     },
     removeChosenSecurity(state) {

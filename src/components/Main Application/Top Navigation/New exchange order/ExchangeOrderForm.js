@@ -12,6 +12,7 @@ import TransactionSummary from "./TransactionSummary";
 import { addTransaction } from "../../../../store/accountData-actions";
 import loadingSpinnerImg from "../../../../images/loadingSpinner.png";
 import SuccessModal from "./SuccessModal";
+import { taskStatusActions } from "../../../../store/taskStatus-slice";
 
 const ExchangeOrderForm = (props) => {
   const dispatch = useDispatch();
@@ -25,13 +26,17 @@ const ExchangeOrderForm = (props) => {
   const { transactionCounter } = useSelector((state) => state.applicationData);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
 
-  const amountInputRef = useRef();
+  const transactionDetailRef = useRef();
 
   let submitButtonContent;
 
   const submitButtonDisabledState =
     isFormValid === false ||
     transactionData === null ||
+    sendTransactionStatus?.status === "loading";
+
+  const displayExchangeFormCondition =
+    sendTransactionStatus === null ||
     sendTransactionStatus?.status === "loading";
 
   const changeFormValidity = (formState) => {
@@ -51,45 +56,34 @@ const ExchangeOrderForm = (props) => {
     setSearchInputValue("");
   };
 
-  const resetNewOrderForm = (isModal = "") => {
+  const resetNewOrderForm = (modal = "", transactionIsFinished = false) => {
     clearInputHandler();
     dispatch(searchResultsActions.clearSearchResults());
     dispatch(searchResultsActions.removeChosenSecurity());
     setTransactionData(null);
-    amountInputRef.current.resetTransactionDetail();
     setFormValidity(false);
 
-    if (isModal === "close_modal") {
+    // amountInputRef.current.resetTransactionDetail();
+
+    if (modal === "close_modal") {
       props.onChangeModalState();
+    }
+
+    if (transactionIsFinished === true) {
+      dispatch(taskStatusActions.changeSendingTransactionStatus(null));
     }
   };
 
   const getTransactionData = (data) => {
-    if (data?.transactionType === "BUY") {
-      setTransactionData(data);
-    }
+    setTransactionData(data);
   };
 
   const sendingTransactionDataHandler = async (e) => {
     e.preventDefault();
 
-    const transaction = {
-      purchasedAmount: transactionData.amount,
-      type: transactionData.transactionType,
-      orderValue: transactionData.transactionValue,
-      commission: transactionData.finalCommission,
-      availableFundsAfter: transactionData.availableFundsAfterTransaction,
-      purchasedSecurityName: chosenSecurity.name,
-      purchasedSecurityID: chosenSecurity.id,
-      purchasedSecurityPrice: chosenSecurity.current_price,
-      purchasedSecurity: { ...chosenSecurity },
-    };
-
-    try {
-      dispatch(addTransaction(transaction, transactionCounter));
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(
+      taskStatusActions.changeSendingTransactionStatus({ status: "loading" })
+    );
   };
 
   if (sendTransactionStatus === null) {
@@ -102,15 +96,22 @@ const ExchangeOrderForm = (props) => {
     );
   }
 
-  const displayExchangeFormCondition =
-    sendTransactionStatus === null ||
-    sendTransactionStatus?.status === "loading";
-
   useEffect(() => {
     if (!isSearching && searchInputValue.length === 0) return;
     dispatch(fetchCryptocurrencies(searchInputValue));
-    setTimeout(setIsSearching(false), 500);
+    const timer = setTimeout(setIsSearching(false), 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [isSearching, searchInputValue]);
+
+  useEffect(() => {
+    if (sendTransactionStatus?.status !== "loading") return;
+    setTimeout(() => {
+      dispatch(addTransaction(transactionData, transactionCounter));
+    }, 5000);
+  }, [sendTransactionStatus]);
 
   return (
     <Modal onCloseFormActions={resetNewOrderForm.bind(null, "close_modal")}>
@@ -135,7 +136,7 @@ const ExchangeOrderForm = (props) => {
               />
             )}
             <TransactionDetail
-              ref={amountInputRef}
+              ref={transactionDetailRef}
               onGetTransactionData={getTransactionData}
               onChangeFormValidity={changeFormValidity}
             />
@@ -148,14 +149,14 @@ const ExchangeOrderForm = (props) => {
               }`}
               type="submit"
             >
-              Place order
+              {submitButtonContent}
             </button>
           </form>
         </div>
       )}
       {!displayExchangeFormCondition && (
         <SuccessModal
-          onResetForm={resetNewOrderForm.bind(null, "close_modal")}
+          onResetForm={resetNewOrderForm.bind(null, "close_modal", true)}
         />
       )}
     </Modal>

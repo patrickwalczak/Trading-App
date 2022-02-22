@@ -37,10 +37,6 @@ const updateFundsUrl =
 export const addTransaction = (transactionData, counter) => {
   return async (dispatch) => {
     try {
-      dispatch(
-        taskStatusActions.changeSendingTransactionStatus({ status: "loading" })
-      );
-
       const id = createID(counter);
       const transactionDate = Date.now();
 
@@ -106,7 +102,8 @@ export const addTransaction = (transactionData, counter) => {
       dispatch(
         taskStatusActions.changeSendingTransactionStatus({ status: "failed" })
       );
-      throw err;
+      console.log("Adding transaction failed");
+      console.log(err);
     }
   };
 };

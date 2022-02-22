@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import classes from "./ExchangeOrderForm.module.css";
 
-const TransactionSummary = (props) => {
+const TransactionSummary = ({ transactionData }) => {
   const { availableFunds } = useSelector((state) => state.accountData);
 
   const localStringOptions = {
@@ -10,31 +10,29 @@ const TransactionSummary = (props) => {
     currency: "USD",
   };
 
-  console.log(props.transactionData);
-
   const commissionValue =
-    props.transactionData !== null
-      ? `- ${props.transactionData.finalCommission.toLocaleString(
+    transactionData !== null
+      ? `- ${transactionData.commission.toLocaleString(
           "en-US",
           localStringOptions
         )}`
       : "-";
   const orderValue =
-    props.transactionData !== null
-      ? `- ${props.transactionData.transactionValue.toLocaleString(
+    transactionData !== null
+      ? `- ${transactionData.orderValue.toLocaleString(
           "en-US",
           localStringOptions
         )}`
       : "-";
   const fundsAfterValue =
-    props.transactionData !== null
-      ? `${props.transactionData.availableFundsAfterTransaction.toLocaleString(
+    transactionData !== null
+      ? `${transactionData.availableFundsAfter.toLocaleString(
           "en-US",
           localStringOptions
         )}`
       : "-";
 
-  const activeClass = props.transactionData !== null ? "active" : "";
+  const activeClass = transactionData !== null ? "active" : "";
 
   return (
     <div className={classes.transactionSummaryContainer}>

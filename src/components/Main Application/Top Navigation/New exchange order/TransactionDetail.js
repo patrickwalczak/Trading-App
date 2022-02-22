@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useSelector } from "react-redux";
 import classes from "./TransactionDetail.module.css";
+import TransactionTypeBtn from "./TransactionTypeBtn";
 
 const TransactionDetail = React.forwardRef((props, ref) => {
   const [buyBtnIsActive, setBuyBtnState] = useState(false);
@@ -24,26 +25,18 @@ const TransactionDetail = React.forwardRef((props, ref) => {
   const { chosenSecurity } = useSelector((state) => state.searchResults);
   const { transactions } = useSelector((state) => state.accountData);
   const { availableFunds } = useSelector((state) => state.accountData);
+  const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
 
   // If security will be chosen (for example cryptocurrency such as bitcoin), then we remove disabled property from buttons and input
-  const isChoosing = chosenSecurity === null ? true : false;
-
-  // This assures that if security is not chosen but button will be hovered then no styling will be applied for buttons
-  const isChosenClass = chosenSecurity === null ? "notChosen" : "chosen";
-
-  // These two classes apply styling for transaction type button when its clicked
-  const activeBuyButtonClass = buyBtnIsActive ? "active" : "";
-  const activeSellButtonClass = sellBtnIsActive ? "active" : "";
-
-  // The same styling for both buy and sell transactons
-  const transactionBtnClasses = `${classes.transactionTypeBtnGeneral} ${classes[isChosenClass]}`;
-
-  const buyBtnClasses = `${classes.buyBtnClass} ${transactionBtnClasses} ${classes[activeBuyButtonClass]}`;
-  const sellBtnClasses = `${classes.sellBtnClass} ${transactionBtnClasses} ${classes[activeSellButtonClass]}`;
+  const isChosen = chosenSecurity !== null ? true : false;
 
   // Variable which will help to apply styling for amount input only if security is chosen and transaction button is active
-  const enableAmountInput = !isChoosing && (buyBtnIsActive || sellBtnIsActive);
-  const enabledInputClass = enableAmountInput ? "chosen" : "notChosen";
+  const enableAmountInput =
+    isChosen &&
+    sendTransactionStatus?.status !== "loading" &&
+    (buyBtnIsActive || sellBtnIsActive);
+
+  const enabledInputClass = enableAmountInput ? "" : "notChosen";
 
   const addErrBorder =
     !amountInputIsValid && errorMsg !== "" ? "errBorder" : "";
@@ -153,28 +146,30 @@ const TransactionDetail = React.forwardRef((props, ref) => {
 
     const minTransactionValue = 1;
 
+    const transaction = {
+      purchasedAmount: enteredAmount,
+      type: transactionType,
+      orderValue: transactionValue,
+      commission: finalCommission,
+      availableFundsAfter: availableFundsAfterTransaction,
+      purchasedSecurityName: chosenSecurity.name,
+      purchasedSecurityID: chosenSecurity.id,
+      purchasedSecurityPrice: chosenSecurityConvertedPrice,
+      purchasedSecurity: { ...chosenSecurity },
+      fractionDigits: chosenSecurity.maxFractionDigits,
+    };
+
     if (transactionValue < minTransactionValue) {
       props.onChangeFormValidity(false);
-      return wrongInputActions("Order value cannot be less than $1", {
-        amount: enteredAmount,
-        transactionValue,
-        finalCommission,
-        availableFunds,
-        availableFundsAfterTransaction,
-        transactionType,
-      });
+      return wrongInputActions(
+        "Order value cannot be less than $1",
+        transaction
+      );
     }
 
     props.onChangeFormValidity(true);
 
-    props.onGetTransactionData({
-      amount: enteredAmount,
-      transactionValue,
-      finalCommission,
-      availableFunds,
-      availableFundsAfterTransaction,
-      transactionType,
-    });
+    props.onGetTransactionData(transaction);
   };
 
   useEffect(() => {
@@ -188,23 +183,23 @@ const TransactionDetail = React.forwardRef((props, ref) => {
   return (
     <Fragment>
       <div className={`${classes.chooseTransactionTypeContainer}`}>
-        <button
+        <TransactionTypeBtn
           onClick={transactionTypeBtnHandler}
-          data-transaction-type="BUY"
-          disabled={isChoosing}
-          className={buyBtnClasses}
+          btnType={"BUY"}
+          btnClassName={"buyBtnClass"}
+          btnState={buyBtnIsActive}
         >
           BUY
-        </button>
+        </TransactionTypeBtn>
         <div className={classes.sellBtnContainer}>
-          <button
+          <TransactionTypeBtn
             onClick={transactionTypeBtnHandler}
-            data-transaction-type="SELL"
-            disabled={isChoosing}
-            className={sellBtnClasses}
+            btnType={"SELL"}
+            btnClassName={"sellBtnClass"}
+            btnState={sellBtnIsActive}
           >
             SELL
-          </button>
+          </TransactionTypeBtn>
           {sellNotAvailable === false && (
             <p className={classes.sellNotAvailable}>Sell not available!</p>
           )}

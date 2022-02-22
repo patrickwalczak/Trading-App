@@ -13,9 +13,15 @@ const taskStatusSlice = createSlice({
       };
     },
     changeSendingTransactionStatus(state, action) {
-      state.sendTransactionStatus = {
-        status: action.payload.status,
-      };
+      const status = action.payload;
+
+      if (status === null) {
+        state.sendTransactionStatus = null;
+      } else {
+        state.sendTransactionStatus = {
+          status: action.payload.status,
+        };
+      }
     },
   },
 });

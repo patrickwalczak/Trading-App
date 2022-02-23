@@ -3,26 +3,41 @@ import MainPanel from "./Panels/Home Panel/HomePanel";
 import SideNavigation from "./Side Navigation/SideNavigation";
 import TopNavigation from "./Top Navigation/TopNavigation";
 import classes from "./MainApplication.module.css";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { getApplicationData } from "../../store/application-actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAccountData } from "../../store/accountData-actions";
+import spinnerImg from "../../images/loadingSpinner.png";
 
 const TradingPlatform = () => {
   const dispatch = useDispatch();
+  const { loadAccountDataStatus } = useSelector((state) => state.taskStatus);
+  const { loadApplicationDataStatus } = useSelector(
+    (state) => state.taskStatus
+  );
 
   useEffect(() => {
-    dispatch(getApplicationData());
-    dispatch(getAccountData());
+    setTimeout(() => {
+      dispatch(getApplicationData());
+      dispatch(getAccountData());
+    }, 2000);
   }, []);
+
+  const displayApplication =
+    loadAccountDataStatus?.status === "success" &&
+    loadApplicationDataStatus?.status === "success";
 
   return (
     <div className={classes.container}>
-      <SideNavigation />
-      <TopNavigation />
+      {displayApplication && <SideNavigation />}
+      {displayApplication && <TopNavigation />}
+
       <Routes>
-        <Route path="/mainPanel" element={<MainPanel />} />
+        {displayApplication && (
+          <Route path="/mainPanel" element={<MainPanel />} />
+        )}
       </Routes>
+      {displayApplication === false && <h2>LOADING...</h2>}
     </div>
   );
 };

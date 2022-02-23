@@ -11,6 +11,10 @@ const URL =
 export const getAccountData = () => {
   return async (dispatch) => {
     try {
+      dispatch(
+        taskStatusActions.changeAccountDataLoading({ status: "loading" })
+      );
+
       const response = await fetch(URL);
 
       if (!response.ok) {
@@ -22,8 +26,13 @@ export const getAccountData = () => {
       if (!data) throw new Error("Wrong database ID");
 
       dispatch(accountDataActions.getUserAccountData({ ...data }));
+
+      dispatch(
+        taskStatusActions.changeAccountDataLoading({ status: "success" })
+      );
     } catch (err) {
       console.log(err);
+      dispatch(taskStatusActions.changeAccountDataLoading({ status: "fail" }));
     }
   };
 };

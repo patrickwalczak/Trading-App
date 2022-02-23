@@ -5,12 +5,42 @@ const taskStatusSlice = createSlice({
   initialState: {
     searchResultsStatus: null,
     sendTransactionStatus: null,
+    loadApplicationDataStatus: null,
+    loadAccountDataStatus: null,
   },
   reducers: {
+    changeApplicationDataLoading(state, action) {
+      const status = action.payload;
+
+      if (status === null) {
+        state.loadApplicationDataStatus = null;
+      } else {
+        state.loadApplicationDataStatus = {
+          status: action.payload.status,
+        };
+      }
+    },
+    changeAccountDataLoading(state, action) {
+      const status = action.payload;
+
+      if (status === null) {
+        state.loadAccountDataStatus = null;
+      } else {
+        state.loadAccountDataStatus = {
+          status: action.payload.status,
+        };
+      }
+    },
     changeSearchResultsStatus(state, action) {
-      state.searchResultsStatus = {
-        status: action.payload.status,
-      };
+      const status = action.payload;
+
+      if (status === null) {
+        state.searchResultsStatus = null;
+      } else {
+        state.searchResultsStatus = {
+          status: action.payload.status,
+        };
+      }
     },
     changeSendingTransactionStatus(state, action) {
       const status = action.payload;

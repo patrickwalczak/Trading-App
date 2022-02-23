@@ -1,33 +1,43 @@
+import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import SecurityShortView from "./Left Side Components/SecurityShortView";
 import classes from "./MainPanelLeftSide.module.css";
 
 const MainPanelLeftSide = () => {
+  const { transactions } = useSelector((state) => state.accountData);
+
+  const [activeButtonId, setActiveBtnId] = useState(transactions[0].databaseID);
+
+  let content;
+
+  const clickHandler = (e) => {
+    const clickedItemID = e.target.closest("li").dataset.id;
+
+    if (activeButtonId === clickedItemID) return;
+
+    setActiveBtnId(clickedItemID);
+  };
+
+  if (transactions.length === 0) {
+    content = "";
+  }
+
+  if (transactions.length >= 1) {
+    content = transactions.map((transaction) => (
+      <SecurityShortView
+        onClick={clickHandler}
+        dataset={transaction.databaseID}
+        key={transaction.databaseID}
+        activeBtnState={activeButtonId}
+        data={transaction.transactionData}
+      ></SecurityShortView>
+    ));
+  }
+
   return (
     <section className={classes.securitiesListContainer}>
-    <h3 className={classes.securitiesHeader}>My Securities</h3>
-    <ul className={classes.securitiesContainer}>
-      <li className={`${classes.securityElement} ${classes.activeSecurity}`}>
-        <span className={classes.activeSecurityIndicator}></span>
-        <h3 className={classes.securityName}>BTC</h3>
-        <div className={classes.securityValuesContainer}>
-          <span className={classes.isGrowing}>+1.95%</span>
-          <span>41.80</span>
-        </div>
-      </li>
-      <li className={classes.securityElement}>
-        <h3 className={classes.securityName}>XTY</h3>
-        <div className={classes.securityValuesContainer}>
-          <span className={classes.isLosing}>-5.95%</span>
-          <span>1121.80</span>
-        </div>
-      </li>
-      <li className={classes.securityElement}>
-        <h3 className={classes.securityName}>ETH</h3>
-        <div className={classes.securityValuesContainer}>
-          <span className={classes.isGrowing}>+ 6.95%</span>
-          <span>54.80</span>
-        </div>
-      </li>
-    </ul>
+      <h3 className={classes.securitiesHeader}>My Securities</h3>
+      <ul className={classes.securitiesContainer}>{content}</ul>
     </section>
   );
 };

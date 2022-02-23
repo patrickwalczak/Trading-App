@@ -55,6 +55,10 @@
   width: 5px;
   bottom: 0;
   left: 0%;
+  background-color: inherit;
+}
+
+.activeSecurity .activeSecurityIndicator {
   background-color: rgb(0, 110, 255);
 }
 
@@ -81,6 +85,6 @@
   color: rgb(14, 160, 14);
 }
 
-.securitiesContainer .isLosing {
+.securitiesContainer .isDropping {
   color: rgb(190, 28, 28);
 }

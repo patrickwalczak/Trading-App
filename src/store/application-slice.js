@@ -4,8 +4,8 @@ const applicationSlice = createSlice({
   name: "application",
   initialState: {
     transactionCounter: 0,
-    processingStatus: null,
     expirationDate: null,
+    activeCrypto: null,
   },
   reducers: {
     increaseCounter(state) {
@@ -16,6 +16,10 @@ const applicationSlice = createSlice({
       const { expirationDate, transactionCounter } = action.payload;
       state.transactionCounter = transactionCounter;
       state.expirationDate = expirationDate;
+    },
+
+    setActiveCrypto(state, action) {
+      state.activeCrypto = action.payload;
     },
   },
 });

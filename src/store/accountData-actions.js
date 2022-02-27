@@ -104,6 +104,8 @@ export const addTransaction = (transactionData, counter) => {
 
       dispatch(applicationActions.increaseCounter());
 
+      dispatch(accountDataActions.addPurchasedCrypto(transactionObj));
+
       dispatch(
         taskStatusActions.changeSendingTransactionStatus({ status: "success" })
       );
@@ -128,19 +130,3 @@ const createID = (transactionCounter) => {
 
   return id;
 };
-
-// I need a variable here which will help with displaying current processing status (loading, success, failed)
-
-// What else I want to do with that transaction object?
-// - create an ID
-// - add creation date (timestamp)
-
-// TODO Call loading spinner
-// Change button content from 'Place order' to loading spinner
-
-// TODO Send transaction to reducer and server
-
-// TODO display error or success msg
-// Change button content from 'Place order' to "tick'
-
-// TODO close form and reset

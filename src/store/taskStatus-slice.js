@@ -7,6 +7,7 @@ const taskStatusSlice = createSlice({
     sendTransactionStatus: null,
     loadApplicationDataStatus: null,
     loadAccountDataStatus: null,
+    loadSingleCrypto: null,
   },
   reducers: {
     changeApplicationDataLoading(state, action) {
@@ -49,6 +50,17 @@ const taskStatusSlice = createSlice({
         state.sendTransactionStatus = null;
       } else {
         state.sendTransactionStatus = {
+          status: action.payload.status,
+        };
+      }
+    },
+    changeFetchingSingleCryptoStatus(state, action) {
+      const status = action.payload;
+
+      if (status === null) {
+        state.loadSingleCrypto = null;
+      } else {
+        state.loadSingleCrypto = {
           status: action.payload.status,
         };
       }

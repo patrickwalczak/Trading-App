@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import MainPanel from "./Panels/Home Panel/HomePanel";
+import HomePanel from "./Panels/Home Panel/HomePanel";
 import SideNavigation from "./Side Navigation/SideNavigation";
 import TopNavigation from "./Top Navigation/TopNavigation";
 import classes from "./MainApplication.module.css";
@@ -34,7 +34,7 @@ const TradingPlatform = () => {
 
       <Routes>
         {displayApplication && (
-          <Route path="/mainPanel" element={<MainPanel />} />
+          <Route path="/mainPanel" element={<HomePanel />} />
         )}
       </Routes>
       {displayApplication === false && <h2>LOADING...</h2>}

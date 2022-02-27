@@ -39,9 +39,10 @@ export const getApplicationData = () => {
         dispatch(
           taskStatusActions.changeApplicationDataLoading({ status: "success" })
         );
-        return dispatch(
+        dispatch(
           applicationActions.initState({ expirationDate, transactionCounter })
         );
+        return;
       }
 
       const updatedData = {

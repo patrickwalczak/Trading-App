@@ -1,35 +1,30 @@
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import SecurityShortView from "./Left Side Components/SecurityShortView";
 import classes from "./MainPanelLeftSide.module.css";
 
-const MainPanelLeftSide = () => {
-  const { transactions } = useSelector((state) => state.accountData);
-
-  const [activeButtonId, setActiveBtnId] = useState(transactions[0].databaseID);
+const MainPanelLeftSide = (props) => {
+  const cryptoIDsAr = props.cryptoArr;
 
   let content;
 
   const clickHandler = (e) => {
     const clickedItemID = e.target.closest("li").dataset.id;
 
-    if (activeButtonId === clickedItemID) return;
+    if (props.activeCrypto === clickedItemID) return;
 
-    setActiveBtnId(clickedItemID);
+    props.onChangeActiveCrypto(clickedItemID);
   };
 
-  if (transactions.length === 0) {
-    content = "";
+  if (cryptoIDsAr.length === 0) {
+    content = <p>No securities</p>;
   }
 
-  if (transactions.length >= 1) {
-    content = transactions.map((transaction) => (
+  if (cryptoIDsAr.length >= 1) {
+    content = cryptoIDsAr.map((cryptoID) => (
       <SecurityShortView
         onClick={clickHandler}
-        dataset={transaction.databaseID}
-        key={transaction.databaseID}
-        activeBtnState={activeButtonId}
-        data={transaction.transactionData}
+        dataset={cryptoID}
+        key={cryptoID}
+        activeBtnState={props.activeCrypto}
       ></SecurityShortView>
     ));
   }

@@ -1,26 +1,22 @@
 import { Bar, Chart } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import classes from "./MainPanelChart.module.css";
+import { useSelector } from "react-redux";
 const MainPanelChart = () => {
+  const { activeCryptoHistoricalData } = useSelector(
+    (state) => state.applicationData
+  );
+
   return (
     <section className={classes.mainPanelChartContainer}>
       <Chart
         type="line"
         data={{
-          labels: [
-            "1.01",
-            "1.02",
-            "1.03",
-            "4.04",
-            "1.01",
-            "1.02",
-            "1.03",
-            "4.04",
-          ],
+          labels: activeCryptoHistoricalData.map((item) => item[1]),
           datasets: [
             {
               label: "",
-              data: [10, 12, 15, 20, 14, 19, 9, 11],
+              data: activeCryptoHistoricalData.map((item) => item[1]),
             },
           ],
         }}

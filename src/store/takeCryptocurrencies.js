@@ -1,3 +1,4 @@
+import { applicationActions } from "./application-slice";
 import { searchResultsActions } from "./searchResults-slice";
 import { taskStatusActions } from "./taskStatus-slice";
 
@@ -32,6 +33,60 @@ export const fetchCryptocurrencies = (query) => {
         taskStatusActions.changeSearchResultsStatus({ status: "failed" })
       );
     }
+  };
+};
+
+export const fetchSingleCrypto = (cryptoID) => {
+  return async (dispatch) => {
+    try {
+      dispatch(
+        taskStatusActions.changeFetchingSingleCryptoStatus({
+          status: "loading",
+        })
+      );
+
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${cryptoID}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Lost internet connecton!");
+      }
+
+      const data = await response.json();
+
+      dispatch(applicationActions.setActiveCrypto(data));
+
+      dispatch(
+        taskStatusActions.changeFetchingSingleCryptoStatus({
+          status: "success",
+        })
+      );
+    } catch (err) {
+      dispatch(
+        taskStatusActions.changeFetchingSingleCryptoStatus({ status: "failed" })
+      );
+    }
+  };
+};
+
+export const fetchHistoricalData = (cryptoID, currency, dataRange) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${cryptoID}/market_chart?vs_currency=${currency}&days=${dataRange}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Lost internet connecton!");
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+
+      dispatch(applicationActions.fillHistoricalDataArr(data));
+    } catch (err) {}
   };
 };
 

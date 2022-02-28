@@ -1,4 +1,6 @@
-Trading application [IN PROGRESS]
+# Trading application [IN PROGRESS]
+
+This application is about trading and investing. Currently, application will be provided with data about cryptocurrencies, but in the future I'd like to add also data about stock market.
 
 Technologies: React, CSS, HTML, Firebase, Chart.js, Redux, Redux toolkit
 

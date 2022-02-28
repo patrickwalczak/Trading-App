@@ -6,6 +6,7 @@ const applicationSlice = createSlice({
     transactionCounter: 0,
     expirationDate: null,
     activeCrypto: null,
+    activeCryptoHistoricalData: [],
   },
   reducers: {
     increaseCounter(state) {
@@ -20,6 +21,10 @@ const applicationSlice = createSlice({
 
     setActiveCrypto(state, action) {
       state.activeCrypto = action.payload;
+    },
+
+    fillHistoricalDataArr(state, action) {
+      state.activeCryptoHistoricalData = action.payload.prices;
     },
   },
 });

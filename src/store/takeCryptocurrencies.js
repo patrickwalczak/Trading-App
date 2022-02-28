@@ -70,6 +70,26 @@ export const fetchSingleCrypto = (cryptoID) => {
   };
 };
 
+export const fetchHistoricalData = (cryptoID, currency, dataRange) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${cryptoID}/market_chart?vs_currency=${currency}&days=${dataRange}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Lost internet connecton!");
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+
+      dispatch(applicationActions.fillHistoricalDataArr(data));
+    } catch (err) {}
+  };
+};
+
 /* 
 export const CoinList = (currency) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false`;

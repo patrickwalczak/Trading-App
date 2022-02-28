@@ -13,7 +13,11 @@ const MainPanelTop = (props) => {
           <label className={classes.dataRangeLabel} htmlFor="dataRange">
             Choose a data range
           </label>
-          <select id="dataRange" className={classes.dateRangeSelect}>
+          <select
+            onChange={props.onGetHistoricalData}
+            id="dataRange"
+            className={classes.dateRangeSelect}
+          >
             <option value="1">1 Day</option>
             <option value="7">7 Days</option>
             <option value="30">30 Days</option>

@@ -36,6 +36,7 @@ const TradingPlatform = () => {
         {displayApplication && (
           <Route path="/mainPanel" element={<HomePanel />} />
         )}
+        {displayApplication && <Route path="/" element={<HomePanel />} />}
       </Routes>
       {displayApplication === false && <h2>LOADING...</h2>}
     </div>

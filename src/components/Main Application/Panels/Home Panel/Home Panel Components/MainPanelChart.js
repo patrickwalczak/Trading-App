@@ -12,7 +12,7 @@ const MainPanelChart = () => {
       <Chart
         type="line"
         data={{
-          labels: activeCryptoHistoricalData.map((item) => item[1]),
+          labels: activeCryptoHistoricalData.map((item) => item[0]),
           datasets: [
             {
               label: "",

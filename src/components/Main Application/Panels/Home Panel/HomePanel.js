@@ -24,7 +24,7 @@ const MainPanel = () => {
   };
 
   const getHistoricalDataHandler = (e) => {
-    const selectedRange = e.target.current;
+    const selectedRange = e.target.value;
 
     if (selectedRange === historicalDataRange) return;
 
@@ -38,7 +38,7 @@ const MainPanel = () => {
 
   useEffect(() => {
     dispatch(fetchHistoricalData(activeCrypto, "usd", historicalDataRange));
-  }, [historicalDataRange]);
+  }, [historicalDataRange, activeCrypto]);
 
   return (
     <main className={classes.mainPanelContainer}>

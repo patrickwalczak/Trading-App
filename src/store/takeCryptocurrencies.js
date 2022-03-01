@@ -73,9 +73,17 @@ export const fetchSingleCrypto = (cryptoID) => {
 export const fetchHistoricalData = (cryptoID, currency, dataRange) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${cryptoID}/market_chart?vs_currency=${currency}&days=${dataRange}`
-      );
+      let url;
+      console.log(dataRange);
+      if (+dataRange === 1) {
+        url = `https://api.coingecko.com/api/v3/coins/${cryptoID}/market_chart?vs_currency=${currency}&days=${dataRange}`;
+      }
+
+      if (+dataRange !== 1) {
+        url = `https://api.coingecko.com/api/v3/coins/${cryptoID}/market_chart?vs_currency=${currency}&days=${dataRange}&interval=daily`;
+      }
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error("Lost internet connecton!");
@@ -85,12 +93,20 @@ export const fetchHistoricalData = (cryptoID, currency, dataRange) => {
 
       console.log(data);
 
-      dispatch(applicationActions.fillHistoricalDataArr(data));
-    } catch (err) {}
+      dispatch(applicationActions.fillHistoricalDataArr({ data, dataRange }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 };
 
 /* 
+
+https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}&interval=daily
+
+https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}
+
+
 export const CoinList = (currency) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false`;
 

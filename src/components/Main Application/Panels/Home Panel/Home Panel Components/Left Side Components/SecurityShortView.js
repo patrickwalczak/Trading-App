@@ -66,7 +66,6 @@ const SecurityShortView = ({ dataset, onClick, activeBtnState }) => {
           onClick={onClick}
           className={`${classes.securityElement} ${btnActiveClass}`}
         >
-          <span className={classes.activeSecurityIndicator}></span>
           <h3 className={classes.securityName}>{symbol}</h3>
           <div className={classes.securityValuesContainer}>
             <span className={classes[changeClass]}>{priceChange24h}%</span>

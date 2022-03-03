@@ -31,7 +31,6 @@ const MainPanelLeftSide = (props) => {
 
   return (
     <section className={classes.securitiesListContainer}>
-      <h3 className={classes.securitiesHeader}>My Securities</h3>
       <ul className={classes.securitiesContainer}>{content}</ul>
     </section>
   );

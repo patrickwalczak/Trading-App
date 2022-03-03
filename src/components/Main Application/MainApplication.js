@@ -3,7 +3,7 @@ import HomePanel from "./Panels/Home Panel/HomePanel";
 import SideNavigation from "./Side Navigation/SideNavigation";
 import TopNavigation from "./Top Navigation/TopNavigation";
 import classes from "./MainApplication.module.css";
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import { getApplicationData } from "../../store/application-actions";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountData } from "../../store/accountData-actions";
@@ -38,7 +38,11 @@ const TradingPlatform = () => {
         )}
         {displayApplication && <Route path="/" element={<HomePanel />} />}
       </Routes>
-      {displayApplication === false && <h2>LOADING...</h2>}
+      {displayApplication === false && (
+        <div className={classes.spinnerWrapper}>
+          <img className={classes.loadingSpinner} src={spinnerImg}></img>
+        </div>
+      )}
     </div>
   );
 };

@@ -10,4 +10,28 @@
   position: relative;
   background-color: rgb(255, 255, 255);
   overflow-x: hidden;
+  position: relative;
+}
+
+.spinnerWrapper {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+}
+
+.loadingSpinner {
+  width: 24px;
+  height: 24px;
+  animation: loading 1s infinite linear;
+  margin-right: 1rem;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

@@ -73,8 +73,14 @@ export const fetchSingleCrypto = (cryptoID) => {
 export const fetchHistoricalData = (cryptoID, currency, dataRange) => {
   return async (dispatch) => {
     try {
+      dispatch(
+        taskStatusActions.changeFetchingHistoricalData({
+          status: "loading",
+        })
+      );
+
       let url;
-      console.log(dataRange);
+
       if (+dataRange === 1) {
         url = `https://api.coingecko.com/api/v3/coins/${cryptoID}/market_chart?vs_currency=${currency}&days=${dataRange}`;
       }
@@ -91,11 +97,19 @@ export const fetchHistoricalData = (cryptoID, currency, dataRange) => {
 
       const data = await response.json();
 
-      console.log(data);
-
       dispatch(applicationActions.fillHistoricalDataArr({ data, dataRange }));
+      dispatch(
+        taskStatusActions.changeFetchingHistoricalData({
+          status: "success",
+        })
+      );
     } catch (err) {
       console.log(err);
+      dispatch(
+        taskStatusActions.changeFetchingHistoricalData({
+          status: "failed",
+        })
+      );
     }
   };
 };

@@ -73,17 +73,3 @@ const applicationSlice = createSlice({
 export const applicationActions = applicationSlice.actions;
 
 export default applicationSlice;
-
-// expiration date is property which stores a current date.
-// Transaction counter starts from zero everyday.
-// if date in firebase will be different than date here,
-// then we send "PUT" request to overwrite date and start transaction counter from zero
-
-// -MwLmbRjZUUKo8dEZNIX
-
-// [ [1646053825033, 367.64123843136827]
-//  [1646054075751, 367.98720215889136]
-//  [1646054378967, 367.2280284148458]
-//   [1646054629067, 366.8062059761764]
-//   [1646054935048, 365.5720121759836]
-//   [1646055269058, 365.8363561898928] ]

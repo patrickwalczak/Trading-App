@@ -41,9 +41,6 @@ const accountDataSlice = createSlice({
 
         state.purchasedCryptocurrencies = [...cryptoIDs];
       }
-
-      if (purchasedCrypto !== undefined) {
-      }
     },
 
     addTransaction(state, action) {

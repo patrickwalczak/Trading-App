@@ -12,12 +12,16 @@ import {
 
 const MainPanel = () => {
   const dispatch = useDispatch();
+  const defaultDataRange = 1;
+
+  // This a list (array) of unique cryptocurrencies' id
   const { purchasedCryptocurrencies: cryptoIDs } = useSelector(
     (state) => state.accountData
   );
-  const [activeCrypto, setActiveCrypto] = useState(cryptoIDs[0]);
+  const { currency: userCurrency } = useSelector((state) => state.accountData);
 
-  const [historicalDataRange, setHistoricalDataRange] = useState(1);
+  const [activeCrypto, setActiveCrypto] = useState(cryptoIDs[0]);
+  const [chosenDataRange, setDataRange] = useState(defaultDataRange);
 
   const changeActiveCryptoHandler = (clickedCryptoID) => {
     setActiveCrypto(clickedCryptoID);
@@ -26,9 +30,9 @@ const MainPanel = () => {
   const getHistoricalDataHandler = (e) => {
     const selectedRange = e.target.value;
 
-    if (selectedRange === historicalDataRange) return;
+    if (selectedRange === chosenDataRange) return;
 
-    setHistoricalDataRange(selectedRange);
+    setDataRange(selectedRange);
   };
 
   useEffect(() => {
@@ -37,8 +41,8 @@ const MainPanel = () => {
   }, [activeCrypto]);
 
   useEffect(() => {
-    dispatch(fetchHistoricalData(activeCrypto, "usd", historicalDataRange));
-  }, [historicalDataRange, activeCrypto]);
+    dispatch(fetchHistoricalData(activeCrypto, userCurrency, chosenDataRange));
+  }, [chosenDataRange, activeCrypto]);
 
   return (
     <main className={classes.mainPanelContainer}>

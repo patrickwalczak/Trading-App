@@ -1,4 +1,4 @@
-form {
+.signUpForm {
   width: 26rem;
   height: 30rem;
   background-color: rgb(255, 255, 255);
@@ -11,7 +11,7 @@ form {
   align-self: start;
 }
 
-label {
+.signUpLabel {
   font-size: 1.7rem;
   color: rgb(95, 95, 95);
   transform: translateX(5rem);
@@ -53,4 +53,3 @@ label {
   color: white;
   text-transform: uppercase;
 }
-

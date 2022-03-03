@@ -1,15 +1,18 @@
 .mainPanelContainer {
+  /* Properties for parent grid */
   grid-column: 2/3;
   grid-row: 2/3;
   align-self: center;
   justify-self: center;
+  /* Properties for parent grid */
+  /* aspect ratio: 2,5 (width/height) */
   width: 80vw;
-  height: 60rem;
-  border: 1px solid rgb(155, 155, 155);
+  max-width: 1300px;
+  height: 32vw;
+  max-height: 520px;
   display: grid;
   grid-template-columns: 15% 70% 15%;
-  grid-template-rows: 12% 88%;
-  margin-top: 4rem;
+  grid-template-rows: 10% 90%;
   background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0px 5px 12px rgb(131, 131, 131);

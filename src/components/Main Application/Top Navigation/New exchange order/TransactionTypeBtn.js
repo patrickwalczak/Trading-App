@@ -4,7 +4,7 @@ const TransactionTypeBtn = (props) => {
   const { chosenSecurity } = useSelector((state) => state.searchResults);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
 
-  // If security will be chosen (for example cryptocurrency such as bitcoin), then we remove disabled property from buttons and input
+  // If security will be chosen (for example cryptocurrency such as a bitcoin), then we remove disabled property from buttons and input
   const isChoosing =
     chosenSecurity === null || sendTransactionStatus?.status === "loading"
       ? true

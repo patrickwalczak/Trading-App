@@ -3,7 +3,7 @@ import classes from "./ExchangeOrderForm.module.css";
 import StatusMsg from "./StatusMsg";
 import { useSelector } from "react-redux";
 
-const FoundElementsContainer = () => {
+const FoundElementsContainer = (props) => {
   const { searchResults } = useSelector((state) => state.searchResults);
   let content;
 
@@ -11,7 +11,11 @@ const FoundElementsContainer = () => {
     content = (
       <ul className={classes.foundElementsList}>
         {searchResults.map((item) => (
-          <FoundElement key={item.id} data={item} />
+          <FoundElement
+            onClick={props.onClearInput}
+            key={item.id}
+            data={item}
+          />
         ))}
       </ul>
     );
@@ -24,7 +28,7 @@ const FoundElementsContainer = () => {
   return (
     <div className={classes.foundElementsContainer}>
       <h5 className={classes.foundElementsHeader}>
-        Results{" "}
+        Results
         <span className={classes.resultsAmount}>{searchResults.length}</span>
       </h5>
       {content}

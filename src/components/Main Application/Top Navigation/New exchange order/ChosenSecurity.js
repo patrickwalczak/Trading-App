@@ -4,6 +4,7 @@ import searchImg from "../../../../images/search.png";
 const ChosenSecurity = (props) => {
   const onReturnHandler = (e) => {
     e.preventDefault();
+    props.onClearAmountInputValue();
     props.onReset();
   };
 
@@ -13,12 +14,14 @@ const ChosenSecurity = (props) => {
     <div className={classes.chosenSecurityContainer}>
       <div className={classes.securityNameAndBtn}>
         <h2 className={classes.chosenSecurityName}>{props.data.name}</h2>
-        <button
-          onClick={onReturnHandler}
-          className={classes.backToSearchBarBtn}
-        >
-          <img src={searchImg}></img>
-        </button>
+        {props.sendingStatus?.status !== "loading" && (
+          <button
+            onClick={onReturnHandler}
+            className={classes.backToSearchBarBtn}
+          >
+            <img src={searchImg}></img>
+          </button>
+        )}
       </div>
       <div className={classes.symbolPriceChangeContainer}>
         <h3 className={classes.chosenSymbol}>{props.data.symbol}</h3>

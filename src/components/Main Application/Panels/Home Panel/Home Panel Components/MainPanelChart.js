@@ -35,24 +35,21 @@ const MainPanelChart = () => {
             labels: activeCryptoHistoricalData.map((item) => item[0]),
             datasets: [
               {
+                fill: false,
                 label: "",
                 data: activeCryptoHistoricalData.map((item) => item[1]),
-                pointRadius: 0,
-                pointHoverRadius: 5,
               },
             ],
           }}
           options={{
-            scales: {
-              y: {},
-            },
             elements: {
               line: {
                 borderColor: lineColor,
               },
               point: {
-                radius: 0,
-                hoverRadius: 3,
+                radius: 1,
+                hoverRadius: 7,
+                borderColor: lineColor,
               },
             },
             plugins: {

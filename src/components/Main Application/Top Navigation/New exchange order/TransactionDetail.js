@@ -1,26 +1,15 @@
-import React, {
-  Fragment,
-  useEffect,
-  useState,
-  useImperativeHandle,
-  useRef,
-} from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import classes from "./TransactionDetail.module.css";
 import TransactionTypeBtn from "./TransactionTypeBtn";
 
-const TransactionDetail = React.forwardRef((props, ref) => {
+const TransactionDetail = (props) => {
   const [buyBtnIsActive, setBuyBtnState] = useState(false);
   const [sellBtnIsActive, setSellBtnState] = useState(false);
   const [transactionType, setTransactionType] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
   const [sellNotAvailable, setSellAvailable] = useState(null);
   const [amountInputIsValid, setAmountInputValidity] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
-  const amountInputRef = useRef();
-
-  useImperativeHandle(ref, () => ({
-    resetTransactionDetail: resetDetailHandler,
-  }));
 
   const { chosenSecurity } = useSelector((state) => state.searchResults);
   const { transactions } = useSelector((state) => state.accountData);
@@ -48,10 +37,10 @@ const TransactionDetail = React.forwardRef((props, ref) => {
   const resetDetailHandler = () => {
     setBuyBtnState(false);
     setSellBtnState(false);
-    amountInputRef.current.value = "";
     setErrorMsg("");
     setAmountInputValidity(true);
     setTransactionType("");
+    props.onChangeAmountInputValue();
   };
 
   const transactionTypeBtnHandler = (e) => {
@@ -73,8 +62,12 @@ const TransactionDetail = React.forwardRef((props, ref) => {
       setBuyBtnState(false);
 
       const foundTransactionIndex = Number(
-        transactions.findIndex((item) => item.securityID === chosenSecurity.id)
+        transactions.findIndex(
+          (item) =>
+            item.transactionData.purchasedSecurityID === chosenSecurity.id
+        )
       );
+      //  TODO I need an Array with every purchased cryptocurrency amount and ID
 
       if (foundTransactionIndex === -1) {
         return setSellAvailable(false);
@@ -160,7 +153,6 @@ const TransactionDetail = React.forwardRef((props, ref) => {
     };
 
     if (transactionValue < minTransactionValue) {
-      props.onChangeFormValidity(false);
       return wrongInputActions(
         "Order value cannot be less than $1",
         transaction
@@ -232,7 +224,7 @@ const TransactionDetail = React.forwardRef((props, ref) => {
             onChange={amountHandler}
             type="number"
             id="amount"
-            ref={amountInputRef}
+            value={props.amountInputValue}
           ></input>
         </div>
       </div>
@@ -241,6 +233,6 @@ const TransactionDetail = React.forwardRef((props, ref) => {
       )}
     </Fragment>
   );
-});
+};
 
 export default TransactionDetail;

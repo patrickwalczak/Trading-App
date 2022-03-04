@@ -13,9 +13,5 @@
   display: grid;
   grid-template-columns: 15% 70% 15%;
   grid-template-rows: 10% 90%;
-  background-color: white;
-  border-radius: 0.5rem;
   box-shadow: 0px 5px 12px rgb(131, 131, 131);
-  position: relative;
-  z-index: 10;
 }

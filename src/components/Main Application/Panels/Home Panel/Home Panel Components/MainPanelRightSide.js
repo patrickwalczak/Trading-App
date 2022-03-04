@@ -39,9 +39,7 @@ const MainPanelRightSide = () => {
 
   return (
     <section className={classes.mainPanelRightSideContainer}>
-      <div className={classes.sectionHeader}>
-        <h3> STATISTICS </h3>
-      </div>
+      <h3 className={classes.mainPanelRight__header}> STATISTICS </h3>
       <ul className={classes.securitySideDataContainer}>
         <li className={classes.securityDataItem}>
           <h5>Opn price</h5> <span>-</span>
@@ -59,10 +57,8 @@ const MainPanelRightSide = () => {
           <h5>Volume</h5> <span>{totalVolume}</span>
         </li>
       </ul>
-      <div className={classes.transactionButtonsContainer}>
-        <button className={classes.transactionBuy}>Buy</button>
-        <button className={classes.transactionSell}>Sell</button>
-      </div>
+      <button className={classes.transactionBuy}>Buy</button>
+      <button className={classes.transactionSell}>Sell</button>
     </section>
   );
 };

@@ -18,7 +18,7 @@ const InputSearchContainer = (props) => {
     props.value && (
       <button
         className={classes.clearInputBtn}
-        onClick={props.onClearInputHandler}
+        onClick={() => props.onChange("")}
       >
         x
       </button>
@@ -27,12 +27,14 @@ const InputSearchContainer = (props) => {
   return (
     <Fragment>
       <div className={classes.inputSearchContainer}>
-        <img className={classes.searchImg} src={searchImg}></img>
+        <label htmlFor="searchField">
+          <img className={classes.searchImg} src={searchImg}></img>
+        </label>
         <input
+          id="searchField"
           autoFocus
           value={props.value}
-          onBlur={props.onBlur}
-          onChange={props.onChange}
+          onChange={(e) => props.onChange(e.target.value.trim())}
           className={classes.searchInput}
           type="text"
           placeholder="Search by symbol or name"
@@ -41,7 +43,7 @@ const InputSearchContainer = (props) => {
         {displayLoadingSpinner}
       </div>
       {searchResultsStatus?.status === "success" && props.value && (
-        <FoundElementsContainer />
+        <FoundElementsContainer onClearInput={props.onChange} />
       )}
       {searchResultsStatus?.status === "failed" && (
         <StatusMsg>lost internet connection</StatusMsg>

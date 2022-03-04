@@ -10,29 +10,30 @@ const TransactionSummary = ({ transactionData }) => {
     currency: "USD",
   };
 
-  const commissionValue =
-    transactionData !== null
-      ? `- ${transactionData.commission.toLocaleString(
-          "en-US",
-          localStringOptions
-        )}`
-      : "-";
-  const orderValue =
-    transactionData !== null
-      ? `- ${transactionData.orderValue.toLocaleString(
-          "en-US",
-          localStringOptions
-        )}`
-      : "-";
-  const fundsAfterValue =
-    transactionData !== null
-      ? `${transactionData.availableFundsAfter.toLocaleString(
-          "en-US",
-          localStringOptions
-        )}`
-      : "-";
+  const convertToLocaleString = (value, whichCountry, localOptions = "") => {
+    if (!transactionData) return "-";
 
-  const activeClass = transactionData !== null ? "active" : "";
+    return value.toLocaleString(whichCountry, localOptions);
+  };
+
+  const commissionValue = convertToLocaleString(
+    transactionData?.commission,
+    "en-US",
+    localStringOptions
+  );
+
+  const orderValue = convertToLocaleString(
+    transactionData?.orderValue,
+    "en-US",
+    localStringOptions
+  );
+
+  const fundsAfterValue = convertToLocaleString(
+    transactionData?.availableFundsAfter,
+    "en-US",
+    localStringOptions
+  );
+  const activeClass = transactionData ? "active" : "";
 
   return (
     <div className={classes.transactionSummaryContainer}>

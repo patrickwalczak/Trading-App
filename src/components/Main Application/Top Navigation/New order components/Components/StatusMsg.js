@@ -1,4 +1,4 @@
-import classes from "./ExchangeOrderForm.module.css";
+import classes from "../NewOrder.module.css";
 
 const StatusMsg = (props) => {
   return (

@@ -2,7 +2,7 @@ import classes from "./TopNavigation.module.css";
 import signOutImg from "../../../images/signOutBtn.png";
 import msgImg from "../../../images/email.png";
 import { Fragment, useState } from "react";
-import ExchangeOrderForm from "./New exchange order/ExchangeOrderForm";
+import NewOrder from "./New order components/NewOrder";
 
 const TopNavigation = () => {
   const [modalVisibility, setModalVisibility] = useState(false);
@@ -14,7 +14,7 @@ const TopNavigation = () => {
   return (
     <Fragment>
       {modalVisibility && (
-        <ExchangeOrderForm onChangeModalState={changeModalStateHandler} />
+        <NewOrder onChangeModalState={changeModalStateHandler} />
       )}
       <nav className={classes.topNavContainer}>
         <ul>

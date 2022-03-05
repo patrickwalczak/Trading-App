@@ -1,5 +1,5 @@
 import classes from "./SuccessModal.module.css";
-import successImg from "../../../../images/success.png";
+import successImg from "../../../../../images/success.png";
 import React from "react";
 
 const SuccessModal = (props) => {

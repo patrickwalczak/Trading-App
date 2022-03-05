@@ -1,12 +1,17 @@
 import { Fragment } from "react";
-import classes from "./ExchangeOrderForm.module.css";
+import classes from "../NewOrder.module.css";
 import { useSelector } from "react-redux";
-import searchImg from "../../../../images/search.png";
-import loadingSpinnerImg from "../../../../images/loadingSpinner.png";
+import searchImg from "../../../../../images/search.png";
+import loadingSpinnerImg from "../../../../../images/loadingSpinner.png";
 import FoundElementsContainer from "./FoundElementsContainer";
 import StatusMsg from "./StatusMsg";
 
 const InputSearchContainer = (props) => {
+  const onClearInput = (e) => {
+    e.preventDefault();
+    props.onUpdateSearchInput();
+  };
+
   const { searchResultsStatus } = useSelector((state) => state.taskStatus);
 
   const displayLoadingSpinner = searchResultsStatus?.status === "loading" &&
@@ -16,10 +21,7 @@ const InputSearchContainer = (props) => {
   const displayClearInputBtn = (searchResultsStatus?.status === "success" ||
     searchResultsStatus?.status === "failed") &&
     props.value && (
-      <button
-        className={classes.clearInputBtn}
-        onClick={() => props.onChange("")}
-      >
+      <button className={classes.clearInputBtn} onClick={onClearInput}>
         x
       </button>
     );
@@ -34,7 +36,7 @@ const InputSearchContainer = (props) => {
           id="searchField"
           autoFocus
           value={props.value}
-          onChange={(e) => props.onChange(e.target.value.trim())}
+          onChange={(e) => props.onUpdateSearchInput(e.target.value.trim())}
           className={classes.searchInput}
           type="text"
           placeholder="Search by symbol or name"
@@ -43,7 +45,7 @@ const InputSearchContainer = (props) => {
         {displayLoadingSpinner}
       </div>
       {searchResultsStatus?.status === "success" && props.value && (
-        <FoundElementsContainer onClearInput={props.onChange} />
+        <FoundElementsContainer onClearInput={props.onUpdateSearchInput} />
       )}
       {searchResultsStatus?.status === "failed" && (
         <StatusMsg>lost internet connection</StatusMsg>

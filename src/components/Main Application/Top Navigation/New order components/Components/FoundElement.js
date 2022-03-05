@@ -1,6 +1,6 @@
-import classes from "./ExchangeOrderForm.module.css";
+import classes from "../NewOrder.module.css";
 import { useDispatch } from "react-redux";
-import { searchResultsActions } from "../../../../store/searchResults-slice";
+import { searchResultsActions } from "../../../../../store/searchResults-slice";
 
 const FoundElement = (props) => {
   const dispatch = useDispatch();

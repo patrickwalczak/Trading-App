@@ -40,7 +40,7 @@ const TransactionDetail = (props) => {
     setErrorMsg("");
     setAmountInputValidity(true);
     setTransactionType("");
-    props.onChangeAmountInputValue();
+    props.onUpdateAmountInput();
   };
 
   const transactionTypeBtnHandler = (e) => {
@@ -81,7 +81,8 @@ const TransactionDetail = (props) => {
   const amountHandler = (e) => {
     setAmountInputValidity(true);
     setErrorMsg("");
-    const enteredAmount = e.target.value;
+    const enteredAmount = e.target.value.trim();
+    props.onUpdateAmountInput(enteredAmount);
 
     const wrongInputActions = (errMsg, transactionData = null) => {
       setAmountInputValidity(false);

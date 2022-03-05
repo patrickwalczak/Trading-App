@@ -19,6 +19,8 @@ const ExchangeOrderForm = (props) => {
   const dispatch = useDispatch();
 
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [buyBtnIsActive, setBuyBtnActivity] = useState(false);
+  const [sellBtnIsActive, setSellBtnActivity] = useState(false);
   const [amountInputValue, setAmountInputValue] = useState("");
   const [transactionData, setTransactionData] = useState(null);
   const [isFormValid, setFormValidity] = useState(false);
@@ -36,12 +38,6 @@ const ExchangeOrderForm = (props) => {
     sendTransactionStatus === null ||
     sendTransactionStatus?.status === "loading";
 
-  const changeFormValidity = (validityState) => setFormValidity(validityState);
-
-  const searchInputHandler = (query = "") => setSearchInputValue(query);
-
-  const amountInputHandler = (amount = "") => setAmountInputValue(amount);
-
   const resetNewOrderForm = (modal = "", transactionIsFinished = false) => {
     dispatch(searchResultsActions.clearSearchResults());
     dispatch(searchResultsActions.removeChosenSecurity());
@@ -54,8 +50,6 @@ const ExchangeOrderForm = (props) => {
       dispatch(taskStatusActions.changeSendingTransactionStatus(null));
     }
   };
-
-  const getTransactionData = (data) => setTransactionData(data);
 
   const sendingTransactionDataHandler = (e) => {
     e.preventDefault();
@@ -85,7 +79,7 @@ const ExchangeOrderForm = (props) => {
     if (sendTransactionStatus?.status !== "loading") return;
     setTimeout(() => {
       dispatch(addTransaction(transactionData, transactionCounter));
-    }, 5000);
+    }, 3000);
   }, [sendTransactionStatus]);
 
   return (
@@ -99,7 +93,7 @@ const ExchangeOrderForm = (props) => {
             {!chosenSecurity && (
               <InputSearchContainer
                 value={searchInputValue}
-                onUpdateSearchInput={searchInputHandler}
+                onUpdateSearchInput={setSearchInputValue}
               />
             )}
             {chosenSecurity && (
@@ -107,15 +101,22 @@ const ExchangeOrderForm = (props) => {
                 sendingStatus={sendTransactionStatus}
                 data={chosenSecurity}
                 onReset={resetNewOrderForm}
-                onUpdateSearchInput={searchInputHandler}
-                onUpdateAmountInput={amountInputHandler}
+                onUpdateSearchInput={setSearchInputValue}
+                onUpdateAmountInput={setAmountInputValue}
+                onChangeFormValidity={setFormValidity}
+                onSetBuyBtnState={setBuyBtnActivity}
+                onSetSellBtnState={setSellBtnActivity}
               />
             )}
             <TransactionDetail
-              onGetTransactionData={getTransactionData}
-              onChangeFormValidity={changeFormValidity}
+              onGetTransactionData={setTransactionData}
+              onChangeFormValidity={setFormValidity}
               amountInputValue={amountInputValue}
-              onUpdateAmountInput={amountInputHandler}
+              onUpdateAmountInput={setAmountInputValue}
+              onSetBuyBtnState={setBuyBtnActivity}
+              buyBtnIsActive={buyBtnIsActive}
+              onSetSellBtnState={setSellBtnActivity}
+              sellBtnIsActive={sellBtnIsActive}
             />
             <TransactionSummary transactionData={transactionData} />
             <button
@@ -136,6 +137,7 @@ const ExchangeOrderForm = (props) => {
           onResetForm={resetNewOrderForm.bind(null, "close_modal", true)}
         />
       )}
+      {/* TODO  FailModal */}
     </Modal>
   );
 };

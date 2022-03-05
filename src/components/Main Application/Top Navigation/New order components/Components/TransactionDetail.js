@@ -4,10 +4,8 @@ import classes from "./TransactionDetail.module.css";
 import TransactionTypeBtn from "./TransactionTypeBtn";
 
 const TransactionDetail = (props) => {
-  const [buyBtnIsActive, setBuyBtnState] = useState(false);
-  const [sellBtnIsActive, setSellBtnState] = useState(false);
-  const [transactionType, setTransactionType] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
+  const [transactionType, setTransactionType] = useState(null);
   const [sellNotAvailable, setSellAvailable] = useState(null);
   const [amountInputIsValid, setAmountInputValidity] = useState(true);
 
@@ -23,43 +21,45 @@ const TransactionDetail = (props) => {
   const enableAmountInput =
     isChosen &&
     sendTransactionStatus?.status !== "loading" &&
-    (buyBtnIsActive || sellBtnIsActive);
+    (props.buyBtnIsActive || props.sellBtnIsActive);
 
   const enabledInputClass = enableAmountInput ? "" : "notChosen";
 
   const addErrBorder =
-    !amountInputIsValid && errorMsg !== "" ? "errBorder" : "";
+    !amountInputIsValid && errorMsg !== "" && props.amountInputValue
+      ? "errBorder"
+      : "";
 
   // Some cryptocurrencies have price equals to zero after rounding them to two digits, so in this case I increase max fraction digits.
 
   const chosenSecurityPrice = chosenSecurity?.convertedPrice;
 
   const resetDetailHandler = () => {
-    setBuyBtnState(false);
-    setSellBtnState(false);
+    props.onSetBuyBtnState(false);
+    props.onSetSellBtnState(false);
     setErrorMsg("");
     setAmountInputValidity(true);
     setTransactionType("");
-    props.onUpdateAmountInput();
+    props.onUpdateAmountInput("");
   };
 
   const transactionTypeBtnHandler = (e) => {
     e.preventDefault();
     const transactionType = e.target.dataset.transactionType;
 
-    if (buyBtnIsActive || sellBtnIsActive) {
+    if (props.buyBtnIsActive || props.sellBtnIsActive) {
       props.onGetTransactionData(null);
       return resetDetailHandler();
     }
 
     if (transactionType === "BUY") {
-      setSellBtnState(false);
-      setBuyBtnState(!buyBtnIsActive);
+      props.onSetSellBtnState(false);
+      props.onSetBuyBtnState(!props.buyBtnIsActive);
       setTransactionType(transactionType);
     }
 
     if (transactionType === "SELL") {
-      setBuyBtnState(false);
+      props.onSetBuyBtnState(false);
 
       const foundTransactionIndex = Number(
         transactions.findIndex(
@@ -74,7 +74,7 @@ const TransactionDetail = (props) => {
       }
 
       setTransactionType(transactionType);
-      setSellBtnState(!sellBtnIsActive);
+      props.onSetSellBtnState(!props.sellBtnIsActive);
     }
   };
 
@@ -180,7 +180,7 @@ const TransactionDetail = (props) => {
           onClick={transactionTypeBtnHandler}
           btnType={"BUY"}
           btnClassName={"buyBtnClass"}
-          btnState={buyBtnIsActive}
+          btnState={props.buyBtnIsActive}
         >
           BUY
         </TransactionTypeBtn>
@@ -189,7 +189,7 @@ const TransactionDetail = (props) => {
             onClick={transactionTypeBtnHandler}
             btnType={"SELL"}
             btnClassName={"sellBtnClass"}
-            btnState={sellBtnIsActive}
+            btnState={props.sellBtnIsActive}
           >
             SELL
           </TransactionTypeBtn>
@@ -229,7 +229,7 @@ const TransactionDetail = (props) => {
           ></input>
         </div>
       </div>
-      {!amountInputIsValid && chosenSecurity && (
+      {!amountInputIsValid && chosenSecurity && props.amountInputValue && (
         <p className={classes.invalidInputAmount}>{errorMsg}</p>
       )}
     </Fragment>

@@ -1,5 +1,5 @@
 import FoundElement from "./FoundElement";
-import classes from "./ExchangeOrderForm.module.css";
+import classes from "../NewOrder.module.css";
 import StatusMsg from "./StatusMsg";
 import { useSelector } from "react-redux";
 

@@ -1,17 +1,17 @@
 import Modal from "../../../UI/Modal/Modal";
-import classes from "./ExchangeOrderForm.module.css";
+import classes from "./NewOrder.module.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCryptocurrencies } from "../../../../store/takeCryptocurrencies";
 import { searchResultsActions } from "../../../../store/searchResults-slice";
-import InputSearchContainer from "./InputSearchContainer";
-import ChosenSecurity from "./ChosenSecurity";
-import OrderFormHeader from "./OrderFormHeader";
-import TransactionDetail from "./TransactionDetail";
-import TransactionSummary from "./TransactionSummary";
+import InputSearchContainer from "./Components/InputSearchContainer";
+import ChosenSecurity from "./Components/ChosenSecurity";
+import OrderFormHeader from "./Components/OrderFormHeader";
+import TransactionDetail from "./Components/TransactionDetail";
+import TransactionSummary from "./Components/TransactionSummary";
 import { addTransaction } from "../../../../store/accountData-actions";
 import loadingSpinnerImg from "../../../../images/loadingSpinner.png";
-import SuccessModal from "./SuccessModal";
+import SuccessModal from "./Components/SuccessModal";
 import { taskStatusActions } from "../../../../store/taskStatus-slice";
 
 const ExchangeOrderForm = (props) => {
@@ -36,11 +36,11 @@ const ExchangeOrderForm = (props) => {
     sendTransactionStatus === null ||
     sendTransactionStatus?.status === "loading";
 
-  const changeFormValidity = (formState) => setFormValidity(formState);
+  const changeFormValidity = (validityState) => setFormValidity(validityState);
 
-  const searchInputHandler = (val = "") => setSearchInputValue(val);
+  const searchInputHandler = (query = "") => setSearchInputValue(query);
 
-  const amountInputHandler = () => setAmountInputValue("");
+  const amountInputHandler = (amount = "") => setAmountInputValue(amount);
 
   const resetNewOrderForm = (modal = "", transactionIsFinished = false) => {
     dispatch(searchResultsActions.clearSearchResults());
@@ -98,8 +98,8 @@ const ExchangeOrderForm = (props) => {
           <form className={classes.exchangeForm}>
             {!chosenSecurity && (
               <InputSearchContainer
-                onChange={searchInputHandler.bind(null)}
                 value={searchInputValue}
+                onUpdateSearchInput={searchInputHandler}
               />
             )}
             {chosenSecurity && (
@@ -107,14 +107,15 @@ const ExchangeOrderForm = (props) => {
                 sendingStatus={sendTransactionStatus}
                 data={chosenSecurity}
                 onReset={resetNewOrderForm}
-                onClearAmountInputValue={amountInputHandler}
+                onUpdateSearchInput={searchInputHandler}
+                onUpdateAmountInput={amountInputHandler}
               />
             )}
             <TransactionDetail
               onGetTransactionData={getTransactionData}
               onChangeFormValidity={changeFormValidity}
               amountInputValue={amountInputValue}
-              onChangeAmountInputValue={amountInputHandler}
+              onUpdateAmountInput={amountInputHandler}
             />
             <TransactionSummary transactionData={transactionData} />
             <button

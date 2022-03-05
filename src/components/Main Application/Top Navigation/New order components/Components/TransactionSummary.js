@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import classes from "./ExchangeOrderForm.module.css";
+import classes from "../NewOrder.module.css";
 
 const TransactionSummary = ({ transactionData }) => {
   const { availableFunds } = useSelector((state) => state.accountData);

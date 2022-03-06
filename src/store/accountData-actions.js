@@ -1,5 +1,6 @@
+import { loadingTimeLimitHandler } from "../helpers/helpers";
 import { accountDataActions } from "./accountData-slice";
-import { fetchAppData } from "./application-actions";
+import { fetchHandler } from "./application-actions";
 import { applicationActions } from "./application-slice";
 import { taskStatusActions } from "./taskStatus-slice";
 
@@ -10,20 +11,14 @@ const URL =
 
 export const getAccountData = () => {
   return async (dispatch) => {
-    const loadingTimeLimitHandler = new Promise((_, reject) =>
-      setTimeout(() => {
-        reject("Problem with internet connection");
-      }, 5000)
-    );
-
     try {
       dispatch(
         taskStatusActions.changeAccountDataLoading({ status: "loading" })
       );
 
       const user_data = await Promise.race([
-        dispatch(fetchAppData(URL)),
-        loadingTimeLimitHandler,
+        dispatch(fetchHandler(URL)),
+        loadingTimeLimitHandler(),
       ]);
 
       if (!user_data) throw new Error("Sth wrong with user data");
@@ -59,33 +54,27 @@ export const addTransaction = (transactionData, counter) => {
     const transactionDate = Date.now();
     const transactionObj = { ...transactionData, id, transactionDate };
 
-    const loadingTimeLimitHandler = new Promise((_, reject) =>
-      setTimeout(() => {
-        reject("Problem with internet connection");
-      }, 5000)
-    );
-
     try {
       await Promise.race([
         dispatch(
-          fetchAppData(transaction_counter_url, {
+          fetchHandler(transaction_counter_url, {
             method: "PUT",
             body: JSON.stringify(counter + 1),
           })
         ),
-        loadingTimeLimitHandler,
+        loadingTimeLimitHandler(),
       ]);
 
       dispatch(applicationActions.increaseCounter());
 
       await Promise.race([
         dispatch(
-          fetchAppData(available_funds_url, {
+          fetchHandler(available_funds_url, {
             method: "PUT",
             body: JSON.stringify(transactionData.availableFundsAfter),
           })
         ),
-        loadingTimeLimitHandler,
+        loadingTimeLimitHandler(),
       ]);
 
       dispatch(
@@ -99,12 +88,12 @@ export const addTransaction = (transactionData, counter) => {
 
       const sentTransactionResponse = await Promise.race([
         dispatch(
-          fetchAppData(transactions_url, {
+          fetchHandler(transactions_url, {
             method: "POST",
             body: JSON.stringify({ ...transactionObj }),
           })
         ),
-        loadingTimeLimitHandler,
+        loadingTimeLimitHandler(),
       ]);
 
       // senTransactionResponse is a returned ID of the created transaction object in the database (firebase)

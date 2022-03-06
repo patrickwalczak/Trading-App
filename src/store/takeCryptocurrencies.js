@@ -1,3 +1,5 @@
+import { loadingTimeLimitHandler } from "../helpers/helpers";
+import { fetchHandler } from "./application-actions";
 import { applicationActions } from "./application-slice";
 import { searchResultsActions } from "./searchResults-slice";
 import { taskStatusActions } from "./taskStatus-slice";
@@ -9,25 +11,26 @@ export const fetchCryptocurrencies = (query) => {
         taskStatusActions.changeSearchResultsStatus({ status: "loading" })
       );
 
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
+      const response_data = await Promise.race([
+        dispatch(
+          fetchHandler(
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=500&page=1&sparkline=false`
+          )
+        ),
+        loadingTimeLimitHandler(),
+      ]);
+
+      const data = response_data.filter(
+        (crypto) => crypto.current_price >= 0.001
       );
-
-      if (!response.ok) {
-        throw new Error("Lost internet connecton!");
-      }
-
-      const data = await response.json();
 
       dispatch(searchResultsActions.searchByQuery({ query, data }));
 
-      if (query !== "") {
-        setTimeout(() => {
-          dispatch(
-            taskStatusActions.changeSearchResultsStatus({ status: "success" })
-          );
-        }, 200);
-      }
+      setTimeout(() => {
+        dispatch(
+          taskStatusActions.changeSearchResultsStatus({ status: "success" })
+        );
+      }, 200);
     } catch (err) {
       dispatch(
         taskStatusActions.changeSearchResultsStatus({ status: "failed" })
@@ -45,15 +48,12 @@ export const fetchSingleCrypto = (cryptoID) => {
         })
       );
 
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${cryptoID}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Lost internet connecton!");
-      }
-
-      const data = await response.json();
+      const data = await Promise.race([
+        dispatch(
+          fetchHandler(`https://api.coingecko.com/api/v3/coins/${cryptoID}`)
+        ),
+        loadingTimeLimitHandler(),
+      ]);
 
       dispatch(applicationActions.setActiveCrypto(data));
 
@@ -89,15 +89,13 @@ export const fetchHistoricalData = (cryptoID, currency, dataRange) => {
         url = `https://api.coingecko.com/api/v3/coins/${cryptoID}/market_chart?vs_currency=${currency}&days=${dataRange}&interval=daily`;
       }
 
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error("Lost internet connecton!");
-      }
-
-      const data = await response.json();
+      const data = await Promise.race([
+        dispatch(fetchHandler(url)),
+        loadingTimeLimitHandler(),
+      ]);
 
       dispatch(applicationActions.fillHistoricalDataArr({ data, dataRange }));
+
       dispatch(
         taskStatusActions.changeFetchingHistoricalData({
           status: "success",

@@ -1,3 +1,4 @@
+import { loadingTimeLimitHandler } from "../helpers/helpers";
 import { applicationActions } from "./application-slice";
 import { taskStatusActions } from "./taskStatus-slice";
 
@@ -18,12 +19,6 @@ export const getApplicationData = () => {
       transactionCounter: 0,
     };
 
-    const loadingTimeLimitHandler = new Promise((_, reject) =>
-      setTimeout(() => {
-        reject("Problem with internet connection");
-      }, 5000)
-    );
-
     const changeAppDataLoadingStatus = (status) =>
       dispatch(
         taskStatusActions.changeApplicationDataLoading({ status: status })
@@ -33,8 +28,8 @@ export const getApplicationData = () => {
       changeAppDataLoadingStatus("loading");
 
       const data = await Promise.race([
-        dispatch(fetchAppData(database_url)),
-        loadingTimeLimitHandler,
+        dispatch(fetchHandler(database_url)),
+        loadingTimeLimitHandler(),
       ]);
       if (!data) throw "Database doesn't return data";
 
@@ -57,9 +52,9 @@ export const getApplicationData = () => {
       }
 
       const sentData = await Promise.race([
-        loadingTimeLimitHandler,
+        loadingTimeLimitHandler(),
         dispatch(
-          fetchAppData(database_url, {
+          fetchHandler(database_url, {
             method: "PUT",
             body: JSON.stringify(updatedData),
           })
@@ -76,7 +71,7 @@ export const getApplicationData = () => {
   };
 };
 
-export const fetchAppData = (url, methodOptionsObject = {}) => {
+export const fetchHandler = (url, methodOptionsObject = {}) => {
   return async () => {
     try {
       const response = await fetch(url, methodOptionsObject);
@@ -87,6 +82,36 @@ export const fetchAppData = (url, methodOptionsObject = {}) => {
       return response.json();
     } catch (err) {
       throw err;
+    }
+  };
+};
+
+export const updateWebCounter = () => {
+  return async (dispatch) => {
+    try {
+      const webCounter = await Promise.race([
+        loadingTimeLimitHandler(),
+        dispatch(
+          fetchHandler(
+            "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/webCounter.json"
+          )
+        ),
+      ]);
+
+      await Promise.race([
+        loadingTimeLimitHandler(),
+        dispatch(
+          fetchHandler(
+            "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/webCounter.json",
+            {
+              method: "PUT",
+              body: JSON.stringify(webCounter + 1),
+            }
+          )
+        ),
+      ]);
+    } catch (err) {
+      console.log(err);
     }
   };
 };

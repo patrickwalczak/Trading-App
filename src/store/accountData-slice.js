@@ -18,27 +18,22 @@ const accountDataSlice = createSlice({
       state.watchList = action.payload?.watchList || [];
 
       const transactionsObj = action.payload?.transactions;
-      const purchasedCrypto = action.payload?.purchasedCryptocurrencies;
 
       if (transactionsObj !== undefined) {
-        const convertedArrFromFirebase = Object.entries(transactionsObj).map(
-          (transaction) => {
-            return {
-              databaseID: transaction[0],
-              transactionData: transaction[1],
-            };
-          }
-        );
+        Object.entries(transactionsObj).map((transaction) => {
+          return state.transactions.unshift({
+            databaseID: transaction[0],
+            transactionData: transaction[1],
+          });
+        });
 
-        state.transactions = convertedArrFromFirebase;
-
-        const cryptoIDs = new Set(
-          convertedArrFromFirebase.map(
-            (item) => item.transactionData.purchasedSecurityID
-          )
-        );
-
-        state.purchasedCryptocurrencies = [...cryptoIDs];
+        state.purchasedCryptocurrencies = [
+          ...new Set(
+            state.transactions.map(
+              (item) => item.transactionData.purchasedSecurityID
+            )
+          ),
+        ];
       }
     },
 
@@ -54,10 +49,10 @@ const accountDataSlice = createSlice({
       const { purchasedSecurityID: cryptoID } = action.payload;
 
       const checkIfAlreadyIs = state.purchasedCryptocurrencies.find(
-        (item) => item.id === cryptoID
+        (item) => item === cryptoID
       );
 
-      if (checkIfAlreadyIs !== undefined) {
+      if (checkIfAlreadyIs === undefined) {
         state.purchasedCryptocurrencies.unshift(cryptoID);
       }
     },

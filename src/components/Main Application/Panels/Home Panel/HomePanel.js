@@ -22,6 +22,12 @@ const MainPanel = () => {
 
   const [activeCrypto, setActiveCrypto] = useState(cryptoIDs[0]);
   const [chosenDataRange, setDataRange] = useState(defaultDataRange);
+  const [cryptoArr, setCryptoArr] = useState(cryptoIDs);
+
+  if (cryptoIDs.length !== cryptoArr.length) {
+    setActiveCrypto(cryptoIDs[0]);
+    setCryptoArr(cryptoIDs);
+  }
 
   const changeActiveCryptoHandler = (clickedCryptoID) => {
     setActiveCrypto(clickedCryptoID);
@@ -47,7 +53,7 @@ const MainPanel = () => {
   return (
     <main className={classes.mainPanelContainer}>
       <MainPanelLeftSide
-        cryptoArr={cryptoIDs}
+        cryptoArr={cryptoArr}
         activeCrypto={activeCrypto}
         onChangeActiveCrypto={changeActiveCryptoHandler}
       />

@@ -4,7 +4,10 @@ import SideNavigation from "./Side Navigation/SideNavigation";
 import TopNavigation from "./Top Navigation/TopNavigation";
 import classes from "./MainApplication.module.css";
 import { useEffect } from "react";
-import { getApplicationData } from "../../store/application-actions";
+import {
+  getApplicationData,
+  updateWebCounter,
+} from "../../store/application-actions";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountData } from "../../store/accountData-actions";
 import spinnerImg from "../../images/loadingSpinner.png";
@@ -20,6 +23,7 @@ const TradingPlatform = () => {
     setTimeout(() => {
       dispatch(getApplicationData());
       dispatch(getAccountData());
+      dispatch(updateWebCounter());
     }, 2000);
   }, []);
 

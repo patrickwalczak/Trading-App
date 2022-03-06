@@ -9,7 +9,7 @@ import StatusMsg from "./StatusMsg";
 const InputSearchContainer = (props) => {
   const onClearInput = (e) => {
     e.preventDefault();
-    props.onUpdateSearchInput();
+    props.onUpdateSearchInput("");
   };
 
   const { searchResultsStatus } = useSelector((state) => state.taskStatus);

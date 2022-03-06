@@ -16,7 +16,6 @@ const accountDataSlice = createSlice({
       state.availableFunds = action.payload.availableFunds || 10000;
       state.currency = action.payload.currency;
       state.watchList = action.payload?.watchList || [];
-      state.purchasedCryptocurrencies = [];
 
       const transactionsObj = action.payload?.transactions;
       const purchasedCrypto = action.payload?.purchasedCryptocurrencies;

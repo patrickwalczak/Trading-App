@@ -1,18 +1,17 @@
 import classes from "./ChosenSecurity.module.css";
 import searchImg from "../../../../../images/search.png";
 
-const ChosenSecurity = ({
-  onReset,
-  onUpdateSearchInput,
-  onUpdateAmountInput,
-  data,
-  sendingStatus,
-}) => {
+const ChosenSecurity = (props) => {
+  const { data, sendingStatus } = props;
+
   const returnHandler = (e) => {
     e.preventDefault();
-    onReset();
-    onUpdateSearchInput();
-    onUpdateAmountInput();
+    props.onReset();
+    props.onUpdateSearchInput("");
+    props.onUpdateAmountInput("");
+    props.onChangeFormValidity(false);
+    props.onSetSellBtnState(false);
+    props.onSetBuyBtnState(false);
   };
 
   const chosenCurrencyPrice = data.convertedPrice;

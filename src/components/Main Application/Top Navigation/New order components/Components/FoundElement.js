@@ -7,7 +7,7 @@ const FoundElement = (props) => {
 
   const clickHandler = () => {
     dispatch(searchResultsActions.addChosenSecurity({ ...props.data }));
-    props.onClick();
+    props.onClick("");
   };
 
   return (

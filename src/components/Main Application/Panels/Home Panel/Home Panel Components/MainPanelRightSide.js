@@ -48,10 +48,10 @@ const MainPanelRightSide = () => {
           <h5>Cl price</h5> <span>-</span>
         </li>
         <li className={classes.securityDataItem}>
-          <h5>Max price</h5> <span>{priceHigh24}</span>
+          <h5>Max price</h5> <span>{activeCrypto ? priceHigh24 : "-"}</span>
         </li>
         <li className={classes.securityDataItem}>
-          <h5>Min price</h5> <span>{priceLow24}</span>
+          <h5>Min price</h5> <span>{activeCrypto ? priceLow24 : "-"}</span>
         </li>
         <li className={classes.securityDataItem}>
           <h5>Volume</h5> <span>{totalVolume}</span>

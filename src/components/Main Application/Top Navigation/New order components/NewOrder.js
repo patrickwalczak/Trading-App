@@ -14,7 +14,7 @@ import loadingSpinnerImg from "../../../../images/loadingSpinner.png";
 import SuccessModal from "./Components/SuccessModal";
 import { taskStatusActions } from "../../../../store/taskStatus-slice";
 
-const ExchangeOrderForm = (props) => {
+const NewOrder = (props) => {
   let submitButtonContent;
   const dispatch = useDispatch();
 
@@ -28,6 +28,9 @@ const ExchangeOrderForm = (props) => {
   const { chosenSecurity } = useSelector((state) => state.searchResults);
   const { transactionCounter } = useSelector((state) => state.applicationData);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
+  const { purchasedCryptocurrencies } = useSelector(
+    (state) => state.accountData
+  );
 
   const submitBtnShouldBeDisabled =
     isFormValid === false ||
@@ -78,7 +81,13 @@ const ExchangeOrderForm = (props) => {
   useEffect(() => {
     if (sendTransactionStatus?.status !== "loading") return;
     setTimeout(() => {
-      dispatch(addTransaction(transactionData, transactionCounter));
+      dispatch(
+        addTransaction(
+          transactionData,
+          transactionCounter,
+          purchasedCryptocurrencies
+        )
+      );
     }, 3000);
   }, [sendTransactionStatus]);
 
@@ -142,4 +151,4 @@ const ExchangeOrderForm = (props) => {
   );
 };
 
-export default ExchangeOrderForm;
+export default NewOrder;

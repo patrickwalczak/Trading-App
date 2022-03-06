@@ -48,7 +48,7 @@ const available_funds_url =
 const transaction_counter_url =
   "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/-MwLmbRjZUUKo8dEZNIX/transactionCounter.json";
 
-export const addTransaction = (transactionData, counter) => {
+export const addTransaction = (transactionData, counter, uniqueList) => {
   return async (dispatch) => {
     const id = createID(counter);
     const transactionDate = Date.now();
@@ -108,7 +108,82 @@ export const addTransaction = (transactionData, counter) => {
         })
       );
 
-      dispatch(accountDataActions.addPurchasedCrypto(transactionObj));
+      const { purchasedSecurityID: cryptoID, purchasedAmount: amount } =
+        transactionObj;
+
+      // Scenario 1: User has just bought new cryptocurrency which hasn't been bought so far.
+      /*
+      New object in the cryptoUniqueList
+      So, I receive the uniqueList from which I will take a uniqueList's length and put new object in the firebase list 
+      */
+      const isNew = uniqueList.find((item) => item.id === cryptoID);
+
+      // IMPROVE
+      if (!isNew) {
+        const databaseListIndex = uniqueList.length;
+
+        await Promise.race([
+          dispatch(
+            fetchHandler(
+              `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList/${databaseListIndex}.json`,
+              {
+                method: "PUT",
+                body: JSON.stringify({
+                  id: cryptoID,
+                  amount: amount,
+                  databaseListIndex,
+                }),
+              }
+            )
+          ),
+          loadingTimeLimitHandler(),
+        ]);
+
+        dispatch(
+          accountDataActions.addPurchasedCrypto({
+            cryptoID,
+            amount,
+            databaseListIndex,
+          })
+        );
+      }
+
+      if (isNew) {
+        const { databaseListIndex } = isNew;
+
+        const newAmount = amount + +isNew.amount;
+
+        await Promise.race([
+          dispatch(
+            fetchHandler(
+              `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList/${databaseListIndex}.json`,
+              {
+                method: "PUT",
+                body: JSON.stringify({
+                  id: cryptoID,
+                  amount: newAmount,
+                  databaseListIndex,
+                }),
+              }
+            )
+          ),
+          loadingTimeLimitHandler(),
+        ]);
+
+        dispatch(
+          accountDataActions.addPurchasedCrypto({
+            cryptoID,
+            amount,
+            databaseListIndex: databaseListIndex,
+          })
+        );
+      }
+
+      // Scenario 2: User has just bought crypto which already is in the uniqueList
+      /*
+        So, I receive the uniqueList in which I have to find the item that will be updated or deleted
+      
+      */
 
       dispatch(
         taskStatusActions.changeSendingTransactionStatus({ status: "success" })

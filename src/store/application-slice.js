@@ -7,6 +7,7 @@ const applicationSlice = createSlice({
     expirationDate: null,
     activeCrypto: null,
     activeCryptoHistoricalData: [],
+    webCounter: null,
   },
   reducers: {
     increaseCounter(state) {

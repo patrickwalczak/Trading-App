@@ -141,7 +141,7 @@ const TransactionDetail = (props) => {
     const minTransactionValue = 1;
 
     const transaction = {
-      purchasedAmount: enteredAmount,
+      purchasedAmount: +enteredAmount,
       type: transactionType,
       orderValue: transactionValue,
       commission: finalCommission,

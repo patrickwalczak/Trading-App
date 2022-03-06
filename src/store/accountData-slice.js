@@ -27,13 +27,9 @@ const accountDataSlice = createSlice({
           });
         });
 
-        state.purchasedCryptocurrencies = [
-          ...new Set(
-            state.transactions.map(
-              (item) => item.transactionData.purchasedSecurityID
-            )
-          ),
-        ];
+        action.payload.cryptoUniqueList.map((item) =>
+          state.purchasedCryptocurrencies.unshift(item)
+        );
       }
     },
 
@@ -46,14 +42,30 @@ const accountDataSlice = createSlice({
     },
 
     addPurchasedCrypto(state, action) {
-      const { purchasedSecurityID: cryptoID } = action.payload;
+      const { cryptoID, amount, databaseListIndex } = action.payload;
 
       const checkIfAlreadyIs = state.purchasedCryptocurrencies.find(
-        (item) => item === cryptoID
+        (item) => item.id === cryptoID
       );
 
-      if (checkIfAlreadyIs === undefined) {
-        state.purchasedCryptocurrencies.unshift(cryptoID);
+      if (checkIfAlreadyIs) {
+        const index = state.purchasedCryptocurrencies.findIndex(
+          (crypto) => crypto.id === cryptoID
+        );
+
+        const cryptoToUpdate = state.purchasedCryptocurrencies[index];
+
+        cryptoToUpdate.amount = +cryptoToUpdate.amount + +amount;
+
+        state.purchasedCryptocurrencies[index] = cryptoToUpdate;
+      }
+
+      if (!checkIfAlreadyIs) {
+        state.purchasedCryptocurrencies.unshift({
+          id: cryptoID,
+          amount: amount,
+          databaseListIndex,
+        });
       }
     },
   },

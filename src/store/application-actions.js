@@ -1,32 +1,44 @@
 import { applicationActions } from "./application-slice";
 import { taskStatusActions } from "./taskStatus-slice";
 
-const URL = (database_id = "") => {
-  return `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application${database_id}.json`;
-};
-
 const database_id = "/-MwLmbRjZUUKo8dEZNIX";
+
+const database_url = `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application${database_id}.json`;
 
 export const getApplicationData = () => {
   return async (dispatch) => {
-    try {
+    const dateOptions = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    };
+
+    const updatedData = {
+      expirationDate: Date.now(),
+      transactionCounter: 0,
+    };
+
+    const loadingTimeLimitHandler = new Promise((_, reject) =>
+      setTimeout(() => {
+        reject("Problem with internet connection");
+      }, 5000)
+    );
+
+    const changeAppDataLoadingStatus = (status) =>
       dispatch(
-        taskStatusActions.changeApplicationDataLoading({ status: "loading" })
+        taskStatusActions.changeApplicationDataLoading({ status: status })
       );
 
-      const response = await fetch(URL(database_id));
+    try {
+      changeAppDataLoadingStatus("loading");
 
-      if (!response.ok) {
-        throw new Error("Sth went wrong");
-      }
-
-      const data = await response.json();
-
-      if (!data) throw new Error("Wrong database ID");
+      const data = await Promise.race([
+        dispatch(fetchAppData(database_url)),
+        loadingTimeLimitHandler,
+      ]);
+      if (!data) throw "Database doesn't return data";
 
       const { expirationDate, transactionCounter } = data;
-
-      const dateOptions = { year: "numeric", month: "numeric", day: "numeric" };
 
       const dateFromDatabase = new Date(expirationDate).toLocaleString(
         "en-US",
@@ -35,73 +47,44 @@ export const getApplicationData = () => {
 
       const today = new Date().toLocaleString("en-US", dateOptions);
 
+      // If date from database is the same as today date, then there is no necessity to reset date and transaction counter
       if (dateFromDatabase === today) {
-        dispatch(
-          taskStatusActions.changeApplicationDataLoading({ status: "success" })
-        );
+        changeAppDataLoadingStatus("success");
         dispatch(
           applicationActions.initState({ expirationDate, transactionCounter })
         );
         return;
       }
 
-      const updatedData = {
-        expirationDate: Date.now(),
-        transactionCounter: 0,
-      };
+      const sentData = await Promise.race([
+        loadingTimeLimitHandler,
+        dispatch(
+          fetchAppData(database_url, {
+            method: "PUT",
+            body: JSON.stringify(updatedData),
+          })
+        ),
+      ]);
 
-      await dispatch(updateApplicationData(URL, database_id, updatedData));
+      dispatch(applicationActions.initState(sentData));
 
-      await dispatch(applicationActions.initState(updatedData));
-
-      dispatch(
-        taskStatusActions.changeApplicationDataLoading({ status: "success" })
-      );
+      changeAppDataLoadingStatus("success");
     } catch (err) {
-      dispatch(
-        taskStatusActions.changeApplicationDataLoading({ status: "failed" })
-      );
-
       console.log(err);
+      changeAppDataLoadingStatus("failed");
     }
   };
 };
 
-export const updateApplicationData = (url, database_id, updatedData) => {
-  return async (dispatch) => {
-    try {
-      const response = await fetch(url(database_id), {
-        method: "PUT",
-        body: JSON.stringify(updatedData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Sth went wrong");
-      }
-    } catch (err) {
-      throw "Wrong url or lost internet connection";
-    }
-  };
-};
-
-export const updateApplicationCounter = (updatedData) => {
+export const fetchAppData = (url, methodOptionsObject = {}) => {
   return async () => {
     try {
-      const response = await fetch(
-        "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/-MwLmbRjZUUKo8dEZNIX/transactionCounter.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(updatedData),
-        }
-      );
+      const response = await fetch(url, methodOptionsObject);
 
       if (!response.ok) {
-        throw new Error(
-          "Could not update counter",
-          response.statusText,
-          response.url
-        );
+        throw new Error([response.status, response.statusText, response.url]);
       }
+      return response.json();
     } catch (err) {
       throw err;
     }

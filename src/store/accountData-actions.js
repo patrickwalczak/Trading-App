@@ -1,5 +1,5 @@
 import { accountDataActions } from "./accountData-slice";
-import { updateApplicationCounter } from "./application-actions";
+import { fetchAppData } from "./application-actions";
 import { applicationActions } from "./application-slice";
 import { taskStatusActions } from "./taskStatus-slice";
 
@@ -10,22 +10,25 @@ const URL =
 
 export const getAccountData = () => {
   return async (dispatch) => {
+    const loadingTimeLimitHandler = new Promise((_, reject) =>
+      setTimeout(() => {
+        reject("Problem with internet connection");
+      }, 5000)
+    );
+
     try {
       dispatch(
         taskStatusActions.changeAccountDataLoading({ status: "loading" })
       );
 
-      const response = await fetch(URL);
+      const user_data = await Promise.race([
+        dispatch(fetchAppData(URL)),
+        loadingTimeLimitHandler,
+      ]);
 
-      if (!response.ok) {
-        throw new Error("Sth went wrong");
-      }
+      if (!user_data) throw new Error("Sth wrong with user data");
 
-      const data = await response.json();
-
-      if (!data) throw new Error("Wrong database ID");
-
-      dispatch(accountDataActions.getUserAccountData({ ...data }));
+      dispatch(accountDataActions.getUserAccountData({ ...user_data }));
 
       dispatch(
         taskStatusActions.changeAccountDataLoading({ status: "success" })
@@ -37,72 +40,84 @@ export const getAccountData = () => {
   };
 };
 
-const url2 =
+// TODO in the future link will be dynamically created based on the user id in the database
+// Link refers to specific user
+const transactions_url =
   "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/transactions.json";
 
-const updateFundsUrl =
+// Link refers to specific user
+const available_funds_url =
   "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/availableFunds.json";
+
+// General application data
+const transaction_counter_url =
+  "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/-MwLmbRjZUUKo8dEZNIX/transactionCounter.json";
 
 export const addTransaction = (transactionData, counter) => {
   return async (dispatch) => {
+    const id = createID(counter);
+    const transactionDate = Date.now();
+    const transactionObj = { ...transactionData, id, transactionDate };
+
+    const loadingTimeLimitHandler = new Promise((_, reject) =>
+      setTimeout(() => {
+        reject("Problem with internet connection");
+      }, 5000)
+    );
+
     try {
-      const id = createID(counter);
-      const transactionDate = Date.now();
+      await Promise.race([
+        dispatch(
+          fetchAppData(transaction_counter_url, {
+            method: "PUT",
+            body: JSON.stringify(counter + 1),
+          })
+        ),
+        loadingTimeLimitHandler,
+      ]);
 
-      const transactionObj = { ...transactionData, id, transactionDate };
+      dispatch(applicationActions.increaseCounter());
 
-      const sendTransaction = await fetch(url2, {
-        method: "POST",
-        body: JSON.stringify({ ...transactionObj }),
-      });
+      await Promise.race([
+        dispatch(
+          fetchAppData(available_funds_url, {
+            method: "PUT",
+            body: JSON.stringify(transactionData.availableFundsAfter),
+          })
+        ),
+        loadingTimeLimitHandler,
+      ]);
 
-      if (!sendTransaction.ok) {
-        throw new Error(
-          "Could not send transaction data",
-          sendTransaction.statusText,
-          sendTransaction.url
-        );
-      }
+      dispatch(
+        accountDataActions.updateAvailableFunds(
+          transactionData.availableFundsAfter
+        )
+      );
 
-      const data = await sendTransaction.json();
+      // ============================================
+      // I will send transaction data only if transaction counter and available funds will be updated
 
-      const databaseID = await data.name;
+      const sentTransactionResponse = await Promise.race([
+        dispatch(
+          fetchAppData(transactions_url, {
+            method: "POST",
+            body: JSON.stringify({ ...transactionObj }),
+          })
+        ),
+        loadingTimeLimitHandler,
+      ]);
 
-      if (!databaseID) throw new Error("Sth is wrong with database ID");
+      // senTransactionResponse is a returned ID of the created transaction object in the database (firebase)
 
-      await dispatch(
+      if (!sentTransactionResponse?.name)
+        throw new Error("Sth is wrong with database ID");
+
+      dispatch(
         accountDataActions.addTransaction({
-          databaseID,
+          databaseID: sentTransactionResponse.name,
           transactionData: transactionObj,
         })
       );
-
-      const updateAvailableFunds = await fetch(updateFundsUrl, {
-        method: "PUT",
-        body: JSON.stringify(transactionData.availableFundsAfter),
-      });
-
-      if (!updateAvailableFunds.ok) {
-        throw new Error(
-          "Could not update available funds",
-          updateAvailableFunds.statusText,
-          updateAvailableFunds.url
-        );
-      }
-
-      const availableFundsData = await updateAvailableFunds.json();
-
-      if (!availableFundsData)
-        throw new Error("Available funds response data returns null");
-
-      await dispatch(
-        accountDataActions.updateAvailableFunds(availableFundsData)
-      );
-
-      // Update counter in the firebase
-      await dispatch(updateApplicationCounter(counter + 1));
-
-      dispatch(applicationActions.increaseCounter());
 
       dispatch(accountDataActions.addPurchasedCrypto(transactionObj));
 
@@ -115,6 +130,7 @@ export const addTransaction = (transactionData, counter) => {
       );
       console.log("Adding transaction failed");
       console.log(err);
+      // TODO if sending transaction failed, maybe I should add function which will return funds which was taken from user
     }
   };
 };

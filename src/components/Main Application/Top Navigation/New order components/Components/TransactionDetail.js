@@ -121,35 +121,46 @@ const TransactionDetail = (props) => {
 
     setAmountInputValidity(true);
 
-    const chosenSecurityConvertedPrice = Number(
-      chosenSecurity.current_price.toFixed(chosenSecurity.maxFractionDigits)
+    const chosenSecurityConvertedPrice = +chosenSecurity.current_price.toFixed(
+      chosenSecurity.maxFractionDigits
     );
 
-    const transactionValue = Number(
-      (chosenSecurityConvertedPrice * enteredAmount).toFixed(2)
-    );
+    const transactionValue = +(
+      chosenSecurityConvertedPrice * enteredAmount
+    ).toFixed(2);
 
     const minCommission = 0.25;
-    const calcCommission = Number(
-      (chosenSecurityConvertedPrice * enteredAmount * 0.01).toFixed(2)
-    );
+
+    const calcCommission = +(
+      chosenSecurityConvertedPrice *
+      enteredAmount *
+      0.01
+    ).toFixed(2);
 
     const finalCommission =
       calcCommission < minCommission ? minCommission : calcCommission;
 
     const total = availableFunds - transactionValue - finalCommission < 0;
 
-    const availableFundsAfterTransaction = Number(
-      (availableFunds - transactionValue - finalCommission).toFixed(2)
-    );
-
     if (total) {
       return wrongInputActions("Insufficient funds");
     }
 
     let purchasedAmount = +enteredAmount;
+    let availableFundsAfterTransaction;
 
-    if (transactionType === "SELL") purchasedAmount = -enteredAmount;
+    if (transactionType === "BUY") {
+      availableFundsAfterTransaction = Number(
+        (availableFunds - transactionValue - finalCommission).toFixed(2)
+      );
+    } else {
+      purchasedAmount = -enteredAmount;
+      availableFundsAfterTransaction = Number(
+        (availableFunds + transactionValue - finalCommission).toFixed(2)
+      );
+    }
+
+    console.log(availableFundsAfterTransaction);
 
     const minTransactionValue = 1;
 

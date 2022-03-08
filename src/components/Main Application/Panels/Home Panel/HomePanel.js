@@ -18,6 +18,7 @@ const MainPanel = () => {
   const { purchasedCryptocurrencies: cryptoIDs } = useSelector(
     (state) => state.accountData
   );
+
   const getCryptoID = cryptoIDs.map((item) => item.id);
 
   const { currency: userCurrency } = useSelector((state) => state.accountData);

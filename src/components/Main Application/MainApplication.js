@@ -23,8 +23,8 @@ const TradingPlatform = () => {
     setTimeout(() => {
       dispatch(getApplicationData());
       dispatch(getAccountData());
-      // dispatch(updateWebCounter());
-    }, 2000);
+      dispatch(updateWebCounter());
+    }, 500);
   }, []);
 
   const displayApplication =

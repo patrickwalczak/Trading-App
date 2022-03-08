@@ -32,6 +32,10 @@ const NewOrder = (props) => {
     (state) => state.accountData
   );
 
+  const availableCryptoToSell = sellBtnIsActive
+    ? purchasedCryptocurrencies.find((item) => item.id === chosenSecurity.id)
+    : "";
+
   const submitBtnShouldBeDisabled =
     isFormValid === false ||
     transactionData === null ||
@@ -97,6 +101,7 @@ const NewOrder = (props) => {
         <div className={classes.exchangeFormContainer}>
           <OrderFormHeader
             onReset={resetNewOrderForm.bind(null, "close_modal")}
+            availableCryptoToSell={availableCryptoToSell}
           />
           <form className={classes.exchangeForm}>
             {!chosenSecurity && (
@@ -118,6 +123,7 @@ const NewOrder = (props) => {
               />
             )}
             <TransactionDetail
+              availableCryptoToSell={availableCryptoToSell}
               onGetTransactionData={setTransactionData}
               onChangeFormValidity={setFormValidity}
               amountInputValue={amountInputValue}

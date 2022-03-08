@@ -148,6 +148,12 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
         );
       }
 
+      // Scenario 2: User has just bought crypto which already is in the uniqueList
+      /*
+        So, I receive the uniqueList in which I have to find the item that will be updated or deleted
+      
+      */
+
       if (isNew) {
         const { databaseListIndex } = isNew;
 
@@ -178,12 +184,6 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
           })
         );
       }
-
-      // Scenario 2: User has just bought crypto which already is in the uniqueList
-      /*
-        So, I receive the uniqueList in which I have to find the item that will be updated or deleted
-      
-      */
 
       dispatch(
         taskStatusActions.changeSendingTransactionStatus({ status: "success" })

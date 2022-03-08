@@ -13,6 +13,9 @@ const TransactionDetail = (props) => {
   const { transactions } = useSelector((state) => state.accountData);
   const { availableFunds } = useSelector((state) => state.accountData);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
+  const { purchasedCryptocurrencies } = useSelector(
+    (state) => state.accountData
+  );
 
   // If security will be chosen (for example cryptocurrency such as bitcoin), then we remove disabled property from buttons and input
   const isChosen = chosenSecurity !== null ? true : false;
@@ -67,7 +70,6 @@ const TransactionDetail = (props) => {
             item.transactionData.purchasedSecurityID === chosenSecurity.id
         )
       );
-      //  TODO I need an Array with every purchased cryptocurrency amount and ID
 
       if (foundTransactionIndex === -1) {
         return setSellAvailable(false);
@@ -100,6 +102,13 @@ const TransactionDetail = (props) => {
 
     if (+enteredAmount === 0) {
       return wrongInputActions("Amount cannot be a zero");
+    }
+
+    if (
+      props.availableCryptoToSell.amount &&
+      enteredAmount > +props.availableCryptoToSell.amount
+    ) {
+      return wrongInputActions("Too much");
     }
 
     if (
@@ -138,10 +147,14 @@ const TransactionDetail = (props) => {
       return wrongInputActions("Insufficient funds");
     }
 
+    let purchasedAmount = +enteredAmount;
+
+    if (transactionType === "SELL") purchasedAmount = -enteredAmount;
+
     const minTransactionValue = 1;
 
     const transaction = {
-      purchasedAmount: +enteredAmount,
+      purchasedAmount,
       type: transactionType,
       orderValue: transactionValue,
       commission: finalCommission,

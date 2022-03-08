@@ -12,10 +12,10 @@ const accountDataSlice = createSlice({
   },
   reducers: {
     getUserAccountData(state, action) {
-      state.userName = action.payload.userName;
+      state.userName = action.payload.userName || "User";
       state.availableFunds = action.payload.availableFunds || 10000;
-      state.currency = action.payload.currency;
-      state.watchList = action.payload?.watchList || [];
+      state.currency = action.payload.currency || "USD";
+      state.watchList = [];
 
       const transactionsObj = action.payload?.transactions;
 
@@ -26,10 +26,16 @@ const accountDataSlice = createSlice({
             transactionData: transaction[1],
           });
         });
-
-        action.payload.cryptoUniqueList.map((item) =>
-          state.purchasedCryptocurrencies.unshift(item)
-        );
+      }
+      if (action.payload?.cryptoUniqueList) {
+        console.log(action.payload.cryptoUniqueList);
+        action.payload.cryptoUniqueList.map((item, index) => {
+          if (item !== null)
+            state.purchasedCryptocurrencies.unshift({
+              ...item,
+              databaseListIndex: index,
+            });
+        });
       }
     },
 
@@ -42,31 +48,14 @@ const accountDataSlice = createSlice({
     },
 
     addPurchasedCrypto(state, action) {
-      const { cryptoID, amount, databaseListIndex } = action.payload;
+      state.purchasedCryptocurrencies = action.payload;
+    },
+    removePurchasedCrypto(state, action) {
+      const { id } = action.payload;
 
-      const checkIfAlreadyIs = state.purchasedCryptocurrencies.find(
-        (item) => item.id === cryptoID
+      state.purchasedCryptocurrencies = state.purchasedCryptocurrencies.filter(
+        (item) => item.id !== id
       );
-
-      if (checkIfAlreadyIs) {
-        const index = state.purchasedCryptocurrencies.findIndex(
-          (crypto) => crypto.id === cryptoID
-        );
-
-        const cryptoToUpdate = state.purchasedCryptocurrencies[index];
-
-        cryptoToUpdate.amount = +cryptoToUpdate.amount + +amount;
-
-        state.purchasedCryptocurrencies[index] = cryptoToUpdate;
-      }
-
-      if (!checkIfAlreadyIs) {
-        state.purchasedCryptocurrencies.unshift({
-          id: cryptoID,
-          amount: amount,
-          databaseListIndex,
-        });
-      }
     },
   },
 });

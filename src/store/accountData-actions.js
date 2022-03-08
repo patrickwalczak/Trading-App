@@ -118,34 +118,31 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
       */
       const isNew = uniqueList.find((item) => item.id === cryptoID);
 
-      // IMPROVE
-      if (!isNew) {
+      // IMPROVE waiting for optimization
+      if (isNew === undefined) {
         const databaseListIndex = uniqueList.length;
+
+        const x = uniqueList.slice();
+
+        x.push({
+          id: cryptoID,
+          amount: amount,
+        });
 
         await Promise.race([
           dispatch(
             fetchHandler(
-              `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList/${databaseListIndex}.json`,
+              `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList.json`,
               {
                 method: "PUT",
-                body: JSON.stringify({
-                  id: cryptoID,
-                  amount: amount,
-                  databaseListIndex,
-                }),
+                body: JSON.stringify(x),
               }
             )
           ),
           loadingTimeLimitHandler(),
         ]);
 
-        dispatch(
-          accountDataActions.addPurchasedCrypto({
-            cryptoID,
-            amount,
-            databaseListIndex,
-          })
-        );
+        dispatch(accountDataActions.addPurchasedCrypto(x));
       }
 
       // Scenario 2: User has just bought crypto which already is in the uniqueList
@@ -154,35 +151,48 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
       
       */
 
-      if (isNew) {
-        const { databaseListIndex } = isNew;
+      if (isNew !== undefined) {
+        const x = uniqueList.slice();
+        const index = uniqueList.findIndex((item) => item.id === isNew.id);
 
-        const newAmount = amount + +isNew.amount;
+        let updatedObj = { ...isNew, amount: amount + +isNew.amount };
 
-        await Promise.race([
-          dispatch(
-            fetchHandler(
-              `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList/${databaseListIndex}.json`,
-              {
-                method: "PUT",
-                body: JSON.stringify({
-                  id: cryptoID,
-                  amount: newAmount,
-                  databaseListIndex,
-                }),
-              }
-            )
-          ),
-          loadingTimeLimitHandler(),
-        ]);
+        if (updatedObj.amount > 0) {
+          x[index] = updatedObj;
 
-        dispatch(
-          accountDataActions.addPurchasedCrypto({
-            cryptoID,
-            amount,
-            databaseListIndex: databaseListIndex,
-          })
-        );
+          await Promise.race([
+            dispatch(
+              fetchHandler(
+                `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList.json`,
+                {
+                  method: "PUT",
+                  body: JSON.stringify(x),
+                }
+              )
+            ),
+            loadingTimeLimitHandler(),
+          ]);
+
+          dispatch(accountDataActions.addPurchasedCrypto(x));
+        }
+
+        if (updatedObj.amount === 0) {
+          x.splice(index, 1);
+
+          await Promise.race([
+            dispatch(
+              fetchHandler(
+                `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList.json`,
+                {
+                  method: "PUT",
+                  body: JSON.stringify(x),
+                }
+              )
+            ),
+            loadingTimeLimitHandler(),
+          ]);
+          dispatch(accountDataActions.addPurchasedCrypto(x));
+        }
       }
 
       dispatch(

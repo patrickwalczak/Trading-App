@@ -160,8 +160,6 @@ const TransactionDetail = (props) => {
       );
     }
 
-    console.log(availableFundsAfterTransaction);
-
     const minTransactionValue = 1;
 
     const transaction = {

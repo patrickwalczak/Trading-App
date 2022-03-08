@@ -18,8 +18,8 @@ const TopNavigation = () => {
       )}
       <nav className={classes.topNavContainer}>
         <ul>
-          <li className={classes.assetsLi}>Bought assets</li>
-          <li className={classes.cashLi}>Cash</li>
+          <li className={classes.assetsLi}>X</li>
+          <li className={classes.cashLi}>X</li>
           <li className={classes.buyLi}>
             <button
               className={classes.newOrderBtn}

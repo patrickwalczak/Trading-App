@@ -4,8 +4,12 @@ import classes from "./TransactionDetail.module.css";
 import TransactionTypeBtn from "./TransactionTypeBtn";
 
 const TransactionDetail = (props) => {
+  let initTransactionType = null;
+  if (props.buyBtnIsActive) initTransactionType = "BUY";
+  if (props.sellBtnIsActive) initTransactionType = "SELL";
+
   const [errorMsg, setErrorMsg] = useState("");
-  const [transactionType, setTransactionType] = useState(null);
+  const [transactionType, setTransactionType] = useState(initTransactionType);
   const [sellNotAvailable, setSellAvailable] = useState(null);
   const [amountInputIsValid, setAmountInputValidity] = useState(true);
 
@@ -13,11 +17,10 @@ const TransactionDetail = (props) => {
   const { transactions } = useSelector((state) => state.accountData);
   const { availableFunds } = useSelector((state) => state.accountData);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
-  const { purchasedCryptocurrencies } = useSelector(
-    (state) => state.accountData
-  );
 
-  // If security will be chosen (for example cryptocurrency such as bitcoin), then we remove disabled property from buttons and input
+  // TODO in the future there will more panels with cryptocurrencies charts and not every crypto will have sell btn enabled
+
+  // If security will be chosen (for example cryptocurrency such as bitcoin), then we remove disabled property from buttons
   const isChosen = chosenSecurity !== null ? true : false;
 
   // Variable which will help to apply styling for amount input only if security is chosen and transaction button is active
@@ -33,13 +36,9 @@ const TransactionDetail = (props) => {
       ? "errBorder"
       : "";
 
-  // Some cryptocurrencies have price equals to zero after rounding them to two digits, so in this case I increase max fraction digits.
-
   const chosenSecurityPrice = chosenSecurity?.convertedPrice;
 
   const resetDetailHandler = () => {
-    props.onSetBuyBtnState(false);
-    props.onSetSellBtnState(false);
     setErrorMsg("");
     setAmountInputValidity(true);
     setTransactionType("");
@@ -50,9 +49,14 @@ const TransactionDetail = (props) => {
     e.preventDefault();
     const transactionType = e.target.dataset.transactionType;
 
-    if (props.buyBtnIsActive || props.sellBtnIsActive) {
-      props.onGetTransactionData(null);
-      return resetDetailHandler();
+    if (transactionType === "BUY" && props.sellBtnIsActive) {
+      props.onSetSellBtnState(false);
+      resetDetailHandler();
+    }
+
+    if (transactionType === "SELL" && props.buyBtnIsActive) {
+      props.onSetBuyBtnState(false);
+      resetDetailHandler();
     }
 
     if (transactionType === "BUY") {
@@ -64,14 +68,15 @@ const TransactionDetail = (props) => {
     if (transactionType === "SELL") {
       props.onSetBuyBtnState(false);
 
-      const foundTransactionIndex = Number(
+      // if returns -1, then sell is not available
+      const isSellAvailable = Number(
         transactions.findIndex(
           (item) =>
             item.transactionData.purchasedSecurityID === chosenSecurity.id
         )
       );
 
-      if (foundTransactionIndex === -1) {
+      if (isSellAvailable === -1) {
         return setSellAvailable(false);
       }
 
@@ -85,6 +90,9 @@ const TransactionDetail = (props) => {
     setErrorMsg("");
     const enteredAmount = e.target.value.trim();
     props.onUpdateAmountInput(enteredAmount);
+
+    let purchasedAmount = +enteredAmount;
+    let availableFundsAfterTransaction;
 
     const wrongInputActions = (errMsg, transactionData = null) => {
       setAmountInputValidity(false);
@@ -145,9 +153,6 @@ const TransactionDetail = (props) => {
     if (total) {
       return wrongInputActions("Insufficient funds");
     }
-
-    let purchasedAmount = +enteredAmount;
-    let availableFundsAfterTransaction;
 
     if (transactionType === "BUY") {
       availableFundsAfterTransaction = Number(

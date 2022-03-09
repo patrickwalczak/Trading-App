@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// IMPROVE Too much duplicated code
+
 const taskStatusSlice = createSlice({
   name: "taskStatus",
   initialState: {
@@ -9,6 +11,7 @@ const taskStatusSlice = createSlice({
     loadAccountDataStatus: null,
     loadSingleCrypto: null,
     fetchingHistoricalDataStatus: null,
+    singleFromList: null,
   },
   reducers: {
     changeApplicationDataLoading(state, action) {
@@ -73,6 +76,17 @@ const taskStatusSlice = createSlice({
         state.fetchingHistoricalDataStatus = null;
       } else {
         state.fetchingHistoricalDataStatus = {
+          status: action.payload.status,
+        };
+      }
+    },
+    changeSingleFromListStatus(state, action) {
+      const status = action.payload;
+
+      if (status === null) {
+        state.singleFromList = null;
+      } else {
+        state.singleFromList = {
           status: action.payload.status,
         };
       }

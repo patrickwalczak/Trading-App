@@ -8,8 +8,18 @@ const applicationSlice = createSlice({
     activeCrypto: null,
     activeCryptoHistoricalData: [],
     webCounter: null,
+    modalVisibility: false,
+    transactionType: "",
   },
   reducers: {
+    changeModalState(state) {
+      state.modalVisibility = !state.modalVisibility;
+    },
+
+    changeTransactionType(state, action) {
+      state.transactionType = action.payload;
+    },
+
     increaseCounter(state) {
       ++state.transactionCounter;
     },

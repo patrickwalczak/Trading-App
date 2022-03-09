@@ -28,7 +28,6 @@ const accountDataSlice = createSlice({
         });
       }
       if (action.payload?.cryptoUniqueList) {
-        console.log(action.payload.cryptoUniqueList);
         action.payload.cryptoUniqueList.map((item, index) => {
           if (item !== null)
             state.purchasedCryptocurrencies.unshift({

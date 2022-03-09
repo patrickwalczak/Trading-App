@@ -39,6 +39,39 @@ export const fetchCryptocurrencies = (query) => {
   };
 };
 
+export const fetchSingleFromList = (query) => {
+  return async (dispatch) => {
+    try {
+      dispatch(
+        taskStatusActions.changeSingleFromListStatus({ status: "loading" })
+      );
+
+      const response_data = await Promise.race([
+        dispatch(
+          fetchHandler(
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=500&page=1&sparkline=false`
+          )
+        ),
+        loadingTimeLimitHandler(),
+      ]);
+
+      const data = response_data.filter(
+        (crypto) => crypto.id === query || crypto.name.toLowerCase() === query
+      );
+
+      dispatch(searchResultsActions.addChosenSecurity(...data));
+      dispatch(
+        taskStatusActions.changeSingleFromListStatus({ status: "success" })
+      );
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        taskStatusActions.changeSingleFromListStatus({ status: "failed" })
+      );
+    }
+  };
+};
+
 export const fetchSingleCrypto = (cryptoID) => {
   return async (dispatch) => {
     try {

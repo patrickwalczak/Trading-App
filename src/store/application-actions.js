@@ -42,7 +42,7 @@ export const getApplicationData = () => {
 
       const today = new Date().toLocaleString("en-US", dateOptions);
 
-      // If date from database is the same as today date, then there is no necessity to reset date and transaction counter
+      // Transaction counter will be reset everyday
       if (dateFromDatabase === today) {
         changeAppDataLoadingStatus("success");
         dispatch(

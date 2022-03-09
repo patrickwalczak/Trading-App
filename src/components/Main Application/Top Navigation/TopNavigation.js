@@ -1,14 +1,18 @@
 import classes from "./TopNavigation.module.css";
 import signOutImg from "../../../images/signOutBtn.png";
 import msgImg from "../../../images/email.png";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import NewOrder from "./New order components/NewOrder";
+import { useDispatch, useSelector } from "react-redux";
+import { applicationActions } from "../../../store/application-slice";
 
 const TopNavigation = () => {
-  const [modalVisibility, setModalVisibility] = useState(false);
+  const { modalVisibility } = useSelector((state) => state.applicationData);
+
+  const dispatch = useDispatch();
 
   const changeModalStateHandler = () => {
-    setModalVisibility(!modalVisibility);
+    dispatch(applicationActions.changeModalState());
   };
 
   return (

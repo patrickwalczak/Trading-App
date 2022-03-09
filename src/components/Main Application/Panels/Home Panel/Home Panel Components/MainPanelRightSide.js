@@ -1,8 +1,13 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { applicationActions } from "../../../../../store/application-slice";
+import { fetchSingleFromList } from "../../../../../store/takeCryptocurrencies";
 import classes from "./MainPanelRightSide.module.css";
 
 const MainPanelRightSide = () => {
+  const dispatch = useDispatch();
   const { activeCrypto } = useSelector((state) => state.applicationData);
+  const { transactionType } = useSelector((state) => state.applicationData);
 
   let priceHigh24 = activeCrypto?.market_data.high_24h["usd"];
   let priceLow24 = activeCrypto?.market_data.low_24h["usd"];
@@ -10,6 +15,12 @@ const MainPanelRightSide = () => {
     activeCrypto?.market_data.total_volume["usd"].toLocaleString("en-US") || 0;
 
   let maxFractionDigits = 2;
+
+  const localStringOptions = {
+    maximumFractionDigits: maxFractionDigits,
+    style: "currency",
+    currency: "USD",
+  };
 
   if (
     priceHigh24 !== undefined &&
@@ -25,17 +36,20 @@ const MainPanelRightSide = () => {
     maxFractionDigits = 6;
   }
 
-  priceHigh24 = Number(priceHigh24).toLocaleString("en-US", {
-    maximumFractionDigits: maxFractionDigits,
-    style: "currency",
-    currency: "USD",
-  });
+  priceHigh24 = Number(priceHigh24).toLocaleString("en-US", localStringOptions);
 
-  priceLow24 = Number(priceLow24).toLocaleString("en-US", {
-    maximumFractionDigits: maxFractionDigits,
-    style: "currency",
-    currency: "USD",
-  });
+  priceLow24 = Number(priceLow24).toLocaleString("en-US", localStringOptions);
+
+  const clickedBtnHandler = (e) => {
+    const clickedBtn = e.target.dataset.transactionType;
+    dispatch(applicationActions.changeModalState());
+    dispatch(applicationActions.changeTransactionType(clickedBtn));
+  };
+
+  useEffect(() => {
+    if (transactionType === "") return;
+    dispatch(fetchSingleFromList(activeCrypto.id));
+  }, [transactionType]);
 
   return (
     <section className={classes.mainPanelRightSideContainer}>
@@ -57,8 +71,20 @@ const MainPanelRightSide = () => {
           <h5>Volume</h5> <span>{totalVolume}</span>
         </li>
       </ul>
-      <button className={classes.transactionBuy}>Buy</button>
-      <button className={classes.transactionSell}>Sell</button>
+      <button
+        data-transaction-type="BUY"
+        className={classes.transactionBuy}
+        onClick={clickedBtnHandler}
+      >
+        Buy
+      </button>
+      <button
+        data-transaction-type="SELL"
+        className={classes.transactionSell}
+        onClick={clickedBtnHandler}
+      >
+        Sell
+      </button>
     </section>
   );
 };

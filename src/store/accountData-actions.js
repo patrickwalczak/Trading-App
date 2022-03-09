@@ -120,8 +120,6 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
 
       // IMPROVE waiting for optimization
       if (isNew === undefined) {
-        const databaseListIndex = uniqueList.length;
-
         const x = uniqueList.slice();
 
         x.push({

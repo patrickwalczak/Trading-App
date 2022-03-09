@@ -13,14 +13,21 @@ import { addTransaction } from "../../../../store/accountData-actions";
 import loadingSpinnerImg from "../../../../images/loadingSpinner.png";
 import SuccessModal from "./Components/SuccessModal";
 import { taskStatusActions } from "../../../../store/taskStatus-slice";
+import { applicationActions } from "../../../../store/application-slice";
 
 const NewOrder = (props) => {
   let submitButtonContent;
   const dispatch = useDispatch();
 
+  const { transactionType } = useSelector((state) => state.applicationData);
+  let initBuy = false;
+  let initSell = false;
+  if (transactionType === "BUY") initBuy = true;
+  if (transactionType === "SELL") initSell = true;
+
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [buyBtnIsActive, setBuyBtnActivity] = useState(false);
-  const [sellBtnIsActive, setSellBtnActivity] = useState(false);
+  const [buyBtnIsActive, setBuyBtnActivity] = useState(initBuy);
+  const [sellBtnIsActive, setSellBtnActivity] = useState(initSell);
   const [amountInputValue, setAmountInputValue] = useState("");
   const [transactionData, setTransactionData] = useState(null);
   const [isFormValid, setFormValidity] = useState(false);
@@ -32,9 +39,10 @@ const NewOrder = (props) => {
     (state) => state.accountData
   );
 
-  const availableCryptoToSell = sellBtnIsActive
-    ? purchasedCryptocurrencies.find((item) => item.id === chosenSecurity.id)
-    : "";
+  const availableCryptoToSell =
+    sellBtnIsActive && chosenSecurity !== null
+      ? purchasedCryptocurrencies.find((item) => item.id === chosenSecurity.id)
+      : "";
 
   const submitBtnShouldBeDisabled =
     isFormValid === false ||
@@ -48,6 +56,7 @@ const NewOrder = (props) => {
   const resetNewOrderForm = (modal = "", transactionIsFinished = false) => {
     dispatch(searchResultsActions.clearSearchResults());
     dispatch(searchResultsActions.removeChosenSecurity());
+    dispatch(applicationActions.changeTransactionType(""));
 
     if (modal === "close_modal") {
       props.onChangeModalState();

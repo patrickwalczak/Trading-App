@@ -16,12 +16,18 @@ import { taskStatusActions } from "../../../../store/taskStatus-slice";
 import { applicationActions } from "../../../../store/application-slice";
 
 const NewOrder = (props) => {
-  let submitButtonContent;
   const dispatch = useDispatch();
-
-  const { transactionType } = useSelector((state) => state.applicationData);
   let initBuy = false;
   let initSell = false;
+  let submitButtonContent;
+
+  const { transactionType } = useSelector((state) => state.applicationData);
+  const { chosenSecurity } = useSelector((state) => state.searchResults);
+  const { transactionCounter } = useSelector((state) => state.applicationData);
+  const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
+  const { purchasedCryptocurrencies } = useSelector(
+    (state) => state.accountData
+  );
   if (transactionType === "BUY") initBuy = true;
   if (transactionType === "SELL") initSell = true;
 
@@ -31,13 +37,6 @@ const NewOrder = (props) => {
   const [amountInputValue, setAmountInputValue] = useState("");
   const [transactionData, setTransactionData] = useState(null);
   const [isFormValid, setFormValidity] = useState(false);
-
-  const { chosenSecurity } = useSelector((state) => state.searchResults);
-  const { transactionCounter } = useSelector((state) => state.applicationData);
-  const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
-  const { purchasedCryptocurrencies } = useSelector(
-    (state) => state.accountData
-  );
 
   const availableCryptoToSell =
     sellBtnIsActive && chosenSecurity !== null
@@ -58,13 +57,10 @@ const NewOrder = (props) => {
     dispatch(searchResultsActions.removeChosenSecurity());
     dispatch(applicationActions.changeTransactionType(""));
 
-    if (modal === "close_modal") {
-      props.onChangeModalState();
-    }
+    if (modal === "close_modal") props.onChangeModalState();
 
-    if (transactionIsFinished) {
+    if (transactionIsFinished)
       dispatch(taskStatusActions.changeSendingTransactionStatus(null));
-    }
   };
 
   const sendingTransactionDataHandler = (e) => {

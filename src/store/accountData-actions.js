@@ -48,11 +48,32 @@ const available_funds_url =
 const transaction_counter_url =
   "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/-MwLmbRjZUUKo8dEZNIX/transactionCounter.json";
 
+const crypto_unique_url =
+  "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList.json";
+
 export const addTransaction = (transactionData, counter, uniqueList) => {
   return async (dispatch) => {
     const id = createID(counter);
     const transactionDate = Date.now();
     const transactionObj = { ...transactionData, id, transactionDate };
+
+    const cryptoUniqueHandler = async (updatedData) => {
+      try {
+        await Promise.race([
+          dispatch(
+            fetchHandler(crypto_unique_url, {
+              method: "PUT",
+              body: JSON.stringify(updatedData),
+            })
+          ),
+          loadingTimeLimitHandler(),
+        ]);
+
+        dispatch(accountDataActions.addPurchasedCrypto(updatedData));
+      } catch (err) {
+        throw err;
+      }
+    };
 
     try {
       await Promise.race([
@@ -111,14 +132,8 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
       const { purchasedSecurityID: cryptoID, purchasedAmount: amount } =
         transactionObj;
 
-      // Scenario 1: User has just bought new cryptocurrency which hasn't been bought so far.
-      /*
-      New object in the cryptoUniqueList
-      So, I receive the uniqueList from which I will take a uniqueList's length and put new object in the firebase list 
-      */
       const isNew = uniqueList.find((item) => item.id === cryptoID);
 
-      // IMPROVE waiting for optimization
       if (isNew === undefined) {
         const x = uniqueList.slice();
 
@@ -127,69 +142,23 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
           amount: amount,
         });
 
-        await Promise.race([
-          dispatch(
-            fetchHandler(
-              `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList.json`,
-              {
-                method: "PUT",
-                body: JSON.stringify(x),
-              }
-            )
-          ),
-          loadingTimeLimitHandler(),
-        ]);
-
-        dispatch(accountDataActions.addPurchasedCrypto(x));
+        await cryptoUniqueHandler(x);
       }
-
-      // Scenario 2: User has just bought crypto which already is in the uniqueList
-      /*
-        So, I receive the uniqueList in which I have to find the item that will be updated or deleted
-      
-      */
 
       if (isNew !== undefined) {
         const x = uniqueList.slice();
         const index = uniqueList.findIndex((item) => item.id === isNew.id);
 
-        let updatedObj = { ...isNew, amount: amount + +isNew.amount };
+        let updatedObj = { ...isNew, amount: +amount + +isNew.amount };
 
         if (updatedObj.amount > 0) {
           x[index] = updatedObj;
 
-          await Promise.race([
-            dispatch(
-              fetchHandler(
-                `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList.json`,
-                {
-                  method: "PUT",
-                  body: JSON.stringify(x),
-                }
-              )
-            ),
-            loadingTimeLimitHandler(),
-          ]);
-
-          dispatch(accountDataActions.addPurchasedCrypto(x));
-        }
-
-        if (updatedObj.amount === 0) {
+          await cryptoUniqueHandler(x);
+        } else {
           x.splice(index, 1);
 
-          await Promise.race([
-            dispatch(
-              fetchHandler(
-                `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS/cryptoUniqueList.json`,
-                {
-                  method: "PUT",
-                  body: JSON.stringify(x),
-                }
-              )
-            ),
-            loadingTimeLimitHandler(),
-          ]);
-          dispatch(accountDataActions.addPurchasedCrypto(x));
+          await cryptoUniqueHandler(x);
         }
       }
 

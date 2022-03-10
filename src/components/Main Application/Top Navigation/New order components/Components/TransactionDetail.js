@@ -14,7 +14,9 @@ const TransactionDetail = (props) => {
   const [amountInputIsValid, setAmountInputValidity] = useState(true);
 
   const { chosenSecurity } = useSelector((state) => state.searchResults);
-  const { transactions } = useSelector((state) => state.accountData);
+  const { purchasedCryptocurrencies } = useSelector(
+    (state) => state.accountData
+  );
   const { availableFunds } = useSelector((state) => state.accountData);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
 
@@ -48,6 +50,7 @@ const TransactionDetail = (props) => {
   const transactionTypeBtnHandler = (e) => {
     e.preventDefault();
     const transactionType = e.target.dataset.transactionType;
+    resetDetailHandler();
 
     if (transactionType === "BUY" && props.sellBtnIsActive) {
       props.onSetSellBtnState(false);
@@ -68,15 +71,17 @@ const TransactionDetail = (props) => {
     if (transactionType === "SELL") {
       props.onSetBuyBtnState(false);
 
+      console.log("test");
+
       // if returns -1, then sell is not available
       const isSellAvailable = Number(
-        transactions.findIndex(
-          (item) =>
-            item.transactionData.purchasedSecurityID === chosenSecurity.id
+        purchasedCryptocurrencies.findIndex(
+          (item) => item.id === chosenSecurity.id
         )
       );
 
       if (isSellAvailable === -1) {
+        console.log("test");
         return setSellAvailable(false);
       }
 
@@ -150,7 +155,7 @@ const TransactionDetail = (props) => {
 
     const total = availableFunds - transactionValue - finalCommission < 0;
 
-    if (total) {
+    if (total && transactionType === "BUY") {
       return wrongInputActions("Insufficient funds");
     }
 
@@ -168,6 +173,7 @@ const TransactionDetail = (props) => {
     const minTransactionValue = 1;
 
     const transaction = {
+      availableFundsBefore: availableFunds,
       purchasedAmount,
       type: transactionType,
       orderValue: transactionValue,

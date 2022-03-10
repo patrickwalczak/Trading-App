@@ -11,9 +11,11 @@ import TransactionDetail from "./Components/TransactionDetail";
 import TransactionSummary from "./Components/TransactionSummary";
 import { addTransaction } from "../../../../store/accountData-actions";
 import loadingSpinnerImg from "../../../../images/loadingSpinner.png";
-import SuccessModal from "./Components/SuccessModal";
+import TransactionStatusModal from "./Components/TransactionStatusModal";
 import { taskStatusActions } from "../../../../store/taskStatus-slice";
 import { applicationActions } from "../../../../store/application-slice";
+import successImg from "../../../../images/success.png";
+import failImg from "../../../../images/fail.png";
 
 const NewOrder = (props) => {
   const dispatch = useDispatch();
@@ -153,11 +155,19 @@ const NewOrder = (props) => {
         </div>
       )}
       {sendTransactionStatus?.status === "success" && (
-        <SuccessModal
-          onResetForm={resetNewOrderForm.bind(null, "close_modal", true)}
+        <TransactionStatusModal
+          image={successImg}
+          type={"success"}
+          onActionHandler={resetNewOrderForm.bind(null, "close_modal", true)}
         />
       )}
-      {/* TODO  FailModal */}
+      {sendTransactionStatus?.status === "failed" && (
+        <TransactionStatusModal
+          type={"fail"}
+          image={failImg}
+          onActionHandler={sendingTransactionDataHandler}
+        />
+      )}
     </Modal>
   );
 };

@@ -48,6 +48,7 @@ const TransactionDetail = (props) => {
   const transactionTypeBtnHandler = (e) => {
     e.preventDefault();
     const transactionType = e.target.dataset.transactionType;
+    resetDetailHandler();
 
     if (transactionType === "BUY" && props.sellBtnIsActive) {
       props.onSetSellBtnState(false);
@@ -90,6 +91,7 @@ const TransactionDetail = (props) => {
     setErrorMsg("");
     const enteredAmount = e.target.value.trim();
     props.onUpdateAmountInput(enteredAmount);
+    console.log("test");
 
     let purchasedAmount = +enteredAmount;
     let availableFundsAfterTransaction;
@@ -150,7 +152,7 @@ const TransactionDetail = (props) => {
 
     const total = availableFunds - transactionValue - finalCommission < 0;
 
-    if (total) {
+    if (total && transactionType === "BUY") {
       return wrongInputActions("Insufficient funds");
     }
 

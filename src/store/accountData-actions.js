@@ -171,7 +171,11 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
       );
       console.log("Adding transaction failed");
       console.log(err);
-      // TODO if sending transaction failed, maybe I should add function which will return funds which was taken from user
+      dispatch(
+        accountDataActions.updateAvailableFunds(
+          transactionData.availableFundsBefore
+        )
+      );
     }
   };
 };

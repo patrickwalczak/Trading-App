@@ -14,7 +14,9 @@ const TransactionDetail = (props) => {
   const [amountInputIsValid, setAmountInputValidity] = useState(true);
 
   const { chosenSecurity } = useSelector((state) => state.searchResults);
-  const { transactions } = useSelector((state) => state.accountData);
+  const { purchasedCryptocurrencies } = useSelector(
+    (state) => state.accountData
+  );
   const { availableFunds } = useSelector((state) => state.accountData);
   const { sendTransactionStatus } = useSelector((state) => state.taskStatus);
 
@@ -69,15 +71,17 @@ const TransactionDetail = (props) => {
     if (transactionType === "SELL") {
       props.onSetBuyBtnState(false);
 
+      console.log("test");
+
       // if returns -1, then sell is not available
       const isSellAvailable = Number(
-        transactions.findIndex(
-          (item) =>
-            item.transactionData.purchasedSecurityID === chosenSecurity.id
+        purchasedCryptocurrencies.findIndex(
+          (item) => item.id === chosenSecurity.id
         )
       );
 
       if (isSellAvailable === -1) {
+        console.log("test");
         return setSellAvailable(false);
       }
 
@@ -91,7 +95,6 @@ const TransactionDetail = (props) => {
     setErrorMsg("");
     const enteredAmount = e.target.value.trim();
     props.onUpdateAmountInput(enteredAmount);
-    console.log("test");
 
     let purchasedAmount = +enteredAmount;
     let availableFundsAfterTransaction;
@@ -170,6 +173,7 @@ const TransactionDetail = (props) => {
     const minTransactionValue = 1;
 
     const transaction = {
+      availableFundsBefore: availableFunds,
       purchasedAmount,
       type: transactionType,
       orderValue: transactionValue,

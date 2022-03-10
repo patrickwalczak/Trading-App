@@ -54,6 +54,12 @@
   cursor: pointer;
 }
 
+.transactionBuy.disabled,
+.transactionSell.disabled {
+  cursor: not-allowed;
+  background-color: #575e566e;
+}
+
 .transactionBuy {
   background-color: #2a9c26;
   margin-bottom: 1rem;

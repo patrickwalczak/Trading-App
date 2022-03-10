@@ -1,7 +1,11 @@
 import classes from "./MainPanelTop.module.css";
 import analyticsImg from "../../../../../images/analytics.png";
+import { useSelector } from "react-redux";
 
 const MainPanelTop = (props) => {
+  const { activeCrypto } = useSelector((state) => state.applicationData);
+  const disabledBtn = !activeCrypto ? true : false;
+
   return (
     <section className={classes.mainPanelTop__Container}>
       <img src={analyticsImg} className={classes.analyticsImg} />
@@ -12,6 +16,7 @@ const MainPanelTop = (props) => {
           Choose a data range
         </label>
         <select
+          disabled={disabledBtn}
           onChange={props.onGetHistoricalData}
           id="dataRange"
           className={classes.dateRangeSelect}

@@ -31,7 +31,48 @@ const applicationSlice = createSlice({
     },
 
     setActiveCrypto(state, action) {
-      state.activeCrypto = action.payload;
+      const cyrptoData = action.payload;
+
+      let priceHigh24 = cyrptoData.market_data.high_24h["usd"];
+      let priceLow24 = cyrptoData.market_data.low_24h["usd"];
+      const totalVolume =
+        cyrptoData.market_data.total_volume["usd"].toLocaleString("en-US") || 0;
+
+      let maxFractionDigits = 2;
+
+      const localStringOptions = {
+        maximumFractionDigits: maxFractionDigits,
+        style: "currency",
+        currency: "USD",
+      };
+
+      if (+priceHigh24.toFixed(maxFractionDigits) === 0) {
+        maxFractionDigits = 4;
+      }
+
+      if (+priceHigh24.toFixed(maxFractionDigits) === 0) {
+        maxFractionDigits = 6;
+      }
+
+      priceHigh24 = Number(priceHigh24).toLocaleString(
+        "en-US",
+        localStringOptions
+      );
+
+      priceLow24 = Number(priceLow24).toLocaleString(
+        "en-US",
+        localStringOptions
+      );
+
+      state.activeCrypto = {
+        ...action.payload,
+        priceHigh24,
+        priceLow24,
+        totalVolume,
+      };
+    },
+    removeActiveCrypto(state) {
+      state.activeCrypto = null;
     },
 
     fillHistoricalDataArr(state, action) {

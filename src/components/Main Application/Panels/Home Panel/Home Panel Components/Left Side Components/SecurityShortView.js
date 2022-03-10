@@ -1,12 +1,17 @@
 import { Fragment, useEffect, useState } from "react";
 import classes from "../MainPanelLeftSide.module.css";
-const SecurityShortView = ({ dataset, onClick, activeBtnState }) => {
+const SecurityShortView = ({
+  dataset,
+  onClick,
+  activeBtnState,
+  loadingStatus,
+  setLoadingStatus,
+}) => {
   const [securityData, setSecurityData] = useState();
-  const [loadSecurity, setLoadStatus] = useState(null);
 
   const initSecurity = async () => {
     try {
-      setLoadStatus("loading");
+      setLoadingStatus("loading");
       const response = await fetch(
         `https://api.coingecko.com/api/v3/coins/${dataset}`
       );
@@ -18,10 +23,10 @@ const SecurityShortView = ({ dataset, onClick, activeBtnState }) => {
       const data = await response.json();
 
       setSecurityData(data);
-      setLoadStatus("success");
+      setLoadingStatus("success");
     } catch (err) {
       console.log(err);
-      setLoadStatus("fail");
+      setLoadingStatus("failed");
     }
   };
 
@@ -60,7 +65,7 @@ const SecurityShortView = ({ dataset, onClick, activeBtnState }) => {
 
   return (
     <Fragment>
-      {loadSecurity === "success" && (
+      {loadingStatus === "success" && (
         <li
           data-id={dataset}
           onClick={onClick}

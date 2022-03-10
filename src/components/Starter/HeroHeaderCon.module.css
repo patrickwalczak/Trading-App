@@ -11,13 +11,13 @@
   margin-top: 2rem;
 }
 
-h1 {
+.heroHeaderContainer h1 {
   font-size: 6rem;
   color: rgb(226, 226, 226);
   margin-bottom: 2rem;
 }
 
-p {
+.heroHeaderContainer p {
   color: rgb(226, 226, 226);
   font-size: 1.7rem;
   max-width: 60%;

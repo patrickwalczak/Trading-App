@@ -9,6 +9,7 @@ import {
   fetchHistoricalData,
   fetchSingleCrypto,
 } from "../../../../store/takeCryptocurrencies";
+import { applicationActions } from "../../../../store/application-slice";
 
 const MainPanel = () => {
   const dispatch = useDispatch();
@@ -18,10 +19,9 @@ const MainPanel = () => {
   const { purchasedCryptocurrencies: cryptoIDs } = useSelector(
     (state) => state.accountData
   );
+  const { currency: userCurrency } = useSelector((state) => state.accountData);
 
   const getCryptoID = cryptoIDs.map((item) => item.id);
-
-  const { currency: userCurrency } = useSelector((state) => state.accountData);
 
   const [activeCrypto, setActiveCrypto] = useState(cryptoIDs[0]?.id);
   const [chosenDataRange, setDataRange] = useState(defaultDataRange);
@@ -53,6 +53,10 @@ const MainPanel = () => {
     if (!activeCrypto) return;
     dispatch(fetchHistoricalData(activeCrypto, userCurrency, chosenDataRange));
   }, [chosenDataRange, activeCrypto]);
+
+  useEffect(() => {
+    if (!cryptoIDs.length) dispatch(applicationActions.removeActiveCrypto());
+  }, [cryptoIDs]);
 
   return (
     <main className={classes.mainPanelContainer}>

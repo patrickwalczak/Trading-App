@@ -1,7 +1,9 @@
+import { useState } from "react";
 import SecurityShortView from "./Left Side Components/SecurityShortView";
 import classes from "./MainPanelLeftSide.module.css";
 
 const MainPanelLeftSide = (props) => {
+  const [loadingStatus, setLoadStatus] = useState(null);
   const cryptoIDsAr = props.cryptoArr;
 
   let content;
@@ -15,12 +17,24 @@ const MainPanelLeftSide = (props) => {
   };
 
   if (cryptoIDsAr.length === 0) {
-    content = <p>No securities</p>;
+    content = (
+      <p className={classes.mainPanelLeftSide_noSecurities}>No securities</p>
+    );
+  }
+
+  if (loadingStatus === "failed") {
+    content = (
+      <p className={classes.mainPanelLeftSide_noSecurities}>
+        Problem with internet connection
+      </p>
+    );
   }
 
   if (cryptoIDsAr.length >= 1) {
     content = cryptoIDsAr.map((cryptoID) => (
       <SecurityShortView
+        loadingStatus={loadingStatus}
+        setLoadingStatus={setLoadStatus}
         onClick={clickHandler}
         dataset={cryptoID}
         key={cryptoID}

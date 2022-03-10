@@ -11,6 +11,10 @@ const MainPanelChart = () => {
     (state) => state.taskStatus
   );
 
+  const { activeCrypto } = useSelector((state) => state.applicationData);
+
+  const showNotification = !activeCrypto ? true : false;
+
   let lineColor;
 
   if (loadingStatus?.status === "success") {
@@ -23,12 +27,22 @@ const MainPanelChart = () => {
 
   return (
     <section className={classes.mainPanelChartContainer}>
+      {showNotification && (
+        <p className={classes.mainPanelChart__notification}>
+          No chart available
+        </p>
+      )}
+      {loadingStatus?.status === "failed" && (
+        <p className={classes.mainPanelChart__notification}>
+          Problem with internet connection!
+        </p>
+      )}
       {loadingStatus?.status === "loading" && (
         <div className={classes.spinnerWrapper}>
           <img className={classes.loadingSpinner} src={loadingSpinner}></img>
         </div>
       )}
-      {loadingStatus?.status === "success" && (
+      {loadingStatus?.status === "success" && activeCrypto && (
         <Chart
           type="line"
           data={{

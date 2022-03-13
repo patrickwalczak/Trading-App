@@ -137,7 +137,7 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
       if (isNew === undefined) {
         const x = uniqueList.slice();
 
-        x.push({
+        x.unshift({
           id: cryptoID,
           amount: amount,
         });

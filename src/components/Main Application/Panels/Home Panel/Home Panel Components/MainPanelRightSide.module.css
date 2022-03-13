@@ -7,6 +7,7 @@
   padding: 2rem 1vw 1.5rem 1vw;
   background-color: rgb(151, 219, 221);
   color: white;
+  border-top-right-radius: 0.5rem;
 }
 
 .mainPanelRight__header {

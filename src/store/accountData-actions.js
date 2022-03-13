@@ -4,8 +4,9 @@ import { fetchHandler } from "./application-actions";
 import { applicationActions } from "./application-slice";
 import { taskStatusActions } from "./taskStatus-slice";
 
-const URL =
-  "https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/-MwMzUzhzGFw1VkH2kJS.json";
+const user_ID = "-MwMzUzhzGFw1VkH2kJS";
+
+const URL = `https://trading-platform-dabf0-default-rtdb.europe-west1.firebasedatabase.app/application/users/${user_ID}.json`;
 
 // TODO in the future each user will have unique ID in the firebase and fucntion will receive id as a parameter
 
@@ -57,6 +58,10 @@ export const addTransaction = (transactionData, counter, uniqueList) => {
     const transactionDate = Date.now();
     const transactionObj = { ...transactionData, id, transactionDate };
 
+    /**
+     * Helper function which manages updating the list with all purchased cryptocurrencies with amount in the firebase and in the account data slice
+     * @param {Array} updatedData - The updated array after processing transaction. If new cryptocurrency is purchased then new item will be added to this array, if purchased crypto has already existed, then amount is updated and it is checked if amount equals zero (delete element) or not zero (update element)
+     */
     const cryptoUniqueHandler = async (updatedData) => {
       try {
         await Promise.race([

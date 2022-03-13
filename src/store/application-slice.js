@@ -82,10 +82,10 @@ const applicationSlice = createSlice({
       const monthDay = today.getDate();
       const month = today.getMonth() + 1;
 
-      let pricesFromToday;
+      let prices;
 
       if (+dataRange === 1) {
-        pricesFromToday = historicData.prices
+        prices = historicData.prices
           .map((item) => [new Date(item[0]), item[1]])
           .filter(
             (item) =>
@@ -103,7 +103,7 @@ const applicationSlice = createSlice({
       }
 
       if (+dataRange > 1) {
-        pricesFromToday = historicData.prices.map((item) => {
+        prices = historicData.prices.map((item) => {
           const convertTimestamp = new Date(item[0]);
           const getDay = String(convertTimestamp.getDate()).padStart(2, 0);
           const getMonth = String(convertTimestamp.getMonth() + 1).padStart(
@@ -117,7 +117,7 @@ const applicationSlice = createSlice({
         });
       }
 
-      state.activeCryptoHistoricalData = pricesFromToday;
+      state.activeCryptoHistoricalData = prices;
     },
   },
 });

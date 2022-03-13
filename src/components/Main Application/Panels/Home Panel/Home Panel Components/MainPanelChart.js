@@ -56,6 +56,13 @@ const MainPanelChart = () => {
             ],
           }}
           options={{
+            scales: {
+              xAxes: {
+                ticks: {
+                  maxTicksLimit: 15,
+                },
+              },
+            },
             elements: {
               line: {
                 borderColor: lineColor,

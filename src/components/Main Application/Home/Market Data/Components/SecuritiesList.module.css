@@ -9,22 +9,12 @@
 
 .securitiesContainer {
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   border-bottom-left-radius: 0.5rem;
   border-top-left-radius: 0.5rem;
   position: relative;
   color: white;
 }
-
-/* .securitiesContainer {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  overflow-y: scroll;
-}
-
-.securitiesContainer::-webkit-scrollbar {
-  display: none;
-} */
 
 .securitiesContainer::-webkit-scrollbar {
   width: 0.85rem;

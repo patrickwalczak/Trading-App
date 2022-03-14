@@ -1,8 +1,8 @@
-import classes from "./HomePanel.module.css";
-import MainPanelChart from "./Home Panel Components/MainPanelChart";
-import MainPanelLeftSide from "./Home Panel Components/MainPanelLeftSide";
-import MainPanelRightSide from "./Home Panel Components/MainPanelRightSide";
-import MainPanelTop from "./Home Panel Components/MainPanelTop";
+import classes from "./MarketData.module.css";
+import MainChart from "./Components/MainChart";
+import SecuritiesList from "./Components/SecuritiesList";
+import StatisticsComponent from "./Components/StatisticsComponent";
+import PanelTop from "./Components/PanelTop";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
@@ -11,7 +11,7 @@ import {
 } from "../../../../store/takeCryptocurrencies";
 import { applicationActions } from "../../../../store/application-slice";
 
-const MainPanel = () => {
+const MarketData = () => {
   const dispatch = useDispatch();
   const defaultDataRange = 1;
 
@@ -60,19 +60,19 @@ const MainPanel = () => {
 
   return (
     <main className={classes.mainPanelContainer}>
-      <MainPanelLeftSide
+      <SecuritiesList
         cryptoArr={cryptoArr}
         activeCrypto={activeCrypto}
         onChangeActiveCrypto={changeActiveCryptoHandler}
       />
-      <MainPanelTop
+      <PanelTop
         onGetHistoricalData={getHistoricalDataHandler}
         activeCrypto={activeCrypto}
       />
-      <MainPanelChart />
-      <MainPanelRightSide />
+      <MainChart />
+      <StatisticsComponent />
     </main>
   );
 };
 
-export default MainPanel;
+export default MarketData;

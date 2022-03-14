@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
-import classes from "../MainPanelLeftSide.module.css";
-const SecurityShortView = ({
+import classes from "./SecuritiesList.module.css";
+const ListElement = ({
   dataset,
   onClick,
   activeBtnState,
@@ -81,4 +81,4 @@ const SecurityShortView = ({
     </Fragment>
   );
 };
-export default SecurityShortView;
+export default ListElement;

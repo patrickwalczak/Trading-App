@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import HomePanel from "./Panels/Home Panel/HomePanel";
 import SideNavigation from "./Side Navigation/SideNavigation";
 import TopNavigation from "./Top Navigation/TopNavigation";
 import classes from "./MainApplication.module.css";
@@ -11,8 +10,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountData } from "../../store/accountData-actions";
 import spinnerImg from "../../images/loadingSpinner.png";
+import Home from "./Home/Home";
 
-const TradingPlatform = () => {
+const MainApplication = () => {
   const dispatch = useDispatch();
   const { loadAccountDataStatus } = useSelector((state) => state.taskStatus);
   const { loadApplicationDataStatus } = useSelector(
@@ -36,12 +36,12 @@ const TradingPlatform = () => {
       {displayApplication && <SideNavigation />}
       {displayApplication && <TopNavigation />}
 
-      <Routes>
-        {displayApplication && (
-          <Route path="/mainPanel" element={<HomePanel />} />
-        )}
-        {displayApplication && <Route path="/" element={<HomePanel />} />}
-      </Routes>
+      {displayApplication && (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+        </Routes>
+      )}
       {displayApplication === false && (
         <div className={classes.spinnerWrapper}>
           <img className={classes.loadingSpinner} src={spinnerImg}></img>
@@ -51,4 +51,4 @@ const TradingPlatform = () => {
   );
 };
 
-export default TradingPlatform;
+export default MainApplication;

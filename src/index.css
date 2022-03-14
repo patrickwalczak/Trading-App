@@ -3,10 +3,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
+  overflow-y: auto;
 }
 
 body::-webkit-scrollbar {
-  width: 1em;
+  width: 1rem;
 }
 
 body::-webkit-scrollbar-track {
@@ -15,7 +16,7 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
   background-color: darkgrey;
-  outline: 1px solid slategrey;
+  border-radius: 0.5rem;
 }
 
 * {

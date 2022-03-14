@@ -1,0 +1,19 @@
+.welcomePanel__container {
+  /* Properties for parent grid */
+  grid-column: 2/3;
+  grid-row: 2/3;
+  align-self: center;
+  justify-self: center;
+  /* Properties for parent grid */
+  width: 80vw;
+  height: 15rem;
+  /* IMPROVE Margins */
+  margin: 8rem 0;
+  box-shadow: 0px 4px 12px rgba(131, 131, 131, 0.651);
+  border-radius: 0.5rem;
+  padding: 4rem 2rem;
+}
+
+.welcomePanel__h1 {
+  font-size: 4rem;
+}

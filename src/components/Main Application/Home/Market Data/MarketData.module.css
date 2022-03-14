@@ -1,7 +1,7 @@
 .mainPanelContainer {
   /* Properties for parent grid */
   grid-column: 2/3;
-  grid-row: 2/3;
+  grid-row: 3/4;
   align-self: center;
   justify-self: center;
   /* Properties for parent grid */
@@ -15,4 +15,6 @@
   grid-template-rows: 10% 90%;
   box-shadow: 0px 5px 12px rgb(131, 131, 131);
   border-radius: 0.5rem;
+  /* IMPROVE margin */
+  margin-bottom: 10rem;
 }

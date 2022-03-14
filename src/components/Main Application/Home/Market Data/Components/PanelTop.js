@@ -1,8 +1,8 @@
-import classes from "./MainPanelTop.module.css";
+import classes from "./PanelTop.module.css";
 import analyticsImg from "../../../../../images/analytics.png";
 import { useSelector } from "react-redux";
 
-const MainPanelTop = (props) => {
+const PanelTop = (props) => {
   const { activeCrypto } = useSelector((state) => state.applicationData);
   const disabledBtn = !activeCrypto ? true : false;
 
@@ -33,4 +33,4 @@ const MainPanelTop = (props) => {
   );
 };
 
-export default MainPanelTop;
+export default PanelTop;

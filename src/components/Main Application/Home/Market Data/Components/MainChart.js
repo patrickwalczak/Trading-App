@@ -1,26 +1,27 @@
 import { Chart } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import classes from "./MainPanelChart.module.css";
+import classes from "./MainChart.module.css";
 import { useSelector } from "react-redux";
 import loadingSpinner from "../../../../../images/loadingSpinner.png";
-const MainPanelChart = () => {
-  const { activeCryptoHistoricalData } = useSelector(
+
+const MainChart = () => {
+  let lineColor;
+  /**
+   * This is an Array with historical data. Every item in this array is also an array which contains time or date at the index [0] and price at the index [1]
+   */
+  const { activeCryptoHistoricalData: historicalData } = useSelector(
     (state) => state.applicationData
   );
   const { fetchingHistoricalDataStatus: loadingStatus } = useSelector(
     (state) => state.taskStatus
   );
-
   const { activeCrypto } = useSelector((state) => state.applicationData);
 
   const showNotification = !activeCrypto ? true : false;
 
-  let lineColor;
-
   if (loadingStatus?.status === "success") {
     lineColor =
-      activeCryptoHistoricalData[activeCryptoHistoricalData.length - 1][1] >
-      activeCryptoHistoricalData[0][1]
+      historicalData[historicalData.length - 1][1] > historicalData[0][1]
         ? "rgba(166, 233, 139, 0.667)"
         : "rgba(250, 77, 77, 0.767)";
   }
@@ -46,12 +47,12 @@ const MainPanelChart = () => {
         <Chart
           type="line"
           data={{
-            labels: activeCryptoHistoricalData.map((item) => item[0]),
+            labels: historicalData.map((item) => item[0]),
             datasets: [
               {
                 fill: false,
                 label: "",
-                data: activeCryptoHistoricalData.map((item) => item[1]),
+                data: historicalData.map((item) => item[1]),
               },
             ],
           }}
@@ -85,4 +86,4 @@ const MainPanelChart = () => {
   );
 };
 
-export default MainPanelChart;
+export default MainChart;

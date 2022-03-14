@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { applicationActions } from "../../../../../store/application-slice";
 import { fetchSingleFromList } from "../../../../../store/takeCryptocurrencies";
-import classes from "./MainPanelRightSide.module.css";
+import classes from "./StatisticsComponent.module.css";
 
-const MainPanelRightSide = () => {
+const StatisticsComponent = () => {
   const dispatch = useDispatch();
   const { transactionType } = useSelector((state) => state.applicationData);
   const { activeCrypto } = useSelector((state) => state.applicationData);
@@ -66,4 +66,4 @@ const MainPanelRightSide = () => {
   );
 };
 
-export default MainPanelRightSide;
+export default StatisticsComponent;

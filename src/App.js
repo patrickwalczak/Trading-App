@@ -6,10 +6,10 @@ import MainApplication from "./components/Main Application/MainApplication";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainApplication />} />
+      <Route path="/*" element={<MainApplication />} />
       <Route path="/welcome" element={<Header />} />
       <Route path="/signUp" element={<CreateAccount />} />
-      <Route path="/mainApplication/*" element={<MainApplication />} />
+      <Route path="/main/*" element={<MainApplication />} />
     </Routes>
   );
 }

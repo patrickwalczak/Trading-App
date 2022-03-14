@@ -6,8 +6,8 @@ const SideNavigation = () => {
     <nav className={classes.sideNavCon}>
       <ul>
         <li>
-          <NavLink className={classes.link} to="/mainApplication/mainPanel">
-            Main Panel
+          <NavLink className={classes.link} to="/main/home">
+            Home
           </NavLink>
         </li>
       </ul>

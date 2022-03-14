@@ -1,8 +1,8 @@
 import { useState } from "react";
-import SecurityShortView from "./Left Side Components/SecurityShortView";
-import classes from "./MainPanelLeftSide.module.css";
+import SecurityShortView from "./ListElement";
+import classes from "./SecuritiesList.module.css";
 
-const MainPanelLeftSide = (props) => {
+const SecuritiesList = (props) => {
   const [loadingStatus, setLoadStatus] = useState(null);
   const cryptoIDsAr = props.cryptoArr;
 
@@ -50,4 +50,4 @@ const MainPanelLeftSide = (props) => {
   );
 };
 
-export default MainPanelLeftSide;
+export default SecuritiesList;

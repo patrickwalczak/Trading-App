@@ -4,9 +4,9 @@ import classes from "./CreateAccount.module.css";
 
 const CreateAccount = () => {
   return (
-    <div className={classes.container}>
+    <div className={classes.createAccount__container}>
       <Logo />
-      <h1>
+      <h1 className={classes.createAccount__h1}>
         Create Invrest account <br /> Invest your money!
       </h1>
       <SignUpForm />
